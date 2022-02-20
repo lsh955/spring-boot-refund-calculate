@@ -21,8 +21,10 @@ dependencies {
     implementation 'io.jsonwebtoken:jjwt-api:0.11.2'
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.2', 'io.jsonwebtoken:jjwt-jackson:0.11.2'
 
-    implementation group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.0'
-    implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.0'
+    implementation 'org.json:json:20190722'
+
+    implementation group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
+    implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
 
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
