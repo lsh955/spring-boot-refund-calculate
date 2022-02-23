@@ -6,6 +6,8 @@ import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
@@ -16,8 +18,12 @@ import java.util.*;
  * @author 이승환
  * @since 2022-02-19
  */
+@Slf4j
 @Service
+@RequiredArgsConstructor
 public class JwtTokenUtil {
+
+    private final AESCryptoUtil aesCryptoUtil;
 
     private final SecretKey secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS256);  // 토큰 암호화 키
 
@@ -28,7 +34,7 @@ public class JwtTokenUtil {
      * @param regNo 주민등록번호
      * @return token
      */
-    public HashMap<String, String> createToken(String name, String regNo) {
+    public HashMap<String, String> createToken(String name, String regNo) throws Exception {
         Date date = new Date();
         Calendar calendar = Calendar.getInstance();
 
@@ -41,7 +47,7 @@ public class JwtTokenUtil {
 
         Map<String, String> payloads = new HashMap<>();
         payloads.put("name", name);
-        payloads.put("regNo", regNo);
+        payloads.put("regNo", this.aesCryptoUtil.decrypt(regNo));
 
         String token = Jwts.builder()
                 .setHeader(headers)
@@ -63,35 +69,39 @@ public class JwtTokenUtil {
      * @param token 토큰
      * @return 검증결과(true OR false)
      */
-    public boolean validateToken(String token) {
+    public JwtTokenStatus validateToken(String token) {
         try {
             Jwts.parserBuilder()
                     .setSigningKey(secretKey)
                     .build()
                     .parseClaimsJws(token);
 
-            return true;
+            return JwtTokenStatus.TOKEN_SUCCESS;
         } catch (JwtException e) {
             e.printStackTrace();
+            return JwtTokenStatus.TOKEN_FAILURE;
         }
-        return false;
     }
 
     /**
      * 토큰 decoder
      *
-     * @param jwtTokenDto   User Token
+     * @param jwtTokenDto User Token
      * @return payload
      */
-    public Object decoderToken(JwtTokenDto jwtTokenDto) {
+    public HashMap<String, String> decoderToken(JwtTokenDto jwtTokenDto) throws Exception {
         String[] chunks = jwtTokenDto.getToken().split("\\.");
         Base64.Decoder decoder = Base64.getUrlDecoder();
 
-        if (!validateToken(jwtTokenDto.getToken()))
-            return JwtTokenStatus.TOKEN_FAILURE;
-
         String strToken = new String(decoder.decode(chunks[1]));
+        JSONObject jsonObject = new JSONObject(strToken);
 
-        return new JSONObject(strToken);
+        HashMap<String, String> refunds = new HashMap<>();
+        refunds.put("name", jsonObject.get("name").toString());
+        refunds.put("regNo", jsonObject.get("regNo").toString());
+        refunds.put("exp", jsonObject.get("exp").toString());
+        refunds.put("iat", jsonObject.get("iat").toString());
+
+        return refunds;
     }
 }

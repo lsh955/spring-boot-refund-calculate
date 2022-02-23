@@ -20,5 +20,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     User findByUserId(String userId);
 
+    // TODO 최근데이터 반화가기
     User findByNameAndRegNo(String name, String regNo);
 }

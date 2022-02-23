@@ -9,7 +9,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum JwtTokenStatus {
 
-    TOKEN_FAILURE("TOKEN_ERR_0001", "토큰 검증에 실패하였습니다.");
+    TOKEN_SUCCESS("TOKEN_ERR_0001", "토큰 검증에 성공하였습니다."),
+    TOKEN_FAILURE("TOKEN_ERR_0002", "토큰 검증에 실패하였습니다.");
 
     private final String code;
     private final String message;

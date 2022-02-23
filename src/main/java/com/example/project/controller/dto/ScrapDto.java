@@ -1,5 +1,8 @@
 package com.example.project.controller.dto;
 
+import com.example.project.domain.scrap.ScrapOne;
+import com.example.project.domain.scrap.ScrapResult;
+import com.example.project.domain.scrap.ScrapTwo;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -22,6 +25,19 @@ public class ScrapDto {
     private String hostNm;
     private String workerResDt;
     private String workerReqDt;
+
+    public ScrapResult toEntity(Long userIdx) {
+        return ScrapResult.builder()
+                .errMsg(scrapListDto.getErrMsg())
+                .company(scrapListDto.getCompany())
+                .svcCd(scrapListDto.getSvcCd())
+                .appVer(getAppVer())
+                .hostNm(getHostNm())
+                .workerReqDt(getWorkerReqDt())
+                .workerResDt(getWorkerReqDt())
+                .userIdx(userIdx)
+                .build();
+    }
 
     @Getter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -61,6 +77,20 @@ public class ScrapDto {
             private String incomeCate;
             @JsonProperty("사업자등록번호")
             private String comNo;
+
+            public ScrapOne toEntity(Long userIdx) {
+                return ScrapOne.builder()
+                        .incomeDetails(incomeDetails)
+                        .totalPay(Long.parseLong(totalPay))
+                        .startDate(startDate)
+                        .scrapCompany(scrapCompany)
+                        .payDate(payDate)
+                        .endDate(endDate)
+                        .incomeCate(incomeCate)
+                        .comNo(comNo)
+                        .userIdx(userIdx)
+                        .build();
+            }
         }
 
         @Getter
@@ -71,6 +101,14 @@ public class ScrapDto {
             private String totalUsed;
             @JsonProperty("소득구분")
             private String taxAmount;
+
+            public ScrapTwo toEntity(Long userIdx) {
+                return ScrapTwo.builder()
+                        .totalUsed(Long.parseLong(totalUsed))
+                        .taxAmount(taxAmount)
+                        .userIdx(userIdx)
+                        .build();
+            }
         }
     }
 }

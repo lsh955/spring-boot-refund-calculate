@@ -4,78 +4,69 @@ import com.example.project.controller.dto.JwtTokenDto;
 import com.example.project.controller.dto.ScrapDto;
 import com.example.project.domain.account.User;
 import com.example.project.domain.account.UserRepository;
-import com.example.project.domain.scrap.*;
+import com.example.project.domain.scrap.ScrapOneRepository;
+import com.example.project.domain.scrap.ScrapResultRepository;
+import com.example.project.domain.scrap.ScrapTwoRepository;
+import com.example.project.util.AESCryptoUtil;
 import com.example.project.util.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+
+import java.util.HashMap;
 
 /**
  * @author 이승환
  * @since 2022-02-20
  */
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ScrapService {
 
+    private final UserRepository userRepository;
     private final ScrapOneRepository scrapOneRepository;
     private final ScrapTwoRepository scrapTwoRepository;
     private final ScrapResultRepository scrapResultRepository;
-    private final UserRepository userRepository;
 
+    private final AESCryptoUtil aesCryptoUtil;
     private final JwtTokenUtil jwtTokenUtil;
 
     private final WebClient webClient = WebClient.builder()
             .baseUrl("https://codetest.3o3.co.kr")
             .build();
 
-    public Object scrap(JwtTokenDto jwtTokenDto) {
-        Object strToken = this.jwtTokenUtil.decoderToken(jwtTokenDto);
-        JSONObject jsonObject = new JSONObject(strToken.toString());
+    /**
+     * 가입한 유저의 스크랩조회 및 저장
+     *
+     * @param jwtTokenDto User Token
+     * @return 스크랩조회 결과
+     */
+    public Object scrap(JwtTokenDto jwtTokenDto) throws Exception {
+        // Token 검증
+        HashMap<String, String> strToken = this.jwtTokenUtil.decoderToken(jwtTokenDto);
 
-        User user = this.userRepository.findByNameAndRegNo(jsonObject.get("name").toString(), jsonObject.get("regNo").toString());
+        // 사용자 불러오기
+        User user = this.userRepository.findByNameAndRegNo(strToken.get("name"), this.aesCryptoUtil.encrypt(strToken.get("regNo")));
 
+        // 공급자로 부터의 데이터 조회
         ScrapDto scrapDto = webClient.post()
                 .uri("/scrap/")
-                .bodyValue(strToken.toString())
+                .bodyValue(new JSONObject(strToken).toString())
                 .retrieve()
                 .bodyToMono(ScrapDto.class)
                 .block();
 
+        // 데이터 저장
         if (scrapDto != null) {
-            // TODO :: 리펙토링 할것.
-            this.scrapOneRepository.save(ScrapOne.builder()
-                    .incomeDetails(scrapDto.getScrapListDto().getScrapOneDto().get(0).getIncomeDetails())
-                    .totalPay(Long.parseLong(scrapDto.getScrapListDto().getScrapOneDto().get(0).getTotalPay()))
-                    .startDate(scrapDto.getScrapListDto().getScrapOneDto().get(0).getStartDate())
-                    .scrapCompany(scrapDto.getScrapListDto().getScrapOneDto().get(0).getScrapCompany())
-                    .name(scrapDto.getScrapListDto().getScrapOneDto().get(0).getName())
-                    .payDate(scrapDto.getScrapListDto().getScrapOneDto().get(0).getPayDate())
-                    .endDate(scrapDto.getScrapListDto().getScrapOneDto().get(0).getEndDate())
-                    .regNo(scrapDto.getScrapListDto().getScrapOneDto().get(0).getRegNo())
-                    .incomeCate(scrapDto.getScrapListDto().getScrapOneDto().get(0).getIncomeCate())
-                    .comNo(scrapDto.getScrapListDto().getScrapOneDto().get(0).getComNo())
-                    .userIdx(user.getUserIdx())
-                    .build());
-
-            this.scrapTwoRepository.save(ScrapTwo.builder()
-                    .totalUsed(Long.parseLong(scrapDto.getScrapListDto().getScrapTwoDto().get(0).getTotalUsed()))
-                    .taxAmount(scrapDto.getScrapListDto().getScrapTwoDto().get(0).getTaxAmount())
-                    .userIdx(user.getUserIdx())
-                    .build());
-
-            this.scrapResultRepository.save(ScrapResult.builder()
-                    .errMsg(scrapDto.getScrapListDto().getErrMsg())
-                    .company(scrapDto.getScrapListDto().getCompany())
-                    .svcCd(scrapDto.getScrapListDto().getSvcCd())
-                    .userId(scrapDto.getScrapListDto().getUserId())
-                    .appVer(scrapDto.getAppVer())
-                    .hostNm(scrapDto.getHostNm())
-                    .workerResDt(scrapDto.getWorkerResDt())
-                    .workerReqDt(scrapDto.getWorkerReqDt())
-                    .userIdx(user.getUserIdx())
-                    .build());
+            // scrap001
+            this.scrapOneRepository.save(scrapDto.getScrapListDto().getScrapOneDto().get(0).toEntity(user.getUserIdx()));
+            // scrap002
+            this.scrapTwoRepository.save(scrapDto.getScrapListDto().getScrapTwoDto().get(0).toEntity(user.getUserIdx()));
+            // API 응답결과
+            this.scrapResultRepository.save(scrapDto.toEntity(user.getUserIdx()));
         }
 
         return scrapDto;

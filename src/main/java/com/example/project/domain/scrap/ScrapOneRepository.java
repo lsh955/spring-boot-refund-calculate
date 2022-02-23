@@ -9,4 +9,7 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface ScrapOneRepository extends JpaRepository<ScrapOne, Long> {
+
+    ScrapOne findByUserIdx(Long userIdx);
+
 }

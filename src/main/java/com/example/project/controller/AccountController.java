@@ -30,7 +30,7 @@ public class AccountController {
      */
     @ApiOperation(value = "회원가입", notes = "입력에 따른 사용자 정보등록")
     @PostMapping(value = "/signup", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Object signup(@RequestBody UserDto userDto) {
+    public Object signup(@RequestBody UserDto userDto) throws Exception {
 
         return accountService.signup(userDto);
     }
@@ -43,7 +43,7 @@ public class AccountController {
      */
     @ApiOperation(value = "로그인", notes = "사용자검증에 따른 토큰발급")
     @PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Object login(@RequestBody UserDto userDto) {
+    public Object login(@RequestBody UserDto userDto) throws Exception {
 
         return accountService.login(userDto);
     }
@@ -56,7 +56,7 @@ public class AccountController {
      */
     @ApiOperation(value = "내 정보 보기", notes = "토큰정보에 따른 사용자 정보조회")
     @PostMapping(value = "/me", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Object me(@RequestBody JwtTokenDto jwtTokenDto) {
+    public Object me(@RequestBody JwtTokenDto jwtTokenDto) throws Exception {
 
         return accountService.me(jwtTokenDto);
     }

@@ -25,7 +25,7 @@ public class RefundController {
     // 사용자 정보를 바탕한 스크랩 api
     @ApiOperation(value = "환급액 계산", notes = "사용자정보를 기반으로 환급액 계산")
     @PostMapping(value = "/refund", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Object refund(@RequestBody JwtTokenDto jwtTokenDto) {
+    public Object refund(@RequestBody JwtTokenDto jwtTokenDto) throws Exception {
 
         return refundService.refund(jwtTokenDto);
     }

@@ -14,4 +14,5 @@ public interface JoinAvailableRepository extends JpaRepository<JoinAvailable, Lo
 
     boolean existsByRegNo(String regNo);
 
+    JoinAvailable findByRegNo(String regNo);
 }

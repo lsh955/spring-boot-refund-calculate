@@ -27,7 +27,6 @@ public class ScrapResult {
     private String errMsg;
     private String company;
     private String svcCd;
-    private String userId;
 
     private String appVer;
     private String hostNm;
@@ -38,7 +37,6 @@ public class ScrapResult {
     public ScrapResult(String errMsg,
                        String company,
                        String svcCd,
-                       String userId,
                        String appVer,
                        String hostNm,
                        String workerResDt,
@@ -48,7 +46,6 @@ public class ScrapResult {
         this.errMsg = errMsg;
         this.company = company;
         this.svcCd = svcCd;
-        this.userId = userId;
         this.appVer = appVer;
         this.hostNm = hostNm;
         this.workerResDt = workerResDt;

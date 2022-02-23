@@ -1,6 +1,7 @@
 package com.example.project.controller.dto;
 
 import com.example.project.domain.account.User;
+import com.example.project.util.AESCryptoUtil;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -37,12 +38,14 @@ public class UserDto {
         this.regNo = regNo;
     }
 
-    public User toEntity() {
+    public User toEntity() throws Exception {
+        AESCryptoUtil aesCryptoUtil = new AESCryptoUtil();
+
         return User.builder()
                 .userId(userId)
-                .password(password)
+                .password(aesCryptoUtil.encrypt(password))
                 .name(name)
-                .regNo(regNo)
+                .regNo(aesCryptoUtil.encrypt(regNo))
                 .build();
     }
 }

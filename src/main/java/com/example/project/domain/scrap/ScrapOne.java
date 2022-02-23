@@ -28,10 +28,8 @@ public class ScrapOne {
     private Long totalPay;
     private String startDate;
     private String scrapCompany;
-    private String name;
     private String payDate;
     private String endDate;
-    private String regNo;
     private String incomeCate;
     private String comNo;
 
@@ -40,10 +38,8 @@ public class ScrapOne {
                     Long totalPay,
                     String startDate,
                     String scrapCompany,
-                    String name,
                     String payDate,
                     String endDate,
-                    String regNo,
                     String incomeCate,
                     String comNo,
                     Long userIdx) {
@@ -52,10 +48,8 @@ public class ScrapOne {
         this.totalPay = totalPay;
         this.startDate = startDate;
         this.scrapCompany = scrapCompany;
-        this.name = name;
         this.payDate = payDate;
         this.endDate = endDate;
-        this.regNo = regNo;
         this.incomeCate = incomeCate;
         this.comNo = comNo;
         this.userIdx = userIdx;

@@ -3,14 +3,19 @@ package com.example.project.service;
 import com.example.project.controller.dto.JwtTokenDto;
 import com.example.project.domain.account.User;
 import com.example.project.domain.account.UserRepository;
+import com.example.project.domain.scrap.ScrapOne;
+import com.example.project.domain.scrap.ScrapOneRepository;
+import com.example.project.domain.scrap.ScrapTwo;
+import com.example.project.domain.scrap.ScrapTwoRepository;
+import com.example.project.enums.ScrapStatus;
+import com.example.project.util.AESCryptoUtil;
 import com.example.project.util.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
 import java.text.DecimalFormat;
-import java.util.LinkedHashMap;
+import java.util.HashMap;
 
 /**
  * @author 이승환
@@ -22,29 +27,38 @@ import java.util.LinkedHashMap;
 public class RefundService {
 
     private final UserRepository userRepository;
+    private final ScrapOneRepository scrapOneRepository;
+    private final ScrapTwoRepository scrapTwoRepository;
 
+    private final AESCryptoUtil aesCryptoUtil;
     private final JwtTokenUtil jwtTokenUtil;
 
     /**
-     * 환급액
+     * 환급액 계산
      *
-     * @param jwtTokenDto   User Token
-     * @return  환금액 결과
+     * @param jwtTokenDto User Token
+     * @return 환금액 결과
      */
-    public Object refund(JwtTokenDto jwtTokenDto) {
-        // Token 처리
-        Object strToken = this.jwtTokenUtil.decoderToken(jwtTokenDto);
-        JSONObject jsonObject = new JSONObject(strToken.toString());
+    public Object refund(JwtTokenDto jwtTokenDto) throws Exception {
+        // Token 검증
+        HashMap<String, String> strToken = this.jwtTokenUtil.decoderToken(jwtTokenDto);
 
-        // Token에 따른 사용자 불러오기
-        User user = this.userRepository.findByNameAndRegNo(jsonObject.get("name").toString(), jsonObject.get("regNo").toString());
+        // 사용자 불러오기
+        User user = this.userRepository.findByNameAndRegNo(strToken.get("name"), this.aesCryptoUtil.encrypt(strToken.get("regNo")));
 
-        // 세액공제 한도 불러오기
-        double taxCredit = taxCredit(user.getScrapOnes().get(0).getTotalPay());
-        // 소득세액 공제 불러오기
-        double taxAmount = taxAmount(user.getScrapTwos().get(0).getTotalUsed());
+        // 스크랩정보 불러오기
+        ScrapOne scrapOne = scrapOneRepository.findByUserIdx(user.getUserIdx());
+        ScrapTwo scrapTwo = scrapTwoRepository.findByUserIdx(user.getUserIdx());
 
-        LinkedHashMap<String, Object> refunds = new LinkedHashMap<>();
+        if (scrapOne == null && scrapTwo == null)
+            return ScrapStatus.NO_SCRAP_DATA;
+
+        // 세액공제 한도계산
+        double taxCredit = taxCredit(scrapOne.getTotalPay());
+        // 소득세액 공제계산
+        double taxAmount = taxAmount(scrapTwo.getTotalUsed());
+
+        HashMap<String, Object> refunds = new HashMap<>();
         refunds.put("이름", user.getName());
         refunds.put("한도", unitConversion(taxCredit));
         refunds.put("공제액", unitConversion(taxAmount));
@@ -54,7 +68,7 @@ public class RefundService {
     }
 
     /**
-     * 세액공제 한도
+     * 세액공제 한도 계산
      *
      * @param totalPay 총급여액(총지급액)
      * @return 기준별 요건에 맞는 한도결과
@@ -77,7 +91,7 @@ public class RefundService {
 
         // 7000만원 초과 일 경우
         if (totalPay > 70000000) {
-            taxCredit = 660000 - (totalPay - 70000000) * 1 / 2; // 66만원 - [(총급여액 - 7,000만원) * 1/2]
+            taxCredit = 660000 - ((totalPay - 70000000) * 1 / 2);   // 66만원 - [(총급여액 - 7,000만원) * 1/2]
 
             // 다만, 위 금액이 50만원보다 적을경우
             if (taxCredit < 500000)
@@ -88,7 +102,7 @@ public class RefundService {
     }
 
     /**
-     * 소득세액 공제
+     * 소득세액 공제 계산
      *
      * @param totalUsed 산출세액
      * @return 기준별 요건에 맞는 공제결과
@@ -111,7 +125,7 @@ public class RefundService {
      * 금액단위 한글변환
      *
      * @param money 금액(ex:684000)
-     * @return {변환결과}원
+     * @return {단위변환결과}원
      */
     public String unitConversion(double money) {
         DecimalFormat d = new DecimalFormat("#,####");
@@ -120,13 +134,13 @@ public class RefundService {
         String[] han3 = {"", "만", "억", "조"};
         String[] str = d.format(money).split(",");
 
-        String result = ""; // 초기화
-        int cnt = 0;
+        StringBuilder result = new StringBuilder();
+        int count = 0;
         for (int i = str.length; i > 0; i--) {
             if (Integer.parseInt(str[i - 1]) != 0)
-                result = String.valueOf(Integer.parseInt(str[i - 1])) + han3[cnt] + result;
+                result.insert(0, Integer.parseInt(str[i - 1]) + han3[count]);
 
-            cnt++;
+            count++;
         }
 
         return result + "원";

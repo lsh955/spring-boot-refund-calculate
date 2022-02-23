@@ -24,7 +24,7 @@ public class ScrapController {
     // 사용자 정보를 바탕한 스크랩 api
     @ApiOperation(value = "사용자 정보 스크랩", notes = "사용자정보를 기반으로 스크랩")
     @PostMapping(value = "/scrap", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Object scrap(@RequestBody JwtTokenDto jwtTokenDto) {
+    public Object scrap(@RequestBody JwtTokenDto jwtTokenDto) throws Exception {
 
         return scrapService.scrap(jwtTokenDto);
     }
