@@ -2,7 +2,6 @@ package com.example.project.service;
 
 import com.example.project.controller.dto.JwtTokenDto;
 import com.example.project.controller.dto.UserDto;
-import com.example.project.domain.account.JoinAvailable;
 import com.example.project.domain.account.JoinAvailableRepository;
 import com.example.project.domain.account.User;
 import com.example.project.domain.account.UserRepository;
@@ -15,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * @author 이승환
