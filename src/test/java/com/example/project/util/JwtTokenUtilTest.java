@@ -21,13 +21,13 @@ public class JwtTokenUtilTest {
     private JwtTokenUtil jwtTokenUtil;
 
     @Test
-    public void 토큰생성() {
+    public void 토큰생성() throws Exception {
         HashMap<String, String> token = this.jwtTokenUtil.createToken("홍길동", "860824-1655068");
         System.out.println(token);
     }
 
     @Test
-    public void 토큰검증() throws JarException {
+    public void 토큰검증() throws Exception {
         HashMap<String, String> token = this.jwtTokenUtil.createToken("홍길동", "860824-1655068");
         System.out.println(token);
 
