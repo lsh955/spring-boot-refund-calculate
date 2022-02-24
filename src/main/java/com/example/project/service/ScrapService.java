@@ -7,6 +7,7 @@ import com.example.project.domain.account.UserRepository;
 import com.example.project.domain.scrap.ScrapOneRepository;
 import com.example.project.domain.scrap.ScrapResultRepository;
 import com.example.project.domain.scrap.ScrapTwoRepository;
+import com.example.project.enums.AccountStatus;
 import com.example.project.util.AESCryptoUtil;
 import com.example.project.util.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
@@ -51,13 +52,18 @@ public class ScrapService {
         // 사용자 불러오기
         User user = this.userRepository.findByNameAndRegNo(strToken.get("name"), this.aesCryptoUtil.encrypt(strToken.get("regNo")));
 
-        // 공급자로 부터의 데이터 조회
-        ScrapDto scrapDto = webClient.post()
-                .uri("/scrap/")
-                .bodyValue(new JSONObject(strToken).toString())
-                .retrieve()
-                .bodyToMono(ScrapDto.class)
-                .block();
+        ScrapDto scrapDto;
+        if (user != null) {  // 가입된 정보가 있다면
+            // 공급자로 부터의 데이터 조회
+            scrapDto = webClient.post()
+                    .uri("/scrap/")
+                    .bodyValue(new JSONObject(strToken).toString())
+                    .retrieve()
+                    .bodyToMono(ScrapDto.class)
+                    .block();
+        } else {
+            return AccountStatus.INCONSISTENT;
+        }
 
         // 데이터 저장
         if (scrapDto != null) {
