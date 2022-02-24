@@ -52,6 +52,10 @@ public class AccountService {
     public Object login(UserDto userDto) throws Exception {
         User user = userRepository.findByUserId(userDto.getUserId());
 
+        // 가입된 정보가 없다면
+        if (user == null)
+            return AccountStatus.INCONSISTENT;
+
         String decryptedDbPassword = this.aesCryptoUtil.decrypt(user.getPassword());
 
         // 아이디와 패스와드가 맞는지.
@@ -70,6 +74,12 @@ public class AccountService {
         HashMap<String, String> strToken = this.jwtTokenUtil.decoderToken(jwtTokenDto);
 
         // 사용자정보 불러오기
-        return this.userRepository.findByNameAndRegNo(strToken.get("name"), this.aesCryptoUtil.encrypt(strToken.get("regNo")));
+        User user = this.userRepository.findByNameAndRegNo(strToken.get("name"), this.aesCryptoUtil.encrypt(strToken.get("regNo")));
+
+        // 정보가 없다면 가입되지 않는회원으로 간주
+        if (user == null)
+            return AccountStatus.INCONSISTENT;
+
+        return user;
     }
 }
