@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum ScrapStatus {
 
-    NO_SCRAP_DATA("SCRAP_ERR_0001", "저장된 데이터가 없습니다.");
+    NO_SCRAP_DATA("SCRAP_ERR_0001", "요청한 데이터가 존재하지 않습니다.");
 
     private final String code;
     private final String message;
