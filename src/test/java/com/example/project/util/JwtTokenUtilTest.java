@@ -14,7 +14,7 @@ import java.util.HashMap;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class JwtTokenUtilTest {
+class JwtTokenUtilTest {
 
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
