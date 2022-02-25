@@ -8,5 +8,5 @@ import org.springframework.stereotype.Repository;
  * @since 2022-02-21
  */
 @Repository
-public interface ScrapResultRepository extends JpaRepository<ScrapResult, Long> {
+public interface ScrapResponseRepository extends JpaRepository<ScrapResponse, Long> {
 }

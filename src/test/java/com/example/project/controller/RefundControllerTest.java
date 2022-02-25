@@ -1,6 +1,5 @@
 package com.example.project.controller;
 
-import com.example.project.TestValues;
 import com.example.project.enums.ScrapStatus;
 import com.example.project.util.JwtTokenUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -27,7 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class RefundControllerTest extends TestValues {
+class RefundControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -44,7 +43,7 @@ class RefundControllerTest extends TestValues {
 
         HashMap<String, String> token = this.jwtTokenUtil.createToken(name, regNo);
 
-        this.mockMvc.perform(post(apIBaseUrl + "/refund")
+        this.mockMvc.perform(post("http://localhost:8080/szs/refund")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(this.objectMapper.writeValueAsString(token)))
                 .andExpect(status().isOk())

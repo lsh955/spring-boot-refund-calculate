@@ -11,5 +11,4 @@ import org.springframework.stereotype.Repository;
 public interface ScrapTwoRepository extends JpaRepository<ScrapTwo, Long> {
 
     ScrapTwo findByUserIdx(Long userIdx);
-
 }

@@ -8,7 +8,5 @@ import org.springframework.stereotype.Repository;
  * @since 2022-02-21
  */
 @Repository
-public interface ScrapOneRepository extends JpaRepository<ScrapOne, Long> {
-
-    ScrapOne findByUserIdx(Long userIdx);
+public interface ScrapListRepository extends JpaRepository<ScrapList, Long> {
 }

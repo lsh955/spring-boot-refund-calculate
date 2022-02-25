@@ -1,6 +1,5 @@
 package com.example.project.repository.scrap;
 
-import com.example.project.TestValues;
 import com.example.project.controller.dto.ScrapDto;
 import com.example.project.domain.scrap.ScrapOne;
 import com.example.project.domain.scrap.ScrapOneRepository;
@@ -21,7 +20,7 @@ import java.util.List;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
-class ScrapOneRepositoryTest extends TestValues {
+class ScrapOneRepositoryTest {
 
     @Autowired
     private ScrapOneRepository scrapOneRepository;
@@ -33,7 +32,7 @@ class ScrapOneRepositoryTest extends TestValues {
 
     @Test
     @DisplayName(value = "SCRAP 001 등록")
-    public void SCRAP_ONE_SAVE_TEST() throws Exception {
+    public void SCRAP_ONE_SAVE_TEST() {
         Long userIdx = 1L;
 
         String incomeDetails = "급여";
@@ -45,7 +44,7 @@ class ScrapOneRepositoryTest extends TestValues {
         String incomeCate = "근로소득(연간)";
         String comNo = "012-34-56789";
 
-        ScrapDto.ScrapListDto.ScrapOneDto scrapOneDto = ScrapDto.ScrapListDto.ScrapOneDto.builder()
+        ScrapDto.ScrapOneDto scrapOneDto = ScrapDto.ScrapOneDto.builder()
                 .incomeDetails("급여")
                 .totalPay("24000000")
                 .startDate("2020.10.03")

@@ -4,8 +4,9 @@ import com.example.project.controller.dto.JwtTokenDto;
 import com.example.project.controller.dto.ScrapDto;
 import com.example.project.domain.account.User;
 import com.example.project.domain.account.UserRepository;
+import com.example.project.domain.scrap.ScrapListRepository;
 import com.example.project.domain.scrap.ScrapOneRepository;
-import com.example.project.domain.scrap.ScrapResultRepository;
+import com.example.project.domain.scrap.ScrapResponseRepository;
 import com.example.project.domain.scrap.ScrapTwoRepository;
 import com.example.project.enums.AccountStatus;
 import com.example.project.util.AESCryptoUtil;
@@ -14,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.HashMap;
@@ -28,9 +30,10 @@ import java.util.HashMap;
 public class ScrapService {
 
     private final UserRepository userRepository;
+    private final ScrapListRepository scrapListRepository;
     private final ScrapOneRepository scrapOneRepository;
     private final ScrapTwoRepository scrapTwoRepository;
-    private final ScrapResultRepository scrapResultRepository;
+    private final ScrapResponseRepository scrapResponseRepository;
 
     private final AESCryptoUtil aesCryptoUtil;
     private final JwtTokenUtil jwtTokenUtil;
@@ -45,6 +48,7 @@ public class ScrapService {
      * @param jwtTokenDto User Token
      * @return 스크랩조회 결과
      */
+    @Transactional
     public Object scrap(JwtTokenDto jwtTokenDto) throws Exception {
         // Token 검증
         HashMap<String, String> strToken = this.jwtTokenUtil.decoderToken(jwtTokenDto);
@@ -67,12 +71,14 @@ public class ScrapService {
 
         // 데이터 저장
         if (scrapDto != null) {
+            // API 리스트결과
+            this.scrapListRepository.save(scrapDto.getScrapListDto().toEntity(user.getUserIdx()));
             // scrap001
             this.scrapOneRepository.save(scrapDto.getScrapListDto().getScrapOneDto().get(0).toEntity(user.getUserIdx()));
             // scrap002
             this.scrapTwoRepository.save(scrapDto.getScrapListDto().getScrapTwoDto().get(0).toEntity(user.getUserIdx()));
             // API 응답결과
-            this.scrapResultRepository.save(scrapDto.toEntity(user.getUserIdx()));
+            this.scrapResponseRepository.save(scrapDto.toEntity(user.getUserIdx()));
         }
 
         return scrapDto;

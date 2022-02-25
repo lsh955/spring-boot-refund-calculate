@@ -1,4 +1,3 @@
--- TODO :: 완성 후 user 테이블 INSERT 쿼리 지울것
 INSERT INTO user (user_idx, name, password, reg_no, user_id)
 VALUES (1, '홍길동', 'ELbbqFzaPvFZbCrhd61Mzw==', 'ldU2Z5ZlRuwPfYA1YfvOTw==', 1);
 

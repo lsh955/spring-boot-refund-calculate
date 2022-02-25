@@ -38,7 +38,7 @@ class ScrapTwoRepositoryTest {
         Long totalUsed = 2000000L;
         String taxAmount = "산출세액";
 
-        ScrapDto.ScrapListDto.ScrapTwoDto scrapTwoDto = ScrapDto.ScrapListDto.ScrapTwoDto.builder()
+        ScrapDto.ScrapTwoDto scrapTwoDto = ScrapDto.ScrapTwoDto.builder()
                 .totalUsed("2000000")
                 .taxAmount("산출세액")
                 .build();

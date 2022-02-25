@@ -1,6 +1,5 @@
 package com.example.project.controller;
 
-import com.example.project.TestValues;
 import com.example.project.controller.dto.UserDto;
 import com.example.project.domain.account.UserRepository;
 import com.example.project.enums.AccountStatus;
@@ -30,7 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class AccountControllerTest extends TestValues {
+class AccountControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -42,7 +41,7 @@ class AccountControllerTest extends TestValues {
     private JwtTokenUtil jwtTokenUtil;
 
     @After
-    public void down() throws Exception {
+    public void down() {
         userRepository.deleteAll();
     }
 
@@ -61,7 +60,7 @@ class AccountControllerTest extends TestValues {
                 .regNo(regNo)
                 .build();
 
-        this.mockMvc.perform(post(apIBaseUrl + "/signup")
+        this.mockMvc.perform(post("http://localhost:8080/szs/signup")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(this.objectMapper.writeValueAsString(userDto)))
                 .andExpect(status().isOk())
@@ -84,7 +83,7 @@ class AccountControllerTest extends TestValues {
                 .regNo(regNo)
                 .build();
 
-        this.mockMvc.perform(post(apIBaseUrl + "/signup")
+        this.mockMvc.perform(post("http://localhost:8080/szs/signup")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(this.objectMapper.writeValueAsString(userDto)))
                 .andExpect(status().isOk())
@@ -107,7 +106,7 @@ class AccountControllerTest extends TestValues {
                 .regNo(regNo)
                 .build();
 
-        this.mockMvc.perform(post(apIBaseUrl + "/signup")
+        this.mockMvc.perform(post("http://localhost:8080/szs/signup")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(this.objectMapper.writeValueAsString(userDto)))
                 .andExpect(status().isOk())
@@ -130,7 +129,7 @@ class AccountControllerTest extends TestValues {
                 .password(password)
                 .build();
 
-        this.mockMvc.perform(post(apIBaseUrl + "/login")
+        this.mockMvc.perform(post("http://localhost:8080/szs/login")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(this.objectMapper.writeValueAsString(userDto)))
                 .andExpect(status().isOk())
@@ -148,7 +147,7 @@ class AccountControllerTest extends TestValues {
                 .password(password)
                 .build();
 
-        this.mockMvc.perform(post(apIBaseUrl + "/login")
+        this.mockMvc.perform(post("http://localhost:8080/szs/login")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(this.objectMapper.writeValueAsString(userDto)))
                 .andExpect(status().isOk())
@@ -164,7 +163,7 @@ class AccountControllerTest extends TestValues {
 
         HashMap<String, String> token = this.jwtTokenUtil.createToken(name, regNo);
 
-        this.mockMvc.perform(post(apIBaseUrl + "/me")
+        this.mockMvc.perform(post("http://localhost:8080/szs/me")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(this.objectMapper.writeValueAsString(token)))
                 .andExpect(status().isOk());
@@ -178,7 +177,7 @@ class AccountControllerTest extends TestValues {
 
         HashMap<String, String> token = this.jwtTokenUtil.createToken(name, regNo);
 
-        this.mockMvc.perform(post(apIBaseUrl + "/me")
+        this.mockMvc.perform(post("http://localhost:8080/szs/me")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(this.objectMapper.writeValueAsString(token)))
                 .andExpect(status().isOk())

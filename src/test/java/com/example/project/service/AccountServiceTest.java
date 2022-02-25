@@ -4,19 +4,21 @@ import com.example.project.controller.dto.JwtTokenDto;
 import com.example.project.controller.dto.UserDto;
 import com.example.project.domain.account.UserRepository;
 import com.example.project.enums.AccountStatus;
-import com.example.project.util.JwtTokenUtil;
 import org.assertj.core.api.Assertions;
 import org.junit.After;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
 /**
  * @author 이승환
  * @since 2022-02-24
  */
+@RunWith(SpringRunner.class)
 @SpringBootTest
 class AccountServiceTest {
 

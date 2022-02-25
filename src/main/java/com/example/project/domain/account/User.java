@@ -1,7 +1,8 @@
 package com.example.project.domain.account;
 
+import com.example.project.domain.scrap.ScrapList;
 import com.example.project.domain.scrap.ScrapOne;
-import com.example.project.domain.scrap.ScrapResult;
+import com.example.project.domain.scrap.ScrapResponse;
 import com.example.project.domain.scrap.ScrapTwo;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -30,15 +31,19 @@ public class User {
 
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_idx")
-    private List<ScrapOne> scrapOnes = new ArrayList<>();
+    private final List<ScrapOne> scrapOnes = new ArrayList<>();
 
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_idx")
-    private List<ScrapTwo> scrapTwos = new ArrayList<>();
+    private final List<ScrapTwo> scrapTwos = new ArrayList<>();
 
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_idx")
-    private List<ScrapResult> scrapResults = new ArrayList<>();
+    private final List<ScrapResponse> scrapResponses = new ArrayList<>();
+
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_idx")
+    private final List<ScrapList> scrapLists = new ArrayList<>();
 
     private String userId;      // 아이디
     private String password;    // 패스워드

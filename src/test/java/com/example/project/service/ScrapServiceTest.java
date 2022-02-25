@@ -3,20 +3,23 @@ package com.example.project.service;
 import com.example.project.controller.dto.JwtTokenDto;
 import com.example.project.domain.account.UserRepository;
 import com.example.project.domain.scrap.ScrapOneRepository;
-import com.example.project.domain.scrap.ScrapResultRepository;
+import com.example.project.domain.scrap.ScrapResponseRepository;
 import com.example.project.domain.scrap.ScrapTwoRepository;
 import com.example.project.enums.AccountStatus;
 import org.assertj.core.api.Assertions;
 import org.junit.After;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
 /**
  * @author 이승환
  * @since 2022-02-24
  */
+@RunWith(SpringRunner.class)
 @SpringBootTest
 class ScrapServiceTest {
 
@@ -30,13 +33,13 @@ class ScrapServiceTest {
     @Autowired
     private ScrapTwoRepository scrapTwoRepository;
     @Autowired
-    private ScrapResultRepository scrapResultRepository;
+    private ScrapResponseRepository scrapResponseRepository;
 
     @After
     public void cleanup() {
         scrapOneRepository.deleteAll();
         scrapTwoRepository.deleteAll();
-        scrapResultRepository.deleteAll();
+        scrapResponseRepository.deleteAll();
         userRepository.deleteAll();
     }
 

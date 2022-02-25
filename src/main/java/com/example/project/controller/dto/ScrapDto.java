@@ -1,7 +1,8 @@
 package com.example.project.controller.dto;
 
+import com.example.project.domain.scrap.ScrapList;
 import com.example.project.domain.scrap.ScrapOne;
-import com.example.project.domain.scrap.ScrapResult;
+import com.example.project.domain.scrap.ScrapResponse;
 import com.example.project.domain.scrap.ScrapTwo;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AccessLevel;
@@ -40,11 +41,8 @@ public class ScrapDto {
         this.workerReqDt = workerReqDt;
     }
 
-    public ScrapResult toEntity(Long userIdx) {
-        return ScrapResult.builder()
-                .errMsg(scrapListDto.getErrMsg())
-                .company(scrapListDto.getCompany())
-                .svcCd(scrapListDto.getSvcCd())
+    public ScrapResponse toEntity(Long userIdx) {
+        return ScrapResponse.builder()
                 .appVer(getAppVer())
                 .hostNm(getHostNm())
                 .workerReqDt(getWorkerReqDt())
@@ -70,101 +68,110 @@ public class ScrapDto {
         @Deprecated
         @Builder
         public ScrapListDto(String errMsg,
-                        String company,
-                        String svcCd) {
+                            String company,
+                            String svcCd) {
 
             this.errMsg = errMsg;
             this.company = company;
             this.svcCd = svcCd;
         }
 
-        @Getter
-        @NoArgsConstructor(access = AccessLevel.PROTECTED)
-        public static class ScrapOneDto {
+        public ScrapList toEntity(Long userIdx) {
+            return ScrapList.builder()
+                    .errMsg(errMsg)
+                    .company(company)
+                    .svcCd(svcCd)
+                    .userIdx(userIdx)
+                    .build();
+        }
+    }
 
-            @JsonProperty("소득내역")
-            private String incomeDetails;
-            @JsonProperty("총지급액")
-            private String totalPay;
-            @JsonProperty("업무시작일")
-            private String startDate;
-            @JsonProperty("기업명")
-            private String scrapCompany;
-            @JsonProperty("이름")
-            private String name;
-            @JsonProperty("지급일")
-            private String payDate;
-            @JsonProperty("업무종료일")
-            private String endDate;
-            @JsonProperty("주민등록번호")
-            private String regNo;
-            @JsonProperty("소득구분")
-            private String incomeCate;
-            @JsonProperty("사업자등록번호")
-            private String comNo;
+    @Getter
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class ScrapOneDto {
 
-            @Deprecated
-            @Builder
-            public ScrapOneDto(String incomeDetails,
-                                String totalPay,
-                                String startDate,
-                                String scrapCompany,
-                                String payDate,
-                                String svcCd,
-                                String endDate,
-                                String incomeCate,
-                                String comNo) {
+        @JsonProperty("소득내역")
+        private String incomeDetails;
+        @JsonProperty("총지급액")
+        private String totalPay;
+        @JsonProperty("업무시작일")
+        private String startDate;
+        @JsonProperty("기업명")
+        private String scrapCompany;
+        @JsonProperty("이름")
+        private String name;
+        @JsonProperty("지급일")
+        private String payDate;
+        @JsonProperty("업무종료일")
+        private String endDate;
+        @JsonProperty("주민등록번호")
+        private String regNo;
+        @JsonProperty("소득구분")
+        private String incomeCate;
+        @JsonProperty("사업자등록번호")
+        private String comNo;
 
-                this.incomeDetails = incomeDetails;
-                this.totalPay = totalPay;
-                this.startDate = startDate;
-                this.scrapCompany = scrapCompany;
-                this.payDate = payDate;
-                this.endDate = endDate;
-                this.incomeCate = incomeCate;
-                this.comNo = comNo;
-            }
+        @Deprecated
+        @Builder
+        public ScrapOneDto(String incomeDetails,
+                           String totalPay,
+                           String startDate,
+                           String scrapCompany,
+                           String payDate,
+                           String svcCd,
+                           String endDate,
+                           String incomeCate,
+                           String comNo) {
 
-            public ScrapOne toEntity(Long userIdx) {
-                return ScrapOne.builder()
-                        .incomeDetails(incomeDetails)
-                        .totalPay(Long.parseLong(totalPay))
-                        .startDate(startDate)
-                        .scrapCompany(scrapCompany)
-                        .payDate(payDate)
-                        .endDate(endDate)
-                        .incomeCate(incomeCate)
-                        .comNo(comNo)
-                        .userIdx(userIdx)
-                        .build();
-            }
+            this.incomeDetails = incomeDetails;
+            this.totalPay = totalPay;
+            this.startDate = startDate;
+            this.scrapCompany = scrapCompany;
+            this.payDate = payDate;
+            this.endDate = endDate;
+            this.incomeCate = incomeCate;
+            this.comNo = comNo;
         }
 
-        @Getter
-        @NoArgsConstructor(access = AccessLevel.PROTECTED)
-        public static class ScrapTwoDto {
+        public ScrapOne toEntity(Long userIdx) {
+            return ScrapOne.builder()
+                    .incomeDetails(incomeDetails)
+                    .totalPay(Long.parseLong(totalPay))
+                    .startDate(startDate)
+                    .scrapCompany(scrapCompany)
+                    .payDate(payDate)
+                    .endDate(endDate)
+                    .incomeCate(incomeCate)
+                    .comNo(comNo)
+                    .userIdx(userIdx)
+                    .build();
+        }
+    }
 
-            @JsonProperty("총사용금액")
-            private String totalUsed;
-            @JsonProperty("소득구분")
-            private String taxAmount;
+    @Getter
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class ScrapTwoDto {
 
-            @Deprecated
-            @Builder
-            public ScrapTwoDto(String totalUsed,
-                               String taxAmount) {
+        @JsonProperty("총사용금액")
+        private String totalUsed;
+        @JsonProperty("소득구분")
+        private String taxAmount;
 
-                this.totalUsed = totalUsed;
-                this.taxAmount = taxAmount;
-            }
+        @Deprecated
+        @Builder
+        public ScrapTwoDto(String totalUsed,
+                           String taxAmount) {
 
-            public ScrapTwo toEntity(Long userIdx) {
-                return ScrapTwo.builder()
-                        .totalUsed(Long.parseLong(totalUsed))
-                        .taxAmount(taxAmount)
-                        .userIdx(userIdx)
-                        .build();
-            }
+            this.totalUsed = totalUsed;
+            this.taxAmount = taxAmount;
+        }
+
+        public ScrapTwo toEntity(Long userIdx) {
+            return ScrapTwo.builder()
+                    .totalUsed(Long.parseLong(totalUsed))
+                    .taxAmount(taxAmount)
+                    .userIdx(userIdx)
+                    .build();
         }
     }
 }

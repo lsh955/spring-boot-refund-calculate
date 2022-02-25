@@ -14,6 +14,7 @@ import com.example.project.util.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.text.DecimalFormat;
 import java.util.HashMap;
@@ -40,6 +41,7 @@ public class RefundService {
      * @param jwtTokenDto User Token
      * @return 환금액 결과
      */
+    @Transactional
     public Object refund(JwtTokenDto jwtTokenDto) throws Exception {
         // Token 검증
         HashMap<String, String> strToken = this.jwtTokenUtil.decoderToken(jwtTokenDto);
@@ -134,15 +136,14 @@ public class RefundService {
     public String unitConversion(double money) {
         DecimalFormat d = new DecimalFormat("#,####");
 
-        String[] han2 = {"", "십", "백", "천"};    // TODO :: 십,백,천 단위 추가하기.
-        String[] han3 = {"", "만", "억", "조"};
+        String[] han = {"", "만", "억", "조"};
         String[] str = d.format(money).split(",");
 
         StringBuilder result = new StringBuilder();
         int count = 0;
         for (int i = str.length; i > 0; i--) {
             if (Integer.parseInt(str[i - 1]) != 0)
-                result.insert(0, Integer.parseInt(str[i - 1]) + han3[count]);
+                result.insert(0, Integer.parseInt(str[i - 1]) + han[count]);
 
             count++;
         }

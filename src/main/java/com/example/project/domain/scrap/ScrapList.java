@@ -13,9 +13,9 @@ import javax.persistence.*;
  */
 @Entity
 @Getter
-@Table(name = "scrap_result")
+@Table(name = "scrap_list")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ScrapResult {
+public class ScrapList {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,28 +28,15 @@ public class ScrapResult {
     private String company;
     private String svcCd;
 
-    private String appVer;
-    private String hostNm;
-    private String workerResDt;
-    private String workerReqDt;
-
     @Builder
-    public ScrapResult(String errMsg,
-                       String company,
-                       String svcCd,
-                       String appVer,
-                       String hostNm,
-                       String workerResDt,
-                       String workerReqDt,
-                       Long userIdx) {
+    public ScrapList(String errMsg,
+                     String company,
+                     String svcCd,
+                     Long userIdx) {
 
         this.errMsg = errMsg;
         this.company = company;
         this.svcCd = svcCd;
-        this.appVer = appVer;
-        this.hostNm = hostNm;
-        this.workerResDt = workerResDt;
-        this.workerReqDt = workerReqDt;
         this.userIdx = userIdx;
     }
 }

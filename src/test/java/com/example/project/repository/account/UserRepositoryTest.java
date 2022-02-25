@@ -1,6 +1,5 @@
 package com.example.project.repository.account;
 
-import com.example.project.TestValues;
 import com.example.project.controller.dto.UserDto;
 import com.example.project.domain.account.User;
 import com.example.project.domain.account.UserRepository;
@@ -21,7 +20,7 @@ import java.util.List;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
-class UserRepositoryTest extends TestValues {
+class UserRepositoryTest {
 
     @Autowired
     private UserRepository userRepository;
