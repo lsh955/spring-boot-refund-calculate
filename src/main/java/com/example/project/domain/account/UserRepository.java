@@ -12,14 +12,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     boolean existsByUserId(String userId);
 
-    boolean existsByName(String name);
-
     boolean existsByRegNo(String regNo);
 
-    boolean existsByPassword(String password);
+    User save(User user);
 
     User findByUserId(String userId);
 
-    // TODO 최근데이터 반화가기
     User findByNameAndRegNo(String name, String regNo);
 }

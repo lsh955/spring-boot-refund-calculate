@@ -1,6 +1,7 @@
 package com.example.project.controller.dto;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -14,4 +15,10 @@ public class JwtTokenDto {
 
     private String token;
 
+    @Deprecated
+    @Builder
+    public JwtTokenDto(String token) {
+
+        this.token = token;
+    }
 }

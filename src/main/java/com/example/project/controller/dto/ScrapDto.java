@@ -5,6 +5,7 @@ import com.example.project.domain.scrap.ScrapResult;
 import com.example.project.domain.scrap.ScrapTwo;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -25,6 +26,19 @@ public class ScrapDto {
     private String hostNm;
     private String workerResDt;
     private String workerReqDt;
+
+    @Deprecated
+    @Builder
+    public ScrapDto(String appVer,
+                    String hostNm,
+                    String workerResDt,
+                    String workerReqDt) {
+
+        this.appVer = appVer;
+        this.hostNm = hostNm;
+        this.workerResDt = workerResDt;
+        this.workerReqDt = workerReqDt;
+    }
 
     public ScrapResult toEntity(Long userIdx) {
         return ScrapResult.builder()
@@ -53,6 +67,17 @@ public class ScrapDto {
         private String svcCd;
         private String userId;
 
+        @Deprecated
+        @Builder
+        public ScrapListDto(String errMsg,
+                        String company,
+                        String svcCd) {
+
+            this.errMsg = errMsg;
+            this.company = company;
+            this.svcCd = svcCd;
+        }
+
         @Getter
         @NoArgsConstructor(access = AccessLevel.PROTECTED)
         public static class ScrapOneDto {
@@ -78,6 +103,28 @@ public class ScrapDto {
             @JsonProperty("사업자등록번호")
             private String comNo;
 
+            @Deprecated
+            @Builder
+            public ScrapOneDto(String incomeDetails,
+                                String totalPay,
+                                String startDate,
+                                String scrapCompany,
+                                String payDate,
+                                String svcCd,
+                                String endDate,
+                                String incomeCate,
+                                String comNo) {
+
+                this.incomeDetails = incomeDetails;
+                this.totalPay = totalPay;
+                this.startDate = startDate;
+                this.scrapCompany = scrapCompany;
+                this.payDate = payDate;
+                this.endDate = endDate;
+                this.incomeCate = incomeCate;
+                this.comNo = comNo;
+            }
+
             public ScrapOne toEntity(Long userIdx) {
                 return ScrapOne.builder()
                         .incomeDetails(incomeDetails)
@@ -101,6 +148,15 @@ public class ScrapDto {
             private String totalUsed;
             @JsonProperty("소득구분")
             private String taxAmount;
+
+            @Deprecated
+            @Builder
+            public ScrapTwoDto(String totalUsed,
+                               String taxAmount) {
+
+                this.totalUsed = totalUsed;
+                this.taxAmount = taxAmount;
+            }
 
             public ScrapTwo toEntity(Long userIdx) {
                 return ScrapTwo.builder()

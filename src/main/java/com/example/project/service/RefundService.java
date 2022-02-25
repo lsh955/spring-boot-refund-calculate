@@ -7,6 +7,7 @@ import com.example.project.domain.scrap.ScrapOne;
 import com.example.project.domain.scrap.ScrapOneRepository;
 import com.example.project.domain.scrap.ScrapTwo;
 import com.example.project.domain.scrap.ScrapTwoRepository;
+import com.example.project.enums.AccountStatus;
 import com.example.project.enums.ScrapStatus;
 import com.example.project.util.AESCryptoUtil;
 import com.example.project.util.JwtTokenUtil;
@@ -45,6 +46,9 @@ public class RefundService {
 
         // 사용자 불러오기
         User user = this.userRepository.findByNameAndRegNo(strToken.get("name"), this.aesCryptoUtil.encrypt(strToken.get("regNo")));
+
+        if (user == null)
+            return AccountStatus.INCONSISTENT;
 
         // 스크랩정보 불러오기
         ScrapOne scrapOne = scrapOneRepository.findByUserIdx(user.getUserIdx());

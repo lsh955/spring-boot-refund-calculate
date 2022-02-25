@@ -94,7 +94,7 @@ class AccountControllerTest extends TestValues {
 
     @Test
     @DisplayName(value = "회원가입 등록실패(회원가입 가능한 유저가 아닌경우)")
-    public void SIGNUP_UNABLE_TEST() throws Exception {
+    public void SIGNUP_UNABLE_FAILURE_TEST() throws Exception {
         String userId = "3";
         String password = "123";
         String name = "이승환";
@@ -142,10 +142,6 @@ class AccountControllerTest extends TestValues {
     public void LOGIN_FAILURE_TEST() throws Exception {
         String userId = "6";
         String password = "1234";
-
-        String name = "홍길동";
-        String regNo = "ldU2Z5ZlRuwPfYA1YfvOTw==";
-        HashMap<String, String> token = this.jwtTokenUtil.createToken(name, regNo);
 
         UserDto userDto = UserDto.builder()
                 .userId(userId)

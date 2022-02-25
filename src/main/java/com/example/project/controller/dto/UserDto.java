@@ -30,7 +30,10 @@ public class UserDto {
     private String regNo;
 
     @Builder
-    public UserDto(String userId, String password, String name, String regNo) {
+    public UserDto(String userId,
+                   String password,
+                   String name,
+                   String regNo) {
 
         this.userId = userId;
         this.password = password;

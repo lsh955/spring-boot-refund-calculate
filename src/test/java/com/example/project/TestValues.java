@@ -8,4 +8,5 @@ public class TestValues {
 
     protected String apIBaseUrl = "http://localhost:8080/szs";
 
+
 }

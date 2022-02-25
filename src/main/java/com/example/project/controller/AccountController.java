@@ -49,12 +49,12 @@ public class AccountController {
     }
 
     /**
-     * 내 정보 보기
+     * 개인정보 보기
      *
      * @param jwtTokenDto User Token
      * @return User
      */
-    @ApiOperation(value = "내 정보 보기", notes = "토큰정보에 따른 사용자 정보조회")
+    @ApiOperation(value = "개인정보 보기", notes = "토큰정보에 따른 사용자 정보조회")
     @PostMapping(value = "/me", consumes = MediaType.APPLICATION_JSON_VALUE)
     public Object me(@RequestBody JwtTokenDto jwtTokenDto) throws Exception {
 
