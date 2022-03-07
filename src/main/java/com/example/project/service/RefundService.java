@@ -60,15 +60,15 @@ public class RefundService {
             return ScrapStatus.NO_SCRAP_DATA;
 
         // 세액공제 한도계산
-        double taxCredit = taxCredit(scrapOne.getTotalPay());
+        double taxCredit = getTaxCredit(scrapOne.getTotalPay());
         // 소득세액 공제계산
-        double taxAmount = taxAmount(scrapTwo.getTotalUsed());
+        double taxAmount = getTaxAmount(scrapTwo.getTotalUsed());
 
         HashMap<String, Object> refunds = new HashMap<>();
         refunds.put("이름", user.getName());
-        refunds.put("한도", unitConversion(taxCredit));
-        refunds.put("공제액", unitConversion(taxAmount));
-        refunds.put("환급액", unitConversion(Math.min(taxCredit, taxAmount)));
+        refunds.put("한도", getUnitConversion(taxCredit));
+        refunds.put("공제액", getUnitConversion(taxAmount));
+        refunds.put("환급액", getUnitConversion(Math.min(taxCredit, taxAmount)));
 
         return refunds;
     }
@@ -79,7 +79,7 @@ public class RefundService {
      * @param totalPay 총급여액(총지급액)
      * @return 기준별 요건에 맞는 한도결과
      */
-    public double taxCredit(double totalPay) {
+    public double getTaxCredit(double totalPay) {
         double taxCredit = 0;   // 초기화
 
         // 3,300만원 이하 일 경우
@@ -113,7 +113,7 @@ public class RefundService {
      * @param totalUsed 산출세액
      * @return 기준별 요건에 맞는 공제결과
      */
-    public double taxAmount(double totalUsed) {
+    public double getTaxAmount(double totalUsed) {
         double taxAmount = 0;   // 초기화
 
         // 130만원 이하 일 경우
@@ -133,7 +133,7 @@ public class RefundService {
      * @param money 금액(ex:684000)
      * @return {단위변환결과}원
      */
-    public String unitConversion(double money) {
+    public String getUnitConversion(double money) {
         DecimalFormat d = new DecimalFormat("#,####");
 
         String[] han = {"", "만", "억", "조"};
