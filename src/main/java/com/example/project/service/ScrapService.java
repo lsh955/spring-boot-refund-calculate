@@ -49,7 +49,7 @@ public class ScrapService {
      * @return 스크랩조회 결과
      */
     @Transactional
-    public Object scrap(JwtTokenDto jwtTokenDto) throws Exception {
+    public Object getScrap(JwtTokenDto jwtTokenDto) throws Exception {
         // Token 검증
         HashMap<String, String> strToken = this.jwtTokenUtil.decoderToken(jwtTokenDto);
 

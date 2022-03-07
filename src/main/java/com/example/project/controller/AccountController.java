@@ -32,7 +32,7 @@ public class AccountController {
     @PostMapping(value = "/signup", consumes = MediaType.APPLICATION_JSON_VALUE)
     public Object signup(@RequestBody UserDto userDto) throws Exception {
 
-        return accountService.signup(userDto);
+        return accountService.addSignup(userDto);
     }
 
     /**
@@ -58,6 +58,6 @@ public class AccountController {
     @PostMapping(value = "/me", consumes = MediaType.APPLICATION_JSON_VALUE)
     public Object me(@RequestBody JwtTokenDto jwtTokenDto) throws Exception {
 
-        return accountService.me(jwtTokenDto);
+        return accountService.readMember(jwtTokenDto);
     }
 }

@@ -42,7 +42,7 @@ public class RefundService {
      * @return 환금액 결과
      */
     @Transactional
-    public Object refund(JwtTokenDto jwtTokenDto) throws Exception {
+    public Object getRefund(JwtTokenDto jwtTokenDto) throws Exception {
         // Token 검증
         HashMap<String, String> strToken = this.jwtTokenUtil.decoderToken(jwtTokenDto);
 

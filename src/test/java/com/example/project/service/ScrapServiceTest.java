@@ -52,7 +52,7 @@ class ScrapServiceTest {
                 .token(token)
                 .build();
 
-        Object me = this.scrapService.scrap(jwtTokenDto);
+        Object me = this.scrapService.getScrap(jwtTokenDto);
 
         Assertions.assertThat(me).isNotNull();
     }
@@ -66,7 +66,7 @@ class ScrapServiceTest {
                 .token(token)
                 .build();
 
-        Object me = this.scrapService.scrap(jwtTokenDto);
+        Object me = this.scrapService.getScrap(jwtTokenDto);
 
         Assertions.assertThat(me).isEqualTo(AccountStatus.INCONSISTENT);
     }

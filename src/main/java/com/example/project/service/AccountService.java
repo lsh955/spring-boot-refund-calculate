@@ -31,7 +31,7 @@ public class AccountService {
     private final AESCryptoUtil aesCryptoUtil;
 
     @Transactional
-    public Object signup(UserDto userDto) throws Exception {
+    public Object addSignup(UserDto userDto) throws Exception {
         String encryptedRegNo = this.aesCryptoUtil.encrypt(userDto.getRegNo());
 
         // 가입가능한 주민번호 체크(이름은 동명이인 있을 수 있으니 가입가능한 이름은 검사하지 않음)
@@ -69,7 +69,7 @@ public class AccountService {
     }
 
     @Transactional
-    public Object me(JwtTokenDto jwtTokenDto) throws Exception {
+    public Object readMember(JwtTokenDto jwtTokenDto) throws Exception {
         // Token 검증
         HashMap<String, String> strToken = this.jwtTokenUtil.decoderToken(jwtTokenDto);
 

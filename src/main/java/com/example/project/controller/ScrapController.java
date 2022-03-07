@@ -26,6 +26,6 @@ public class ScrapController {
     @PostMapping(value = "/scrap", consumes = MediaType.APPLICATION_JSON_VALUE)
     public Object scrap(@RequestBody JwtTokenDto jwtTokenDto) throws Exception {
 
-        return scrapService.scrap(jwtTokenDto);
+        return scrapService.getScrap(jwtTokenDto);
     }
 }

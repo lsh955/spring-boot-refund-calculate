@@ -27,7 +27,7 @@ public class RefundController {
     @PostMapping(value = "/refund", consumes = MediaType.APPLICATION_JSON_VALUE)
     public Object refund(@RequestBody JwtTokenDto jwtTokenDto) throws Exception {
 
-        return refundService.refund(jwtTokenDto);
+        return refundService.getRefund(jwtTokenDto);
     }
 
 }
