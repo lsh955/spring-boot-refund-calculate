@@ -42,7 +42,6 @@ dependencies {
     implementation 'org.json:json:20211205'
 
     // test
-    implementation 'junit:junit:4.13.2'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 

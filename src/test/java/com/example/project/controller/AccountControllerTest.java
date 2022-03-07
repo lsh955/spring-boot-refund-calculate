@@ -5,16 +5,15 @@ import com.example.project.domain.account.UserRepository;
 import com.example.project.enums.AccountStatus;
 import com.example.project.util.JwtTokenUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.After;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.HashMap;
@@ -28,7 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * @since 2022-02-19
  */
 @AutoConfigureMockMvc
-@RunWith(SpringRunner.class)
+@ExtendWith(MockitoExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class AccountControllerTest {
 
@@ -62,8 +61,8 @@ class AccountControllerTest {
                 .build();
 
         this.mockMvc.perform(post("http://localhost:8080/szs/signup")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(this.objectMapper.writeValueAsString(userDto)))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(this.objectMapper.writeValueAsString(userDto)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("code").value(AccountStatus.SIGNUP_SUCCESS.getCode()))
                 .andExpect(jsonPath("message").value(AccountStatus.SIGNUP_SUCCESS.getMessage()));
@@ -85,8 +84,8 @@ class AccountControllerTest {
                 .build();
 
         this.mockMvc.perform(post("http://localhost:8080/szs/signup")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(this.objectMapper.writeValueAsString(userDto)))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(this.objectMapper.writeValueAsString(userDto)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("code").value(AccountStatus.REG_NO_OVERLAP.getCode()))
                 .andExpect(jsonPath("message").value(AccountStatus.REG_NO_OVERLAP.getMessage()));
@@ -108,8 +107,8 @@ class AccountControllerTest {
                 .build();
 
         this.mockMvc.perform(post("http://localhost:8080/szs/signup")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(this.objectMapper.writeValueAsString(userDto)))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(this.objectMapper.writeValueAsString(userDto)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("code").value(AccountStatus.UNABLE_TO_REG_NO.getCode()))
                 .andExpect(jsonPath("message").value(AccountStatus.UNABLE_TO_REG_NO.getMessage()));
@@ -131,8 +130,8 @@ class AccountControllerTest {
                 .build();
 
         this.mockMvc.perform(post("http://localhost:8080/szs/login")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(this.objectMapper.writeValueAsString(userDto)))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(this.objectMapper.writeValueAsString(userDto)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("token").value(token.get("token")));
     }
@@ -149,8 +148,8 @@ class AccountControllerTest {
                 .build();
 
         this.mockMvc.perform(post("http://localhost:8080/szs/login")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(this.objectMapper.writeValueAsString(userDto)))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(this.objectMapper.writeValueAsString(userDto)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("code").value(AccountStatus.INCONSISTENT.getCode()))
                 .andExpect(jsonPath("message").value(AccountStatus.INCONSISTENT.getMessage()));
@@ -165,8 +164,8 @@ class AccountControllerTest {
         HashMap<String, String> token = this.jwtTokenUtil.createToken(name, regNo);
 
         this.mockMvc.perform(post("http://localhost:8080/szs/me")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(this.objectMapper.writeValueAsString(token)))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(this.objectMapper.writeValueAsString(token)))
                 .andExpect(status().isOk());
     }
 
@@ -179,8 +178,8 @@ class AccountControllerTest {
         HashMap<String, String> token = this.jwtTokenUtil.createToken(name, regNo);
 
         this.mockMvc.perform(post("http://localhost:8080/szs/me")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(this.objectMapper.writeValueAsString(token)))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(this.objectMapper.writeValueAsString(token)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("code").value(AccountStatus.INCONSISTENT.getCode()))
                 .andExpect(jsonPath("message").value(AccountStatus.INCONSISTENT.getMessage()));

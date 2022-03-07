@@ -5,21 +5,20 @@ import com.example.project.controller.dto.UserDto;
 import com.example.project.domain.account.UserRepository;
 import com.example.project.enums.AccountStatus;
 import org.assertj.core.api.Assertions;
-import org.junit.After;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
 /**
  * @author 이승환
  * @since 2022-02-24
  */
-@RunWith(SpringRunner.class)
+@ExtendWith(MockitoExtension.class)
 @SpringBootTest
 class AccountServiceTest {
 
