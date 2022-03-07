@@ -5,6 +5,7 @@ import com.example.project.domain.scrap.ScrapResponse;
 import com.example.project.domain.scrap.ScrapResponseRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.After;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -25,7 +26,7 @@ class ScrapResponseRepositoryTest {
     @Autowired
     private ScrapResponseRepository scrapResponseRepository;
 
-    @After
+    @AfterEach
     public void cleanup() {
         this.scrapResponseRepository.deleteAll();
     }

@@ -6,6 +6,7 @@ import com.example.project.enums.AccountStatus;
 import com.example.project.util.JwtTokenUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.After;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -40,7 +41,7 @@ class AccountControllerTest {
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
 
-    @After
+    @AfterEach
     public void down() {
         userRepository.deleteAll();
     }

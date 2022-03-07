@@ -8,6 +8,7 @@ import com.example.project.domain.scrap.ScrapTwoRepository;
 import com.example.project.enums.AccountStatus;
 import org.assertj.core.api.Assertions;
 import org.junit.After;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -35,7 +36,7 @@ class ScrapServiceTest {
     @Autowired
     private ScrapResponseRepository scrapResponseRepository;
 
-    @After
+    @AfterEach
     public void cleanup() {
         scrapOneRepository.deleteAll();
         scrapTwoRepository.deleteAll();
