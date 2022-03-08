@@ -2,6 +2,7 @@ package com.example.project.controller;
 
 import com.example.project.controller.dto.JwtTokenDto;
 import com.example.project.controller.dto.UserDto;
+import com.example.project.enums.AccountStatus;
 import com.example.project.service.AccountService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +31,7 @@ public class AccountController {
      */
     @ApiOperation(value = "회원가입", notes = "입력에 따른 사용자 정보등록")
     @PostMapping(value = "/signup", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Object signup(@RequestBody UserDto userDto) throws Exception {
+    public AccountStatus signup(@RequestBody UserDto userDto) throws Exception {
 
         return accountService.addSignup(userDto);
     }

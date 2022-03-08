@@ -29,7 +29,7 @@ public class AccountService {
     private final AESCryptoUtil aesCryptoUtil;
 
     @Transactional
-    public Object addSignup(UserDto userDto) throws Exception {
+    public AccountStatus addSignup(UserDto userDto) throws Exception {
         String encryptedRegNo = this.aesCryptoUtil.encrypt(userDto.getRegNo());
 
         // 가입가능한 주민번호 체크(이름은 동명이인 있을 수 있으니 가입가능한 이름은 검사하지 않음)

@@ -48,7 +48,7 @@ class AccountServiceTest {
                 .regNo(regNo)
                 .build();
 
-        Object signup = this.accountService.addSignup(userDto);
+        AccountStatus signup = this.accountService.addSignup(userDto);
 
         Assertions.assertThat(signup).isEqualTo(AccountStatus.SIGNUP_SUCCESS);
     }
@@ -68,7 +68,7 @@ class AccountServiceTest {
                 .regNo(regNo)
                 .build();
 
-        Object signup = this.accountService.addSignup(userDto);
+        AccountStatus signup = this.accountService.addSignup(userDto);
 
         Assertions.assertThat(signup).isEqualTo(AccountStatus.REG_NO_OVERLAP);
     }
@@ -88,7 +88,7 @@ class AccountServiceTest {
                 .regNo(regNo)
                 .build();
 
-        Object signup = this.accountService.addSignup(userDto);
+        AccountStatus signup = this.accountService.addSignup(userDto);
 
         Assertions.assertThat(signup).isEqualTo(AccountStatus.UNABLE_TO_REG_NO);
     }
