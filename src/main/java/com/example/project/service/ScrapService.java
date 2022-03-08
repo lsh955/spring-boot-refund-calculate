@@ -70,13 +70,13 @@ public class ScrapService {
             return AccountStatus.INCONSISTENT;
         }
 
-        // API 리스트결과
+        // API 리스트결과 저장
         this.scrapListRepository.save(scrapDto.getScrapListDto().toEntity(user.getUserIdx()));
-        // scrap001
+        // scrap001 저장
         this.scrapOneRepository.save(scrapDto.getScrapListDto().getScrapOneDto().get(0).toEntity(user.getUserIdx()));
-        // scrap002
+        // scrap002 저장
         this.scrapTwoRepository.save(scrapDto.getScrapListDto().getScrapTwoDto().get(0).toEntity(user.getUserIdx()));
-        // API 응답결과
+        // API 응답결과 저장
         this.scrapResponseRepository.save(scrapDto.toEntity(user.getUserIdx()));
 
         return scrapDto;
