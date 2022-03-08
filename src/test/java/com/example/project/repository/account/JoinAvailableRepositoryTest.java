@@ -1,19 +1,17 @@
 package com.example.project.repository.account;
 
 import com.example.project.domain.account.JoinAvailableRepository;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * @author 이승환
  * @since 2022-02-24
  */
-@ExtendWith(MockitoExtension.class)
 @SpringBootTest
 class JoinAvailableRepositoryTest {
 
@@ -27,6 +25,6 @@ class JoinAvailableRepositoryTest {
 
         boolean regNo = this.joinAvailableRepository.existsByRegNo(regNoText);
 
-        Assertions.assertThat(regNo).isEqualTo(true);
+        assertThat(regNo).isEqualTo(true);
     }
 }

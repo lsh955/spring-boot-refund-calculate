@@ -3,22 +3,20 @@ package com.example.project.repository.scrap;
 import com.example.project.controller.dto.ScrapDto;
 import com.example.project.domain.scrap.ScrapResponse;
 import com.example.project.domain.scrap.ScrapResponseRepository;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 /**
  * @author 이승환
  * @since 2022-02-24
  */
-@ExtendWith(MockitoExtension.class)
 @SpringBootTest
 class ScrapResponseRepositoryTest {
 
@@ -51,11 +49,11 @@ class ScrapResponseRepositoryTest {
 
         List<ScrapResponse> scrapResponses = scrapResponseRepository.findAll();
 
-        Assertions.assertThat(scrapResponses.get(0)).isNotNull();
-        Assertions.assertThat(scrapResponses.get(0).getUserIdx()).isEqualTo(userIdx);
-        Assertions.assertThat(scrapResponses.get(0).getAppVer()).isEqualTo(appVer);
-        Assertions.assertThat(scrapResponses.get(0).getHostNm()).isEqualTo(hostNm);
-        Assertions.assertThat(scrapResponses.get(0).getWorkerReqDt()).isNotNull();
-        Assertions.assertThat(scrapResponses.get(0).getWorkerReqDt()).isNotNull();
+        assertThat(scrapResponses.get(0)).isNotNull();
+        assertThat(scrapResponses.get(0).getUserIdx()).isEqualTo(userIdx);
+        assertThat(scrapResponses.get(0).getAppVer()).isEqualTo(appVer);
+        assertThat(scrapResponses.get(0).getHostNm()).isEqualTo(hostNm);
+        assertThat(scrapResponses.get(0).getWorkerReqDt()).isNotNull();
+        assertThat(scrapResponses.get(0).getWorkerReqDt()).isNotNull();
     }
 }

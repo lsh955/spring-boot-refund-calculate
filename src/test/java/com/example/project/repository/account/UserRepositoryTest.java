@@ -3,22 +3,20 @@ package com.example.project.repository.account;
 import com.example.project.controller.dto.UserDto;
 import com.example.project.domain.account.User;
 import com.example.project.domain.account.UserRepository;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 /**
  * @author 이승환
  * @since 2022-02-24
  */
-@ExtendWith(MockitoExtension.class)
 @SpringBootTest
 class UserRepositoryTest {
 
@@ -49,10 +47,10 @@ class UserRepositoryTest {
 
         List<User> userList = userRepository.findAll();
 
-        Assertions.assertThat(userList.get(0).getUserId()).isEqualTo(userId);
-        Assertions.assertThat(userList.get(0).getPassword()).isEqualTo(password);
-        Assertions.assertThat(userList.get(0).getRegNo()).isEqualTo(regNo);
-        Assertions.assertThat(userList.get(0).getName()).isEqualTo(name);
+        assertThat(userList.get(0).getUserId()).isEqualTo(userId);
+        assertThat(userList.get(0).getPassword()).isEqualTo(password);
+        assertThat(userList.get(0).getRegNo()).isEqualTo(regNo);
+        assertThat(userList.get(0).getName()).isEqualTo(name);
     }
 
     @Test
@@ -67,10 +65,10 @@ class UserRepositoryTest {
 
         List<User> userList = userRepository.findAll();
 
-        Assertions.assertThat(userList.get(0).getUserId()).isEqualTo(userId);
-        Assertions.assertThat(userList.get(0).getPassword()).isEqualTo(password);
-        Assertions.assertThat(userList.get(0).getRegNo()).isEqualTo(regNo);
-        Assertions.assertThat(userList.get(0).getName()).isEqualTo(name);
+        assertThat(userList.get(0).getUserId()).isEqualTo(userId);
+        assertThat(userList.get(0).getPassword()).isEqualTo(password);
+        assertThat(userList.get(0).getRegNo()).isEqualTo(regNo);
+        assertThat(userList.get(0).getName()).isEqualTo(name);
     }
 
     @Test
@@ -80,7 +78,7 @@ class UserRepositoryTest {
 
         boolean userId = userRepository.existsByUserId(userIdText);
 
-        Assertions.assertThat(userId).isEqualTo(true);
+        assertThat(userId).isEqualTo(true);
     }
 
     @Test
@@ -90,7 +88,7 @@ class UserRepositoryTest {
 
         boolean userId = userRepository.existsByUserId(userIdText);
 
-        Assertions.assertThat(userId).isEqualTo(false);
+        assertThat(userId).isEqualTo(false);
     }
 
     @Test
@@ -100,7 +98,7 @@ class UserRepositoryTest {
 
         boolean regNo = userRepository.existsByRegNo(regNoText);
 
-        Assertions.assertThat(regNo).isEqualTo(true);
+        assertThat(regNo).isEqualTo(true);
     }
 
     @Test
@@ -110,7 +108,7 @@ class UserRepositoryTest {
 
         boolean regNo = userRepository.existsByRegNo(regNoText);
 
-        Assertions.assertThat(regNo).isEqualTo(false);
+        assertThat(regNo).isEqualTo(false);
     }
 
     @Test
@@ -123,9 +121,9 @@ class UserRepositoryTest {
 
         User user = userRepository.findByNameAndRegNo(name, regNo);
 
-        Assertions.assertThat(user.getUserId()).isEqualTo(userId);
-        Assertions.assertThat(user.getName()).isEqualTo(name);
-        Assertions.assertThat(user.getPassword()).isEqualTo(password);
-        Assertions.assertThat(user.getRegNo()).isEqualTo(regNo);
+        assertThat(user.getUserId()).isEqualTo(userId);
+        assertThat(user.getName()).isEqualTo(name);
+        assertThat(user.getPassword()).isEqualTo(password);
+        assertThat(user.getRegNo()).isEqualTo(regNo);
     }
 }

@@ -3,22 +3,20 @@ package com.example.project.repository.scrap;
 import com.example.project.controller.dto.ScrapDto;
 import com.example.project.domain.scrap.ScrapOne;
 import com.example.project.domain.scrap.ScrapOneRepository;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 /**
  * @author 이승환
  * @since 2022-02-24
  */
-@ExtendWith(MockitoExtension.class)
 @SpringBootTest
 class ScrapOneRepositoryTest {
 
@@ -59,14 +57,14 @@ class ScrapOneRepositoryTest {
 
         List<ScrapOne> scrapOnes = scrapOneRepository.findAll();
 
-        Assertions.assertThat(scrapOnes.get(0).getUserIdx()).isEqualTo(userIdx);
-        Assertions.assertThat(scrapOnes.get(0).getIncomeDetails()).isEqualTo(incomeDetails);
-        Assertions.assertThat(scrapOnes.get(0).getTotalPay()).isEqualTo(totalPay);
-        Assertions.assertThat(scrapOnes.get(0).getStartDate()).isEqualTo(startDate);
-        Assertions.assertThat(scrapOnes.get(0).getScrapCompany()).isEqualTo(scrapCompany);
-        Assertions.assertThat(scrapOnes.get(0).getPayDate()).isEqualTo(payDate);
-        Assertions.assertThat(scrapOnes.get(0).getEndDate()).isEqualTo(endDate);
-        Assertions.assertThat(scrapOnes.get(0).getIncomeCate()).isEqualTo(incomeCate);
-        Assertions.assertThat(scrapOnes.get(0).getComNo()).isEqualTo(comNo);
+        assertThat(scrapOnes.get(0).getUserIdx()).isEqualTo(userIdx);
+        assertThat(scrapOnes.get(0).getIncomeDetails()).isEqualTo(incomeDetails);
+        assertThat(scrapOnes.get(0).getTotalPay()).isEqualTo(totalPay);
+        assertThat(scrapOnes.get(0).getStartDate()).isEqualTo(startDate);
+        assertThat(scrapOnes.get(0).getScrapCompany()).isEqualTo(scrapCompany);
+        assertThat(scrapOnes.get(0).getPayDate()).isEqualTo(payDate);
+        assertThat(scrapOnes.get(0).getEndDate()).isEqualTo(endDate);
+        assertThat(scrapOnes.get(0).getIncomeCate()).isEqualTo(incomeCate);
+        assertThat(scrapOnes.get(0).getComNo()).isEqualTo(comNo);
     }
 }

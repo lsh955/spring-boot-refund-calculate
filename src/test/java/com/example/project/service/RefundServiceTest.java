@@ -7,21 +7,19 @@ import com.example.project.domain.scrap.ScrapResponseRepository;
 import com.example.project.domain.scrap.ScrapTwoRepository;
 import com.example.project.enums.AccountStatus;
 import com.example.project.enums.ScrapStatus;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * @author 이승환
  * @since 2022-02-24
  */
-@ExtendWith(MockitoExtension.class)
 @SpringBootTest
 class RefundServiceTest {
 
@@ -70,7 +68,7 @@ class RefundServiceTest {
 
         Object me = this.refundService.getRefund(jwtTokenDto);
 
-        Assertions.assertThat(me).isNotNull();
+        assertThat(me).isNotNull();
     }
 
     @Test
@@ -84,7 +82,7 @@ class RefundServiceTest {
 
         Object me = this.refundService.getRefund(jwtTokenDto);
 
-        Assertions.assertThat(me).isEqualTo(ScrapStatus.NO_SCRAP_DATA);
+        assertThat(me).isEqualTo(ScrapStatus.NO_SCRAP_DATA);
     }
 
     @Test
@@ -98,6 +96,6 @@ class RefundServiceTest {
 
         Object me = this.refundService.getRefund(jwtTokenDto);
 
-        Assertions.assertThat(me).isEqualTo(AccountStatus.INCONSISTENT);
+        assertThat(me).isEqualTo(AccountStatus.INCONSISTENT);
     }
 }

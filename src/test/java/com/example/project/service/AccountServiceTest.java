@@ -4,21 +4,19 @@ import com.example.project.controller.dto.JwtTokenDto;
 import com.example.project.controller.dto.UserDto;
 import com.example.project.domain.account.UserRepository;
 import com.example.project.enums.AccountStatus;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * @author 이승환
  * @since 2022-02-24
  */
-@ExtendWith(MockitoExtension.class)
 @SpringBootTest
 class AccountServiceTest {
 
@@ -50,7 +48,7 @@ class AccountServiceTest {
 
         AccountStatus signup = this.accountService.addSignup(userDto);
 
-        Assertions.assertThat(signup).isEqualTo(AccountStatus.SIGNUP_SUCCESS);
+        assertThat(signup).isEqualTo(AccountStatus.SIGNUP_SUCCESS);
     }
 
     @Test
@@ -70,7 +68,7 @@ class AccountServiceTest {
 
         AccountStatus signup = this.accountService.addSignup(userDto);
 
-        Assertions.assertThat(signup).isEqualTo(AccountStatus.REG_NO_OVERLAP);
+        assertThat(signup).isEqualTo(AccountStatus.REG_NO_OVERLAP);
     }
 
     @Test
@@ -90,7 +88,7 @@ class AccountServiceTest {
 
         AccountStatus signup = this.accountService.addSignup(userDto);
 
-        Assertions.assertThat(signup).isEqualTo(AccountStatus.UNABLE_TO_REG_NO);
+        assertThat(signup).isEqualTo(AccountStatus.UNABLE_TO_REG_NO);
     }
 
     @Test
@@ -110,7 +108,7 @@ class AccountServiceTest {
 
         Object login = this.accountService.login(userDto);
 
-        Assertions.assertThat(login).isNotNull();
+        assertThat(login).isNotNull();
     }
 
     @Test
@@ -130,7 +128,7 @@ class AccountServiceTest {
 
         Object login = this.accountService.login(userDto);
 
-        Assertions.assertThat(login).isEqualTo(AccountStatus.INCONSISTENT);
+        assertThat(login).isEqualTo(AccountStatus.INCONSISTENT);
     }
 
     @Test
@@ -144,7 +142,7 @@ class AccountServiceTest {
 
         Object me = this.accountService.readMember(jwtTokenDto);
 
-        Assertions.assertThat(me).isNotNull();
+        assertThat(me).isNotNull();
     }
 
     @Test
@@ -158,6 +156,6 @@ class AccountServiceTest {
 
         Object me = this.accountService.readMember(jwtTokenDto);
 
-        Assertions.assertThat(me).isEqualTo(AccountStatus.INCONSISTENT);
+        assertThat(me).isEqualTo(AccountStatus.INCONSISTENT);
     }
 }

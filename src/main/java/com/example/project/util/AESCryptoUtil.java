@@ -31,12 +31,10 @@ public class AESCryptoUtil {
         SecretKeySpec keySpec = new SecretKeySpec(secretKey.getBytes(), "AES");   // key 로 비밀키 생성
 
         /**
-         * AES는 128비트(16바이트)단위로 암호화 하기때문에 IV 또한 16바이트 크기여야 한다.
-         * IV가 생성되면 이 값을 가지고 첫번째 블록을 암호화 한다.
-         * 매번 다른 IV를 생성하면 같은 평문이라도 다른 암호문을 생성할 수 있다.
+         * AES는 128비트(16바이트)단위로 암호화 하기때문에 IV 또한 16바이트 똑같은 크기여야 한다.
+         * IV가 생성되면 이 값을 가지고 첫번째 블록을 암호화 하고, 매번 다른 IV를 생성하면 같은 평문이라도 다른 암호문을 생성할 수 있다.
          */
         IvParameterSpec ivParamSpec = new IvParameterSpec(iv.getBytes());   // CBC 암호화는 IV 라는 벡터값이 하나가 더 들어간다고 한다.
-
         cipher.init(Cipher.ENCRYPT_MODE, keySpec, ivParamSpec); // cipher 객체를 암호화 모드로 초기화
 
         byte[] encrypted = cipher.doFinal(text.getBytes(StandardCharsets.UTF_8));   // 평문을 바이트와 하고, 바이트한 평문을 암호화 한다.
@@ -56,12 +54,10 @@ public class AESCryptoUtil {
         SecretKeySpec keySpec = new SecretKeySpec(secretKey.getBytes(), "AES");   // key 로 비밀키 생성
 
         /**
-         * AES는 128비트(16바이트)단위로 암호화 하기때문에 IV 또한 16바이트 크기여야 한다.
-         * IV가 생성되면 이 값을 가지고 첫번째 블록을 암호화 한다.
-         * 매번 다른 IV를 생성하면 같은 평문이라도 다른 암호문을 생성할 수 있다.
+         * AES는 128비트(16바이트)단위로 암호화 하기때문에 IV 또한 16바이트 똑같은 크기여야 한다.
+         * IV가 생성되면 이 값을 가지고 첫번째 블록을 암호화 하고, 매번 다른 IV를 생성하면 같은 평문이라도 다른 암호문을 생성할 수 있다.
          */
         IvParameterSpec ivParamSpec = new IvParameterSpec(iv.getBytes());   // CBC 암호화는 IV 라는 벡터값이 하나가 더 들어간다고 한다.
-
         cipher.init(Cipher.DECRYPT_MODE, keySpec, ivParamSpec); // cipher 객체를 복호화 모드로 초기화
 
         byte[] decodedBytes = Base64.getDecoder().decode(cipherText);   // 문자열을 다시 원래 형식으로 base64로 디코더
