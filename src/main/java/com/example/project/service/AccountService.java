@@ -9,6 +9,7 @@ import com.example.project.enums.AccountStatus;
 import com.example.project.util.AESCryptoUtil;
 import com.example.project.util.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -48,22 +49,19 @@ public class AccountService {
 
     @Transactional
     public Object login(UserDto userDto) throws Exception {
-        User user = userRepository.findByUserId(userDto.getUserId());
+        User user = userRepository.findByUserId(userDto.getUserId());   // 사용자 아이디 기준으로 데이터 불러오기
 
-        // 가입된 정보가 없다면
-        if (user == null)
+        if (user == null)   // 정보가 없다면 가입되지 않는회원으로 간주
             return AccountStatus.INCONSISTENT;
 
+        // 패스워드 복호화
         String decryptedDbPassword = this.aesCryptoUtil.decrypt(user.getPassword());
 
-        // 아이디와 패스와드가 맞는지.
-        if (this.userRepository.existsByUserId(userDto.getUserId()) && userDto.getPassword().equals(decryptedDbPassword)) {
-            User users = this.userRepository.findByUserId(userDto.getUserId());
-
-            return this.jwtTokenUtil.createToken(users.getName(), users.getRegNo()); // 가입이 되었다면 토큰생성.
-        } else {
+        // 아이디와 패스와드가 맞는지 검증
+        if (!userDto.getPassword().equals(decryptedDbPassword))
             return AccountStatus.INCONSISTENT;  // 정보가 올바르지 않는다면.
-        }
+
+        return this.jwtTokenUtil.createToken(user.getName(), user.getRegNo());  // 가입이 되었다면 토큰생성.
     }
 
     @Transactional
