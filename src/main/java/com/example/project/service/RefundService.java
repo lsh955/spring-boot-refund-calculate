@@ -47,14 +47,14 @@ public class RefundService {
         // 사용자 불러오기
         User user = this.userRepository.findByNameAndRegNo(strToken.get("name"), this.aesCryptoUtil.encrypt(strToken.get("regNo")));
 
-        if (user == null)
+        if (user == null)   // 사용자가 없을 시
             return AccountStatus.INCONSISTENT;
 
         // 스크랩정보 불러오기
         ScrapOne scrapOne = scrapOneRepository.findByUserIdx(user.getUserIdx());
         ScrapTwo scrapTwo = scrapTwoRepository.findByUserIdx(user.getUserIdx());
 
-        if (scrapOne == null && scrapTwo == null)
+        if (scrapOne == null && scrapTwo == null)   // 사용자 식별값 기준으로 저장된 스크랩데이터가 없을 시
             return ScrapStatus.NO_SCRAP_DATA;
 
         // 세액공제 한도계산
