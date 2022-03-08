@@ -69,5 +69,4 @@ public class AESCryptoUtil {
 
         return new String(decrypted, StandardCharsets.UTF_8);   // 복호화 인코딩 후 return
     }
-
 }
