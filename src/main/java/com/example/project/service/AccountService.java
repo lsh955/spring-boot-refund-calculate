@@ -28,6 +28,12 @@ public class AccountService {
     private final JwtTokenUtil jwtTokenUtil;
     private final AESCryptoUtil aesCryptoUtil;
 
+    /**
+     * 회원가입
+     *
+     * @param userDto userDto
+     * @return
+     */
     @Transactional
     public AccountStatus addSignup(UserDto userDto) throws Exception {
         // 패스워드 암호화
@@ -47,6 +53,12 @@ public class AccountService {
         return AccountStatus.SIGNUP_SUCCESS;
     }
 
+    /**
+     * 로그인
+     *
+     * @param userDto userDto
+     * @return
+     */
     @Transactional
     public Object login(UserDto userDto) throws Exception {
         // 사용자 아이디 기준으로 데이터 불러오기
@@ -65,6 +77,12 @@ public class AccountService {
         return this.jwtTokenUtil.createToken(user.getName(), user.getRegNo());  // 가입이 되었다면 토큰생성.
     }
 
+    /**
+     * 내 정보 보기
+     *
+     * @param jwtTokenDto User Token
+     * @return
+     */
     @Transactional
     public Object readMember(JwtTokenDto jwtTokenDto) throws Exception {
         // Token 검증
