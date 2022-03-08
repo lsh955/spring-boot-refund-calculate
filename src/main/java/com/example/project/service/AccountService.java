@@ -58,7 +58,7 @@ public class AccountService {
         // 패스워드 복호화
         String decryptedDbPassword = this.aesCryptoUtil.decrypt(user.getPassword());
 
-        // 아이디와 패스와드가 맞는지 검증
+        // 패스와드가 맞는지 검증
         if (!userDto.getPassword().equals(decryptedDbPassword))
             return AccountStatus.INCONSISTENT;  // 정보가 올바르지 않는다면.
 
