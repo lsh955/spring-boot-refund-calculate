@@ -72,8 +72,7 @@ public class AccountService {
         // 사용자정보 불러오기
         User user = this.userRepository.findByNameAndRegNo(strToken.get("name"), this.aesCryptoUtil.encrypt(strToken.get("regNo")));
 
-        // 정보가 없다면 가입되지 않는회원으로 간주
-        if (user == null)
+        if (user == null)   // 정보가 없다면 가입되지 않는회원으로 간주
             return AccountStatus.INCONSISTENT;
 
         return user;
