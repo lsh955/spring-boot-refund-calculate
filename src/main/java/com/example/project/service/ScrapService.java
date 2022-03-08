@@ -67,17 +67,14 @@ public class ScrapService {
             return AccountStatus.INCONSISTENT;
         }
 
-        // 데이터 저장
-        if (scrapDto != null) {
-            // API 리스트결과
-            this.scrapListRepository.save(scrapDto.getScrapListDto().toEntity(user.getUserIdx()));
-            // scrap001
-            this.scrapOneRepository.save(scrapDto.getScrapListDto().getScrapOneDto().get(0).toEntity(user.getUserIdx()));
-            // scrap002
-            this.scrapTwoRepository.save(scrapDto.getScrapListDto().getScrapTwoDto().get(0).toEntity(user.getUserIdx()));
-            // API 응답결과
-            this.scrapResponseRepository.save(scrapDto.toEntity(user.getUserIdx()));
-        }
+        // API 리스트결과
+        this.scrapListRepository.save(scrapDto.getScrapListDto().toEntity(user.getUserIdx()));
+        // scrap001
+        this.scrapOneRepository.save(scrapDto.getScrapListDto().getScrapOneDto().get(0).toEntity(user.getUserIdx()));
+        // scrap002
+        this.scrapTwoRepository.save(scrapDto.getScrapListDto().getScrapTwoDto().get(0).toEntity(user.getUserIdx()));
+        // API 응답결과
+        this.scrapResponseRepository.save(scrapDto.toEntity(user.getUserIdx()));
 
         return scrapDto;
     }
