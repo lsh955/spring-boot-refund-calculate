@@ -52,7 +52,10 @@ public class ScrapService {
         HashMap<String, String> strToken = this.jwtTokenUtil.decoderToken(jwtTokenDto);
 
         // 사용자 불러오기
-        User user = this.userRepository.findByNameAndRegNo(strToken.get("name"), this.aesCryptoUtil.encrypt(strToken.get("regNo")));
+        User user = this.userRepository.findByNameAndRegNo(
+                strToken.get("name"),
+                this.aesCryptoUtil.encrypt(strToken.get("regNo"))
+        );
 
         ScrapDto scrapDto;
         if (user != null) {  // 가입된 정보가 있다면
