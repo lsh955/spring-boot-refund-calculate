@@ -31,6 +31,7 @@ public class AccountService {
 
     @Transactional
     public AccountStatus addSignup(UserDto userDto) throws Exception {
+        // 패스워드 암호화
         String encryptedRegNo = this.aesCryptoUtil.encrypt(userDto.getRegNo());
 
         // 가입가능한 주민번호 체크(이름은 동명이인 있을 수 있으니 가입가능한 이름은 검사하지 않음)
@@ -49,7 +50,8 @@ public class AccountService {
 
     @Transactional
     public Object login(UserDto userDto) throws Exception {
-        User user = userRepository.findByUserId(userDto.getUserId());   // 사용자 아이디 기준으로 데이터 불러오기
+        // 사용자 아이디 기준으로 데이터 불러오기
+        User user = userRepository.findByUserId(userDto.getUserId());
 
         if (user == null)   // 정보가 없다면 가입되지 않는회원으로 간주
             return AccountStatus.INCONSISTENT;
@@ -70,7 +72,10 @@ public class AccountService {
         HashMap<String, String> strToken = this.jwtTokenUtil.decoderToken(jwtTokenDto);
 
         // 사용자정보 불러오기
-        User user = this.userRepository.findByNameAndRegNo(strToken.get("name"), this.aesCryptoUtil.encrypt(strToken.get("regNo")));
+        User user = this.userRepository.findByNameAndRegNo(
+                strToken.get("name"),
+                this.aesCryptoUtil.encrypt(strToken.get("regNo"))
+        );
 
         if (user == null)   // 정보가 없다면 가입되지 않는회원으로 간주
             return AccountStatus.INCONSISTENT;
