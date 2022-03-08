@@ -7,7 +7,6 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +17,6 @@ import java.util.*;
  * @author 이승환
  * @since 2022-02-19
  */
-@Slf4j
 @Service
 @RequiredArgsConstructor
 public class JwtTokenUtil {

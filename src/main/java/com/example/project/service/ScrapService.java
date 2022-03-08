@@ -12,7 +12,6 @@ import com.example.project.enums.AccountStatus;
 import com.example.project.util.AESCryptoUtil;
 import com.example.project.util.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,7 +23,6 @@ import java.util.HashMap;
  * @author 이승환
  * @since 2022-02-20
  */
-@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ScrapService {

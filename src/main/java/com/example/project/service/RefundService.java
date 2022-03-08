@@ -12,7 +12,6 @@ import com.example.project.enums.ScrapStatus;
 import com.example.project.util.AESCryptoUtil;
 import com.example.project.util.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,7 +22,6 @@ import java.util.HashMap;
  * @author 이승환
  * @since 2022-02-22
  */
-@Slf4j
 @Service
 @RequiredArgsConstructor
 public class RefundService {
