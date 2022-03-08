@@ -1,11 +1,13 @@
 package com.example.project.enums;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Getter;
 
 /**
  * @author 이승환
  * @since 2022-02-23
  */
+@Getter
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum ScrapStatus {
 
@@ -17,13 +19,5 @@ public enum ScrapStatus {
     ScrapStatus(String code, String message) {
         this.code = code;
         this.message = message;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public String getMessage() {
-        return message;
     }
 }
