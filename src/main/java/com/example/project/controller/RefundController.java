@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class RefundController {
 
-    // 스크랩 정보를 바탕으로 한 환급액 계산
     private final RefundService refundService;
 
     /**
