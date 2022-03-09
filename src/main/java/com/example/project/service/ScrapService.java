@@ -36,14 +36,14 @@ public class ScrapService {
     private final JwtTokenUtil jwtTokenUtil;
 
     private final WebClient webClient = WebClient.builder()
-            .baseUrl("https://codetest.3o3.co.kr")
+            .baseUrl("https://codetest.3o3.co.kr")  // 공급자 BASE URL 지정
             .build();
 
     /**
      * 가입한 유저의 스크랩조회 및 저장
      *
      * @param token User Token
-     * @return      스크랩조회 결과
+     * @return 스크랩조회 결과
      */
     @Transactional
     public Object getScrap(String token) throws Exception {
@@ -69,13 +69,18 @@ public class ScrapService {
             return AccountStatus.INCONSISTENT;
         }
 
-        // API 리스트결과 저장
+        // 데이터 리스트 결과저장
         this.scrapListRepository.save(scrapDto.getScrapListDto().toEntity(user.getUserIdx()));
-        // scrap001 저장
-        this.scrapOneRepository.save(scrapDto.getScrapListDto().getScrapOneDto().get(0).toEntity(user.getUserIdx()));
-        // scrap002 저장
-        this.scrapTwoRepository.save(scrapDto.getScrapListDto().getScrapTwoDto().get(0).toEntity(user.getUserIdx()));
-        // API 응답결과 저장
+
+        // scrap001 결과저장
+        for (ScrapDto.ScrapOneDto scrapOneDto : scrapDto.getScrapListDto().getScrapOneDto())
+            this.scrapOneRepository.save(scrapOneDto.toEntity(user.getUserIdx()));
+
+        // scrap002 결과저장
+        for (ScrapDto.ScrapTwoDto scrapTwoDto : scrapDto.getScrapListDto().getScrapTwoDto())
+            this.scrapTwoRepository.save(scrapTwoDto.toEntity(user.getUserIdx()));
+
+        // 응답결과 결과저장
         this.scrapResponseRepository.save(scrapDto.toEntity(user.getUserIdx()));
 
         return scrapDto;
