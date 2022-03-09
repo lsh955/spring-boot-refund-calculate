@@ -1,6 +1,5 @@
 package com.example.project.service;
 
-import com.example.project.controller.dto.JwtTokenDto;
 import com.example.project.controller.dto.RefundDto;
 import com.example.project.domain.account.User;
 import com.example.project.domain.account.UserRepository;
@@ -37,13 +36,13 @@ public class RefundService {
     /**
      * 환급액 계산
      *
-     * @param jwtTokenDto User Token
-     * @return 환금액 결과
+     * @param token User Token
+     * @return      환금액 결과
      */
     @Transactional
-    public Object getRefund(JwtTokenDto jwtTokenDto) throws Exception {
+    public Object getRefund(String token) throws Exception {
         // Token 검증
-        HashMap<String, String> strToken = this.jwtTokenUtil.decoderToken(jwtTokenDto);
+        HashMap<String, String> strToken = this.jwtTokenUtil.decoderToken(token);
 
         // 사용자 불러오기
         User user = this.userRepository.findByNameAndRegNo(
@@ -83,8 +82,8 @@ public class RefundService {
     /**
      * 세액공제 한도 계산
      *
-     * @param totalPay 총급여액(총지급액)
-     * @return 기준별 요건에 맞는 한도결과
+     * @param totalPay  총급여액(총지급액)
+     * @return          기준별 요건에 맞는 한도결과
      */
     public double getTaxCredit(double totalPay) {
         double taxCredit = 0;   // 초기화
@@ -118,7 +117,7 @@ public class RefundService {
      * 소득세액 공제 계산
      *
      * @param totalUsed 산출세액
-     * @return 기준별 요건에 맞는 공제결과
+     * @return          기준별 요건에 맞는 공제결과
      */
     public double getTaxAmount(double totalUsed) {
         double taxAmount = 0;   // 초기화
@@ -138,7 +137,7 @@ public class RefundService {
      * 금액단위 한글변환
      *
      * @param money 금액(ex:684000)
-     * @return {단위변환결과}원
+     * @return      {단위변환결과}원
      */
     public String getUnitConversion(double money) {
         DecimalFormat d = new DecimalFormat("#,####");

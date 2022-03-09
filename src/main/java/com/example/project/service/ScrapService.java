@@ -1,6 +1,5 @@
 package com.example.project.service;
 
-import com.example.project.controller.dto.JwtTokenDto;
 import com.example.project.controller.dto.ScrapDto;
 import com.example.project.domain.account.User;
 import com.example.project.domain.account.UserRepository;
@@ -43,13 +42,13 @@ public class ScrapService {
     /**
      * 가입한 유저의 스크랩조회 및 저장
      *
-     * @param jwtTokenDto User Token
-     * @return 스크랩조회 결과
+     * @param token User Token
+     * @return      스크랩조회 결과
      */
     @Transactional
-    public Object getScrap(JwtTokenDto jwtTokenDto) throws Exception {
+    public Object getScrap(String token) throws Exception {
         // Token 검증
-        HashMap<String, String> strToken = this.jwtTokenUtil.decoderToken(jwtTokenDto);
+        HashMap<String, String> strToken = this.jwtTokenUtil.decoderToken(token);
 
         // 사용자 불러오기
         User user = this.userRepository.findByNameAndRegNo(

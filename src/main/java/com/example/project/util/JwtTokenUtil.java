@@ -1,6 +1,5 @@
 package com.example.project.util;
 
-import com.example.project.controller.dto.JwtTokenDto;
 import com.example.project.enums.JwtTokenStatus;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
@@ -84,11 +83,11 @@ public class JwtTokenUtil {
     /**
      * 토큰 decoder
      *
-     * @param jwtTokenDto User Token
-     * @return payload
+     * @param token     User Token
+     * @return          payload
      */
-    public HashMap<String, String> decoderToken(JwtTokenDto jwtTokenDto) throws Exception {
-        String[] chunks = jwtTokenDto.getToken().split("\\.");
+    public HashMap<String, String> decoderToken(String token) throws Exception {
+        String[] chunks = token.split("\\.");
         Base64.Decoder decoder = Base64.getUrlDecoder();
 
         String strToken = new String(decoder.decode(chunks[1]));

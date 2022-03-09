@@ -31,13 +31,17 @@ public class AccountService {
     /**
      * 회원가입
      *
-     * @param userDto userDto
-     * @return
+     * @param userId    아이디
+     * @param password  패스워드
+     * @param name      이름
+     * @param regNo     주민등록번호
+     * @return          성공여부
      */
     @Transactional
-    public AccountStatus addSignup(UserDto userDto) throws Exception {
+    public AccountStatus addSignup(String userId, String password, String name, String regNo) throws Exception {
         // 패스워드 암호화
-        String encryptedRegNo = this.aesCryptoUtil.encrypt(userDto.getRegNo());
+        String encryptedRegNo = this.aesCryptoUtil.encrypt(regNo);
+        String encryptedPassword = this.aesCryptoUtil.encrypt(password);
 
         // 가입가능한 주민번호 체크(이름은 동명이인 있을 수 있으니 가입가능한 이름은 검사하지 않음)
         if (!this.joinAvailableRepository.existsByRegNo(encryptedRegNo))
@@ -48,7 +52,13 @@ public class AccountService {
             return AccountStatus.REG_NO_OVERLAP;
 
         // 사용자 등록
-        this.userRepository.save(userDto.toEntity());
+        this.userRepository.save(User.builder()
+                .userId(userId)
+                .password(encryptedPassword)
+                .name(name)
+                .regNo(encryptedRegNo)
+                .build()
+        );
 
         return AccountStatus.SIGNUP_SUCCESS; // 성공
     }
@@ -56,13 +66,14 @@ public class AccountService {
     /**
      * 로그인
      *
-     * @param userDto userDto
-     * @return
+     * @param userId    아이디
+     * @param password  패스워드
+     * @return          성공여부
      */
     @Transactional
-    public Object login(UserDto userDto) throws Exception {
+    public Object login(String userId, String password) throws Exception {
         // 사용자 아이디 기준으로 데이터 불러오기
-        User user = userRepository.findByUserId(userDto.getUserId());
+        User user = userRepository.findByUserId(userId);
 
         if (user == null) // 정보가 없다면 가입되지 않는회원으로 간주
             return AccountStatus.INCONSISTENT;
@@ -71,11 +82,14 @@ public class AccountService {
         String decryptedDbPassword = this.aesCryptoUtil.decrypt(user.getPassword());
 
         // 패스와드가 맞는지 검증
-        if (!userDto.getPassword().equals(decryptedDbPassword))
+        if (!password.equals(decryptedDbPassword))
             return AccountStatus.INCONSISTENT;  // 정보가 올바르지 않는다면.
 
         // 가입이 되었다면 토큰생성.
-        HashMap<String, String> token = this.jwtTokenUtil.createToken(user.getName(), user.getRegNo());
+        HashMap<String, String> token = this.jwtTokenUtil.createToken(
+                user.getName(),
+                user.getRegNo()
+        );
 
         // 엔티티를 반환하는 것 보다는 DTO를 반환
         return JwtTokenDto.builder()
@@ -86,13 +100,13 @@ public class AccountService {
     /**
      * 내 정보 보기
      *
-     * @param jwtTokenDto User Token
-     * @return
+     * @param token User Token
+     * @return      성공여부
      */
     @Transactional
-    public Object readMember(JwtTokenDto jwtTokenDto) throws Exception {
+    public Object readMember(String token) throws Exception {
         // Token 검증
-        HashMap<String, String> strToken = this.jwtTokenUtil.decoderToken(jwtTokenDto);
+        HashMap<String, String> strToken = this.jwtTokenUtil.decoderToken(token);
 
         // 사용자정보 불러오기
         User user = this.userRepository.findByNameAndRegNo(
