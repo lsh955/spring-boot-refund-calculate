@@ -46,7 +46,12 @@ class AccountServiceTest {
                 .regNo(regNo)
                 .build();
 
-        AccountStatus signup = this.accountService.addSignup(userDto);
+        AccountStatus signup = this.accountService.addSignup(
+                userDto.getUserId(),
+                userDto.getPassword(),
+                userDto.getName(),
+                userDto.getRegNo()
+        );
 
         assertThat(signup).isEqualTo(AccountStatus.SIGNUP_SUCCESS);
     }
@@ -66,7 +71,12 @@ class AccountServiceTest {
                 .regNo(regNo)
                 .build();
 
-        AccountStatus signup = this.accountService.addSignup(userDto);
+        AccountStatus signup = this.accountService.addSignup(
+                userDto.getUserId(),
+                userDto.getPassword(),
+                userDto.getName(),
+                userDto.getRegNo()
+        );
 
         assertThat(signup).isEqualTo(AccountStatus.REG_NO_OVERLAP);
     }
@@ -86,7 +96,12 @@ class AccountServiceTest {
                 .regNo(regNo)
                 .build();
 
-        AccountStatus signup = this.accountService.addSignup(userDto);
+        AccountStatus signup = this.accountService.addSignup(
+                userDto.getUserId(),
+                userDto.getPassword(),
+                userDto.getName(),
+                userDto.getRegNo()
+        );
 
         assertThat(signup).isEqualTo(AccountStatus.UNABLE_TO_REG_NO);
     }
@@ -106,7 +121,7 @@ class AccountServiceTest {
                 .regNo(regNo)
                 .build();
 
-        Object login = this.accountService.login(userDto);
+        Object login = this.accountService.login(userDto.getUserId(), userDto.getPassword());
 
         assertThat(login).isNotNull();
     }
@@ -126,7 +141,7 @@ class AccountServiceTest {
                 .regNo(regNo)
                 .build();
 
-        Object login = this.accountService.login(userDto);
+        Object login = this.accountService.login(userDto.getUserId(), userDto.getPassword());
 
         assertThat(login).isEqualTo(AccountStatus.INCONSISTENT);
     }
@@ -140,7 +155,7 @@ class AccountServiceTest {
                 .token(token)
                 .build();
 
-        Object me = this.accountService.readMember(jwtTokenDto);
+        Object me = this.accountService.readMember(jwtTokenDto.getToken());
 
         assertThat(me).isNotNull();
     }
@@ -154,7 +169,7 @@ class AccountServiceTest {
                 .token(token)
                 .build();
 
-        Object me = this.accountService.readMember(jwtTokenDto);
+        Object me = this.accountService.readMember(jwtTokenDto.getToken());
 
         assertThat(me).isEqualTo(AccountStatus.INCONSISTENT);
     }

@@ -46,7 +46,7 @@ class RefundServiceTest {
                 .token(token)
                 .build();
 
-        this.scrapService.getScrap(jwtTokenDto);
+        this.scrapService.getScrap(jwtTokenDto.getToken());
     }
 
     @AfterEach
@@ -66,7 +66,7 @@ class RefundServiceTest {
                 .token(token)
                 .build();
 
-        Object me = this.refundService.getRefund(jwtTokenDto);
+        Object me = this.refundService.getRefund(jwtTokenDto.getToken());
 
         assertThat(me).isNotNull();
     }
@@ -80,7 +80,7 @@ class RefundServiceTest {
                 .token(token)
                 .build();
 
-        Object me = this.refundService.getRefund(jwtTokenDto);
+        Object me = this.refundService.getRefund(jwtTokenDto.getToken());
 
         assertThat(me).isEqualTo(ScrapStatus.NO_SCRAP_DATA);
     }
@@ -94,7 +94,7 @@ class RefundServiceTest {
                 .token(token)
                 .build();
 
-        Object me = this.refundService.getRefund(jwtTokenDto);
+        Object me = this.refundService.getRefund(jwtTokenDto.getToken());
 
         assertThat(me).isEqualTo(AccountStatus.INCONSISTENT);
     }
