@@ -50,7 +50,7 @@ public class AccountService {
         // 사용자 등록
         this.userRepository.save(userDto.toEntity());
 
-        return AccountStatus.SIGNUP_SUCCESS;
+        return AccountStatus.SIGNUP_SUCCESS; // 성공
     }
 
     /**
@@ -64,7 +64,7 @@ public class AccountService {
         // 사용자 아이디 기준으로 데이터 불러오기
         User user = userRepository.findByUserId(userDto.getUserId());
 
-        if (user == null)   // 정보가 없다면 가입되지 않는회원으로 간주
+        if (user == null) // 정보가 없다면 가입되지 않는회원으로 간주
             return AccountStatus.INCONSISTENT;
 
         // 패스워드 복호화
@@ -74,7 +74,13 @@ public class AccountService {
         if (!userDto.getPassword().equals(decryptedDbPassword))
             return AccountStatus.INCONSISTENT;  // 정보가 올바르지 않는다면.
 
-        return this.jwtTokenUtil.createToken(user.getName(), user.getRegNo());  // 가입이 되었다면 토큰생성.
+        // 가입이 되었다면 토큰생성.
+        HashMap<String, String> token = this.jwtTokenUtil.createToken(user.getName(), user.getRegNo());
+
+        // 엔티티를 반환하는 것 보다는 DTO를 반환
+        return JwtTokenDto.builder()
+                .token(token.get("token"))
+                .build();
     }
 
     /**
@@ -94,9 +100,15 @@ public class AccountService {
                 this.aesCryptoUtil.encrypt(strToken.get("regNo"))
         );
 
-        if (user == null)   // 정보가 없다면 가입되지 않는회원으로 간주
+        if (user == null) // 정보가 없다면 가입되지 않는회원으로 간주
             return AccountStatus.INCONSISTENT;
 
-        return user;
+        // 엔티티를 반환하는 것 보다는 DTO를 반환
+        return UserDto.builder()
+                .userId(user.getUserId())
+                .name(user.getName())
+                .password(user.getPassword())
+                .regNo(user.getRegNo())
+                .build();
     }
 }
