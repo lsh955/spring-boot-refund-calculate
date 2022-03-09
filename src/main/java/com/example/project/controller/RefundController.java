@@ -22,11 +22,18 @@ public class RefundController {
     // 스크랩 정보를 바탕으로 한 환급액 계산
     private final RefundService refundService;
 
-    // 사용자 정보를 바탕한 스크랩 api
+    /**
+     * 환급액 계산
+     *
+     * @param jwtTokenDto   User Token
+     * @return              환급액 결과
+     */
     @ApiOperation(value = "환급액 계산", notes = "사용자정보를 기반으로 환급액 계산")
     @PostMapping(value = "/refund", consumes = MediaType.APPLICATION_JSON_VALUE)
     public Object refund(@RequestBody JwtTokenDto jwtTokenDto) throws Exception {
 
-        return refundService.getRefund(jwtTokenDto);
+        return refundService.getRefund(
+                jwtTokenDto.getToken()
+        );
     }
 }

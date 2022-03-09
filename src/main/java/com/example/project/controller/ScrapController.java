@@ -21,11 +21,17 @@ public class ScrapController {
 
     private final ScrapService scrapService;
 
-    // 사용자 정보를 바탕한 스크랩 api
+    /**
+     * 사용자 스크크정보 조회
+     * @param jwtTokenDto   User Token
+     * @return              조회결과
+     */
     @ApiOperation(value = "사용자 정보 스크랩", notes = "사용자정보를 기반으로 스크랩")
     @PostMapping(value = "/scrap", consumes = MediaType.APPLICATION_JSON_VALUE)
     public Object scrap(@RequestBody JwtTokenDto jwtTokenDto) throws Exception {
 
-        return scrapService.getScrap(jwtTokenDto);
+        return scrapService.getScrap(
+                jwtTokenDto.getToken()
+        );
     }
 }
