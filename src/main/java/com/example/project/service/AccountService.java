@@ -76,14 +76,14 @@ public class AccountService {
         User user = userRepository.findByUserId(userId);
 
         if (user == null) // 정보가 없다면 가입되지 않는회원으로 간주
-            return AccountStatus.INCONSISTENT;
+            return AccountStatus.UNKNOWN;
 
         // 패스워드 복호화
         String decryptedDbPassword = this.aesCryptoUtil.decrypt(user.getPassword());
 
         // 패스와드가 맞는지 검증
         if (!password.equals(decryptedDbPassword))
-            return AccountStatus.INCONSISTENT;  // 정보가 올바르지 않는다면.
+            return AccountStatus.UNKNOWN;  // 정보가 올바르지 않는다면.
 
         // 가입이 되었다면 토큰생성.
         HashMap<String, String> token = this.jwtTokenUtil.createToken(
@@ -115,7 +115,7 @@ public class AccountService {
         );
 
         if (user == null) // 정보가 없다면 가입되지 않는회원으로 간주
-            return AccountStatus.INCONSISTENT;
+            return AccountStatus.UNKNOWN;
 
         // 엔티티를 반환하는 것 보다는 DTO를 반환
         return UserDto.builder()

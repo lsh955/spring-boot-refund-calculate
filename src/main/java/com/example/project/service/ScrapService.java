@@ -66,7 +66,7 @@ public class ScrapService {
                     .bodyToMono(ScrapDto.class)
                     .block();
         } else {
-            return AccountStatus.INCONSISTENT;
+            return AccountStatus.UNKNOWN;
         }
 
         // 데이터 리스트 결과저장

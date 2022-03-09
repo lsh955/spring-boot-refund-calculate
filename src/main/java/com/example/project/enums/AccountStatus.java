@@ -17,7 +17,7 @@ public enum AccountStatus {
     REG_NO_OVERLAP("ACCOUNT_ERR_0004", "주민번호 중복"),
     UNABLE_TO_NAME("ACCOUNT_ERR_0005", "가입 가능한 사용자이름이 아닙니다"),
     UNABLE_TO_REG_NO("ACCOUNT_ERR_0006", "가입 가능한 주민번호가 아닙니다"),
-    INCONSISTENT("ACCOUNT_ERR_0007", "정보가 올바르지 않거나 가입되지 않는 정보입니다.");
+    UNKNOWN("ACCOUNT_ERR_0007", "정보가 올바르지 않거나 가입되지 않는 정보입니다.");
 
     private final String code;
     private final String message;

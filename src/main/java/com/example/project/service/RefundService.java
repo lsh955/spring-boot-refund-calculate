@@ -51,7 +51,7 @@ public class RefundService {
         );
 
         if (user == null)   // 사용자가 없을 시
-            return AccountStatus.INCONSISTENT;
+            return AccountStatus.UNKNOWN;
 
         // 스크랩정보 불러오기
         ScrapOne scrapOne = scrapOneRepository.findByUserIdx(user.getUserIdx());

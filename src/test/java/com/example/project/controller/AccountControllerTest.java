@@ -148,8 +148,8 @@ class AccountControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(this.objectMapper.writeValueAsString(userDto)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("code").value(AccountStatus.INCONSISTENT.getCode()))
-                .andExpect(jsonPath("message").value(AccountStatus.INCONSISTENT.getMessage()));
+                .andExpect(jsonPath("code").value(AccountStatus.UNKNOWN.getCode()))
+                .andExpect(jsonPath("message").value(AccountStatus.UNKNOWN.getMessage()));
     }
 
     @Test
@@ -178,7 +178,7 @@ class AccountControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(this.objectMapper.writeValueAsString(token)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("code").value(AccountStatus.INCONSISTENT.getCode()))
-                .andExpect(jsonPath("message").value(AccountStatus.INCONSISTENT.getMessage()));
+                .andExpect(jsonPath("code").value(AccountStatus.UNKNOWN.getCode()))
+                .andExpect(jsonPath("message").value(AccountStatus.UNKNOWN.getMessage()));
     }
 }

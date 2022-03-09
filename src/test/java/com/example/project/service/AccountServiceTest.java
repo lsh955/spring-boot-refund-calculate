@@ -143,7 +143,7 @@ class AccountServiceTest {
 
         Object login = this.accountService.login(userDto.getUserId(), userDto.getPassword());
 
-        assertThat(login).isEqualTo(AccountStatus.INCONSISTENT);
+        assertThat(login).isEqualTo(AccountStatus.UNKNOWN);
     }
 
     @Test
@@ -171,6 +171,6 @@ class AccountServiceTest {
 
         Object me = this.accountService.readMember(jwtTokenDto.getToken());
 
-        assertThat(me).isEqualTo(AccountStatus.INCONSISTENT);
+        assertThat(me).isEqualTo(AccountStatus.UNKNOWN);
     }
 }

@@ -96,6 +96,6 @@ class RefundServiceTest {
 
         Object me = this.refundService.getRefund(jwtTokenDto.getToken());
 
-        assertThat(me).isEqualTo(AccountStatus.INCONSISTENT);
+        assertThat(me).isEqualTo(AccountStatus.UNKNOWN);
     }
 }
