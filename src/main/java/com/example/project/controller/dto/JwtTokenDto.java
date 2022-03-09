@@ -15,10 +15,8 @@ public class JwtTokenDto {
 
     private String token;
 
-    @Deprecated
     @Builder
     public JwtTokenDto(String token) {
-
         this.token = token;
     }
 }
