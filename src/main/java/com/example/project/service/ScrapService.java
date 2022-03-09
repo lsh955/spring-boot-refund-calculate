@@ -57,7 +57,7 @@ public class ScrapService {
         );
 
         ScrapDto scrapDto;
-        if (user != null) {  // 가입된 정보가 있다면
+        if (user != null) {
             // 공급자로 부터의 데이터 조회
             scrapDto = webClient.post()
                     .uri("/scrap/")
@@ -66,7 +66,7 @@ public class ScrapService {
                     .bodyToMono(ScrapDto.class)
                     .block();
         } else {
-            return AccountStatus.UNKNOWN;
+            return AccountStatus.UNKNOWN;   // 가입된 정보가 없다면.
         }
 
         // 데이터 리스트 결과저장
