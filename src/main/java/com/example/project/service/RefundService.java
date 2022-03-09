@@ -1,6 +1,7 @@
 package com.example.project.service;
 
 import com.example.project.controller.dto.JwtTokenDto;
+import com.example.project.controller.dto.RefundDto;
 import com.example.project.domain.account.User;
 import com.example.project.domain.account.UserRepository;
 import com.example.project.domain.scrap.ScrapOne;
@@ -71,7 +72,12 @@ public class RefundService {
         refunds.put("공제액", getUnitConversion(taxAmount));
         refunds.put("환급액", getUnitConversion(Math.min(taxCredit, taxAmount)));
 
-        return refunds;
+        return RefundDto.builder()
+                .name(refunds.get("이름").toString())
+                .taxCredit(refunds.get("한도").toString())
+                .taxAmount(refunds.get("공제액").toString())
+                .refund(refunds.get("환급액").toString())
+                .build();
     }
 
     /**
