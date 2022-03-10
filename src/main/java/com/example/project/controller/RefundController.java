@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * @author 이승환
  * @since 2022-02-20
+ *
+ * 환급액에 관련된 Controller
  */
 @RestController
 @RequestMapping(value = "/szs", produces = MediaType.APPLICATION_JSON_VALUE)
