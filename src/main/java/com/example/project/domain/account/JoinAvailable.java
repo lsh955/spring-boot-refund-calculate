@@ -21,7 +21,7 @@ public class JoinAvailable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long availableIdx;           // 식별값
+    private Long availableIdx;  // 식별값
 
     private String name;        // 이름
     private String regNo;       // 주민등록번호

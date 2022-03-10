@@ -19,7 +19,7 @@ public class ScrapOne {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long scrapOneIdx;  // 식별값
+    private Long scrapOneIdx;   // 식별값
 
     @Column(name = "user_idx")
     private Long userIdx;
