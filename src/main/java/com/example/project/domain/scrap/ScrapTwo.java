@@ -18,7 +18,7 @@ import javax.persistence.*;
 public class ScrapTwo {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long scrapTwoIdx;   // 식별값
 
     @Column(name = "user_idx")

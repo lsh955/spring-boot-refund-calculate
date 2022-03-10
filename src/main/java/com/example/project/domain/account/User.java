@@ -26,7 +26,7 @@ import java.util.List;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userIdx;       // 식별값
 
     @OneToMany(fetch = FetchType.LAZY)
@@ -51,7 +51,11 @@ public class User {
     private String regNo;       // 주민등록번호
 
     @Builder
-    public User(String userId, String password, String name, String regNo) {
+    public User(String userId,
+                String password,
+                String name,
+                String regNo) {
+
         this.userId = userId;
         this.password = password;
         this.name = name;
