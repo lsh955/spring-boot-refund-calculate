@@ -67,18 +67,18 @@ public class ScrapService {
         }
 
         // 데이터 리스트 결과저장
-        this.scrapListRepository.save(scrapDto.getScrapListDto().toEntity(user.getUserIdx()));
+        this.scrapListRepository.save(scrapDto.getScrapListDto().toEntity(user.getUserIdx()));  // DTO -> Entity
 
         // scrap001 결과저장
         for (ScrapDto.ScrapOneDto scrapOneDto : scrapDto.getScrapListDto().getScrapOneDto())
-            this.scrapOneRepository.save(scrapOneDto.toEntity(user.getUserIdx()));
+            this.scrapOneRepository.save(scrapOneDto.toEntity(user.getUserIdx()));  // DTO -> Entity
 
         // scrap002 결과저장
         for (ScrapDto.ScrapTwoDto scrapTwoDto : scrapDto.getScrapListDto().getScrapTwoDto())
-            this.scrapTwoRepository.save(scrapTwoDto.toEntity(user.getUserIdx()));
+            this.scrapTwoRepository.save(scrapTwoDto.toEntity(user.getUserIdx()));  // DTO -> Entity
 
         // 응답결과 결과저장
-        this.scrapResponseRepository.save(scrapDto.toEntity(user.getUserIdx()));
+        this.scrapResponseRepository.save(scrapDto.toEntity(user.getUserIdx()));    // DTO -> Entity
 
         return scrapDto;
     }
