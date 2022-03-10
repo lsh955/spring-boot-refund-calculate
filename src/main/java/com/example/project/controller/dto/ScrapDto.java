@@ -42,6 +42,7 @@ public class ScrapDto {
     }
 
     public ScrapResponse toEntity(Long userIdx) {
+
         return ScrapResponse.builder()
                 .appVer(getAppVer())
                 .hostNm(getHostNm())
@@ -77,6 +78,7 @@ public class ScrapDto {
         }
 
         public ScrapList toEntity(Long userIdx) {
+
             return ScrapList.builder()
                     .errMsg(errMsg)
                     .company(company)
@@ -134,6 +136,7 @@ public class ScrapDto {
         }
 
         public ScrapOne toEntity(Long userIdx) {
+
             return ScrapOne.builder()
                     .incomeDetails(incomeDetails)
                     .totalPay(Long.parseLong(totalPay))
@@ -167,6 +170,7 @@ public class ScrapDto {
         }
 
         public ScrapTwo toEntity(Long userIdx) {
+
             return ScrapTwo.builder()
                     .totalUsed(Long.parseLong(totalUsed))
                     .taxAmount(taxAmount)

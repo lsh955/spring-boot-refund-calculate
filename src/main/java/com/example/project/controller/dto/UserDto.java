@@ -17,16 +17,9 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserDto {
 
-    @NotBlank(message = "userId must not be empty")
     private String userId;
-
-    @NotBlank(message = "password must not be empty")
     private String password;
-
-    @NotBlank(message = "name must not be empty")
     private String name;
-
-    @NotBlank(message = "regNo must not be empty")
     private String regNo;
 
     @Deprecated // 테스트 코드에서 사용하는 용도라 프로덕션 환경에서는 Deprecated
