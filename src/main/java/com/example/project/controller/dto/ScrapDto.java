@@ -28,6 +28,7 @@ public class ScrapDto {
     private String workerResDt;
     private String workerReqDt;
 
+    @Deprecated // 테스트 코드에서 사용하는 용도라 프로덕션 환경에서는 Deprecated
     @Builder
     public ScrapDto(String appVer,
                     String hostNm,
@@ -64,6 +65,7 @@ public class ScrapDto {
         private String svcCd;
         private String userId;
 
+        @Deprecated // 테스트 코드에서 사용하는 용도라 프로덕션 환경에서는 Deprecated
         @Builder
         public ScrapListDto(String errMsg,
                             String company,
@@ -109,6 +111,7 @@ public class ScrapDto {
         @JsonProperty("사업자등록번호")
         private String comNo;
 
+        @Deprecated // 테스트 코드에서 사용하는 용도라 프로덕션 환경에서는 Deprecated
         @Builder
         public ScrapOneDto(String incomeDetails,
                            String totalPay,
@@ -154,6 +157,7 @@ public class ScrapDto {
         @JsonProperty("소득구분")
         private String taxAmount;
 
+        @Deprecated // 테스트 코드에서 사용하는 용도라 프로덕션 환경에서는 Deprecated
         @Builder
         public ScrapTwoDto(String totalUsed,
                            String taxAmount) {

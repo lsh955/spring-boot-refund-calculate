@@ -20,6 +20,7 @@ public class RefundDto {
     private String taxAmount;
     private String refund;
 
+    @Deprecated // 테스트 코드에서 사용하는 용도라 프로덕션 환경에서는 Deprecated
     @Builder
     public RefundDto(String name,
                      String taxCredit,
