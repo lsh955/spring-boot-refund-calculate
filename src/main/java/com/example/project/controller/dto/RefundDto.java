@@ -8,8 +8,8 @@ import lombok.NoArgsConstructor;
 /**
  * @author 이승환
  * @since 2022-03-09
- *
- * RefundService > getRefund 에서 return 할 용도
+ * <p>
+ * 계층간 환급액조회 를 위한 DTO
  */
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

@@ -7,11 +7,11 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotBlank;
-
 /**
  * @author 이승환
  * @since 2022-02-18
+ * <p>
+ * 계층간 사용자정보 교환을 위한 DTO
  */
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -35,6 +35,7 @@ public class UserDto {
         this.regNo = regNo;
     }
 
+    // DTO -> Entity
     public User toEntity() throws Exception {
         AESCryptoUtil aesCryptoUtil = new AESCryptoUtil();
 

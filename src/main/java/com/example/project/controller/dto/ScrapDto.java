@@ -15,6 +15,8 @@ import java.util.List;
 /**
  * @author 이승환
  * @since 2022-02-20
+ * <p>
+ * 계층간 스크랩데이터 교환을 위한 DTO
  */
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -41,6 +43,7 @@ public class ScrapDto {
         this.workerReqDt = workerReqDt;
     }
 
+    // DTO -> Entity
     public ScrapResponse toEntity(Long userIdx) {
 
         return ScrapResponse.builder()
@@ -77,6 +80,7 @@ public class ScrapDto {
             this.svcCd = svcCd;
         }
 
+        // DTO -> Entity
         public ScrapList toEntity(Long userIdx) {
 
             return ScrapList.builder()
@@ -135,6 +139,7 @@ public class ScrapDto {
             this.comNo = comNo;
         }
 
+        // DTO -> Entity
         public ScrapOne toEntity(Long userIdx) {
 
             return ScrapOne.builder()
@@ -169,6 +174,7 @@ public class ScrapDto {
             this.taxAmount = taxAmount;
         }
 
+        // DTO -> Entity
         public ScrapTwo toEntity(Long userIdx) {
 
             return ScrapTwo.builder()
