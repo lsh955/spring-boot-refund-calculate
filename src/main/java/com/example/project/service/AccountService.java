@@ -91,7 +91,6 @@ public class AccountService {
                 user.getRegNo()
         );
 
-        // 엔티티를 반환하는 것 보다는 DTO를 반환
         return JwtTokenDto.builder()
                 .token(token.get("token"))
                 .build();
@@ -117,7 +116,6 @@ public class AccountService {
         if (user == null) // 정보가 없다면 가입되지 않는회원으로 간주
             return AccountStatus.UNKNOWN;
 
-        // 엔티티를 반환하는 것 보다는 DTO를 반환
         return UserDto.builder()
                 .userId(user.getUserId())
                 .name(user.getName())
