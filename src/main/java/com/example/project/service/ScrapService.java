@@ -11,10 +11,13 @@ import com.example.project.enums.AccountStatus;
 import com.example.project.util.AESCryptoUtil;
 import com.example.project.util.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
 import java.util.HashMap;
 
@@ -22,6 +25,7 @@ import java.util.HashMap;
  * @author 이승환
  * @since 2022-02-20
  */
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ScrapService {
@@ -63,7 +67,15 @@ public class ScrapService {
                     .uri("/scrap/")
                     .bodyValue(new JSONObject(strToken).toString())
                     .retrieve()
+                    .onStatus(httpStatus -> httpStatus != HttpStatus.OK,
+                            clientResponse -> clientResponse.createException()
+                                    .flatMap(it -> Mono.error(
+                                            new RuntimeException("code : " + clientResponse.statusCode())
+                                    )))
                     .bodyToMono(ScrapDto.class)
+                    .onErrorResume(throwable -> Mono.error(
+                            new RuntimeException(throwable)
+                    ))
                     .block();
         } else {
             return AccountStatus.UNKNOWN;   // 가입된 정보가 없다면.
