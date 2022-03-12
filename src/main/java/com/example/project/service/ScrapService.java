@@ -70,7 +70,7 @@ public class ScrapService {
                     .onStatus(httpStatus -> httpStatus != HttpStatus.OK,
                             clientResponse -> clientResponse.createException()
                                     .flatMap(it -> Mono.error(
-                                            new RuntimeException("code : " + clientResponse.statusCode())
+                                            new RuntimeException("statusCode >> " + clientResponse.statusCode())
                                     )))
                     .bodyToMono(ScrapDto.class)
                     .onErrorResume(throwable -> Mono.error(
