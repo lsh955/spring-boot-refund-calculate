@@ -1,6 +1,7 @@
 package com.example.project.controller;
 
 import com.example.project.controller.dto.JwtTokenDto;
+import com.example.project.controller.dto.RefundDto;
 import com.example.project.service.RefundService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +32,7 @@ public class RefundController {
      */
     @ApiOperation(value = "환급액 계산", notes = "사용자정보를 기반으로 환급액 계산")
     @PostMapping(value = "/refund", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Object refund(@RequestBody JwtTokenDto jwtTokenDto) throws Exception {
+    public RefundDto refund(@RequestBody JwtTokenDto jwtTokenDto) throws Exception {
 
         return refundService.getRefund(
                 jwtTokenDto.getToken()

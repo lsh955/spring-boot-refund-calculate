@@ -7,7 +7,7 @@ import com.example.project.domain.scrap.ScrapListRepository;
 import com.example.project.domain.scrap.ScrapOneRepository;
 import com.example.project.domain.scrap.ScrapResponseRepository;
 import com.example.project.domain.scrap.ScrapTwoRepository;
-import com.example.project.enums.AccountStatus;
+import com.example.project.exception.CustomException;
 import com.example.project.util.AESCryptoUtil;
 import com.example.project.util.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +20,8 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 import java.util.HashMap;
+
+import static com.example.project.enums.ErrorCode.MEMBER_NOT_FOUND;
 
 /**
  * @author 이승환
@@ -39,10 +41,6 @@ public class ScrapService {
     private final AESCryptoUtil aesCryptoUtil;
     private final JwtTokenUtil jwtTokenUtil;
 
-    private final WebClient webClient = WebClient.builder()
-            .baseUrl("https://codetest.3o3.co.kr")  // 공급자 BASE URL 지정
-            .build();
-
     /**
      * 가입한 유저의 스크랩조회 및 저장
      *
@@ -50,51 +48,109 @@ public class ScrapService {
      * @return 스크랩조회 결과
      */
     @Transactional
-    public Object getScrap(String token) throws Exception {
+    public ScrapDto getSaveByScrap(String token) throws Exception {
         // Token 검증
         HashMap<String, String> strToken = this.jwtTokenUtil.decoderToken(token);
 
+        // 주민등록번호 암호화
+        String encryptRegNo = this.aesCryptoUtil.encrypt(strToken.get("regNo"));
+
         // 사용자 불러오기
-        User user = this.userRepository.findByNameAndRegNo(
-                strToken.get("name"),
-                this.aesCryptoUtil.encrypt(strToken.get("regNo"))
-        );
+        User user = getUser(strToken.get("name"), encryptRegNo);
 
-        ScrapDto scrapDto;
-        if (user != null) {
-            // 공급자로 부터의 데이터 조회
-            scrapDto = webClient.post()
-                    .uri("/scrap/")
-                    .bodyValue(new JSONObject(strToken).toString())
-                    .retrieve()
-                    .onStatus(httpStatus -> httpStatus != HttpStatus.OK,
-                            clientResponse -> clientResponse.createException()
-                                    .flatMap(it -> Mono.error(
-                                            new RuntimeException("statusCode >> " + clientResponse.statusCode())
-                                    )))
-                    .bodyToMono(ScrapDto.class)
-                    .onErrorResume(throwable -> Mono.error(
-                            new RuntimeException(throwable)
-                    ))
-                    .block();
-        } else {
-            return AccountStatus.UNKNOWN;   // 가입된 정보가 없다면.
-        }
+        if (user == null)
+            throw new CustomException(MEMBER_NOT_FOUND);
 
-        // 데이터 리스트 결과저장
-        this.scrapListRepository.save(scrapDto.getScrapListDto().toEntity(user.getUserIdx()));  // DTO -> Entity
+        // 공급자로 부터의 데이터 조회
+        ScrapDto scrapDto = getClientScrap(strToken);
 
-        // scrap001 결과저장
-        for (ScrapDto.ScrapOneDto scrapOneDto : scrapDto.getScrapListDto().getScrapOneDto())
-            this.scrapOneRepository.save(scrapOneDto.toEntity(user.getUserIdx()));  // DTO -> Entity
-
-        // scrap002 결과저장
-        for (ScrapDto.ScrapTwoDto scrapTwoDto : scrapDto.getScrapListDto().getScrapTwoDto())
-            this.scrapTwoRepository.save(scrapTwoDto.toEntity(user.getUserIdx()));  // DTO -> Entity
-
-        // 응답결과 결과저장
-        this.scrapResponseRepository.save(scrapDto.toEntity(user.getUserIdx()));    // DTO -> Entity
+        saveScrapList(scrapDto, user);       // 리스트 결과저장
+        saveScrapOne(scrapDto, user);        // scrap001 결과저장
+        saveScrapTwo(scrapDto, user);        // scrap002 결과저장
+        saveScrapResponse(scrapDto, user);   // 응답결과 결과저장
 
         return scrapDto;
+    }
+
+
+    /**
+     * 공급자로 부터의 데이터 조회
+     *
+     * @param strToken
+     * @return
+     */
+    private ScrapDto getClientScrap(HashMap<String, String> strToken) {
+        WebClient webClient = WebClient.builder()
+                .baseUrl("https://codetest.3o3.co.kr")  // 공급자 BASE URL 지정
+                .build();
+
+        return webClient.post()
+                .uri("/scrap/")
+                .bodyValue(new JSONObject(strToken).toString())
+                .retrieve()
+                .onStatus(httpStatus -> httpStatus != HttpStatus.OK,
+                        clientResponse -> clientResponse.createException()
+                                .flatMap(it -> Mono.error(
+                                        new RuntimeException("statusCode >> " + clientResponse.statusCode())
+                                ))
+                )
+                .bodyToMono(ScrapDto.class)
+                .onErrorResume(throwable -> Mono.error(
+                        new RuntimeException(throwable)
+                ))
+                .block();
+    }
+
+    /**
+     * 사용자 불러오기
+     *
+     * @param name
+     * @param regNo
+     * @return
+     */
+    private User getUser(String name, String regNo) {
+        return this.userRepository.findByNameAndRegNo(name, regNo);
+    }
+
+    /**
+     * 데이터 리스트 결과저장
+     *
+     * @param scrapDto
+     * @param user
+     */
+    private void saveScrapList(ScrapDto scrapDto, User user) {
+        this.scrapListRepository.save(scrapDto.getScrapListDto().toEntity(user));
+    }
+
+    /**
+     * scrap001 결과저장
+     *
+     * @param scrapDto
+     * @param user
+     */
+    private void saveScrapOne(ScrapDto scrapDto, User user) {
+        for (ScrapDto.ScrapOneDto scrapOneDtos : scrapDto.getScrapListDto().getScrapOneDto())
+            this.scrapOneRepository.save(scrapOneDtos.toEntity(user));
+    }
+
+    /**
+     * scrap002 결과저장
+     *
+     * @param scrapDto
+     * @param user
+     */
+    private void saveScrapTwo(ScrapDto scrapDto, User user) {
+        for (ScrapDto.ScrapTwoDto scrapTwoDtos : scrapDto.getScrapListDto().getScrapTwoDto())
+            this.scrapTwoRepository.save(scrapTwoDtos.toEntity(user));
+    }
+
+    /**
+     * 응답결과 결과저장
+     *
+     * @param scrapDto
+     * @param user
+     */
+    private void saveScrapResponse(ScrapDto scrapDto, User user) {
+        this.scrapResponseRepository.save(scrapDto.toEntity(user));
     }
 }

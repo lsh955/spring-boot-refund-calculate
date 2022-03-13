@@ -6,6 +6,7 @@ import com.example.project.domain.account.JoinAvailableRepository;
 import com.example.project.domain.account.User;
 import com.example.project.domain.account.UserRepository;
 import com.example.project.enums.AccountStatus;
+import com.example.project.exception.CustomException;
 import com.example.project.util.AESCryptoUtil;
 import com.example.project.util.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +14,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
+
+import static com.example.project.enums.ErrorCode.*;
 
 /**
  * @author 이승환
@@ -45,11 +48,11 @@ public class AccountService {
 
         // 가입가능한 주민번호 체크(이름은 동명이인 있을 수 있으니 가입가능한 이름은 검사하지 않음)
         if (!this.joinAvailableRepository.existsByRegNo(encryptedRegNo))
-            return AccountStatus.UNABLE_TO_REG_NO;
+            throw new CustomException(UNABLE_TO_REG_NO);
 
         // 주민번호 중복체크
         if (this.userRepository.existsByRegNo(encryptedRegNo))
-            return AccountStatus.REG_NO_OVERLAP;
+            throw new CustomException(REG_NO_OVERLAP);
 
         // 사용자 등록
         this.userRepository.save(User.builder()
@@ -71,19 +74,19 @@ public class AccountService {
      * @return          성공여부
      */
     @Transactional
-    public Object login(String userId, String password) throws Exception {
+    public JwtTokenDto login(String userId, String password) throws Exception {
         // 사용자 아이디 기준으로 데이터 불러오기
         User user = userRepository.findByUserId(userId);
 
-        if (user == null) // 정보가 없다면 가입되지 않는회원으로 간주
-            return AccountStatus.UNKNOWN;
+        if(user == null)
+            throw new CustomException(MEMBER_NOT_FOUND);
 
         // 패스워드 복호화
         String decryptedDbPassword = this.aesCryptoUtil.decrypt(user.getPassword());
 
         // 패스와드가 맞는지 검증
         if (!password.equals(decryptedDbPassword))
-            return AccountStatus.UNKNOWN;  // 정보가 올바르지 않는다면.
+            throw new CustomException(UNAUTHORIZED_PASSWORD);
 
         // 가입이 되었다면 토큰생성.
         HashMap<String, String> token = this.jwtTokenUtil.createToken(
@@ -103,7 +106,7 @@ public class AccountService {
      * @return      성공여부
      */
     @Transactional
-    public Object readMember(String token) throws Exception {
+    public UserDto readMember(String token) throws Exception {
         // Token 검증
         HashMap<String, String> strToken = this.jwtTokenUtil.decoderToken(token);
 
@@ -114,7 +117,7 @@ public class AccountService {
         );
 
         if (user == null) // 정보가 없다면 가입되지 않는회원으로 간주
-            return AccountStatus.UNKNOWN;
+            throw new CustomException(MEMBER_NOT_FOUND);
 
         return UserDto.builder()
                 .userId(user.getUserId())

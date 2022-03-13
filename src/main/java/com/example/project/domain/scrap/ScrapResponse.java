@@ -1,5 +1,6 @@
 package com.example.project.domain.scrap;
 
+import com.example.project.domain.account.User;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,8 +22,9 @@ public class ScrapResponse {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long resultIdx; // 식별값
 
-    @Column(name = "user_idx")
-    private Long userIdx;
+    @ManyToOne
+    @JoinColumn(name="user_idx")
+    private User user;
 
     private String appVer;
     private String hostNm;
@@ -34,12 +36,12 @@ public class ScrapResponse {
                          String hostNm,
                          String workerResDt,
                          String workerReqDt,
-                         Long userIdx) {
+                         User user) {
 
         this.appVer = appVer;
         this.hostNm = hostNm;
         this.workerResDt = workerResDt;
         this.workerReqDt = workerReqDt;
-        this.userIdx = userIdx;
+        this.user = user;
     }
 }

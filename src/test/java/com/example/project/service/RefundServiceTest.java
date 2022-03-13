@@ -6,13 +6,13 @@ import com.example.project.domain.scrap.ScrapOneRepository;
 import com.example.project.domain.scrap.ScrapResponseRepository;
 import com.example.project.domain.scrap.ScrapTwoRepository;
 import com.example.project.enums.AccountStatus;
-import com.example.project.enums.ScrapStatus;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -46,7 +46,7 @@ class RefundServiceTest {
                 .token(token)
                 .build();
 
-        this.scrapService.getScrap(jwtTokenDto.getToken());
+        this.scrapService.getSaveByScrap(jwtTokenDto.getToken());
     }
 
     @AfterEach
@@ -82,7 +82,7 @@ class RefundServiceTest {
 
         Object me = this.refundService.getRefund(jwtTokenDto.getToken());
 
-        assertThat(me).isEqualTo(ScrapStatus.NO_SCRAP_DATA);
+        assertThat(me).isEqualTo(HttpStatus.CONFLICT);
     }
 
     @Test

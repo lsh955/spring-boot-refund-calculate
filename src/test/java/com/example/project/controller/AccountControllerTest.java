@@ -83,9 +83,7 @@ class AccountControllerTest {
         this.mockMvc.perform(post("http://localhost:8080/szs/signup")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(this.objectMapper.writeValueAsString(userDto)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("code").value(AccountStatus.REG_NO_OVERLAP.getCode()))
-                .andExpect(jsonPath("message").value(AccountStatus.REG_NO_OVERLAP.getMessage()));
+                .andExpect(status().is4xxClientError());
     }
 
     @Test
@@ -106,9 +104,7 @@ class AccountControllerTest {
         this.mockMvc.perform(post("http://localhost:8080/szs/signup")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(this.objectMapper.writeValueAsString(userDto)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("code").value(AccountStatus.UNABLE_TO_REG_NO.getCode()))
-                .andExpect(jsonPath("message").value(AccountStatus.UNABLE_TO_REG_NO.getMessage()));
+                .andExpect(status().is4xxClientError());
     }
 
     @Test
@@ -147,9 +143,7 @@ class AccountControllerTest {
         this.mockMvc.perform(post("http://localhost:8080/szs/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(this.objectMapper.writeValueAsString(userDto)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("code").value(AccountStatus.UNKNOWN.getCode()))
-                .andExpect(jsonPath("message").value(AccountStatus.UNKNOWN.getMessage()));
+                .andExpect(status().is4xxClientError());
     }
 
     @Test
@@ -177,8 +171,6 @@ class AccountControllerTest {
         this.mockMvc.perform(post("http://localhost:8080/szs/me")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(this.objectMapper.writeValueAsString(token)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("code").value(AccountStatus.UNKNOWN.getCode()))
-                .andExpect(jsonPath("message").value(AccountStatus.UNKNOWN.getMessage()));
+                .andExpect(status().is4xxClientError());
     }
 }

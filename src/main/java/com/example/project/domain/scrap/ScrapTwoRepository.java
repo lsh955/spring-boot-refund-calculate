@@ -1,6 +1,7 @@
 package com.example.project.domain.scrap;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -10,5 +11,11 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ScrapTwoRepository extends JpaRepository<ScrapTwo, Long> {
 
-    ScrapTwo findByUserIdx(Long userIdx);
+    @Query(
+            value = "	SELECT total_used " +
+                    "	FROM scrap_two" +
+                    "	WHERE user_idx = ?1",
+            nativeQuery = true
+    )
+    Long findByTotalUsed(Long userId);
 }

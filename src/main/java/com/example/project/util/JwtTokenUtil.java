@@ -1,7 +1,5 @@
 package com.example.project.util;
 
-import com.example.project.enums.JwtTokenStatus;
-import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -58,26 +56,6 @@ public class JwtTokenUtil {
         map.put("token", token);
 
         return map;
-    }
-
-    /**
-     * 토큰검증
-     *
-     * @param token 토큰
-     * @return 검증결과(true OR false)
-     */
-    public JwtTokenStatus validateToken(String token) {
-        try {
-            Jwts.parserBuilder()
-                    .setSigningKey(secretKey)
-                    .build()
-                    .parseClaimsJws(token);
-
-            return JwtTokenStatus.TOKEN_SUCCESS;
-        } catch (JwtException e) {
-            e.printStackTrace();
-            return JwtTokenStatus.TOKEN_FAILURE;
-        }
     }
 
     /**

@@ -1,6 +1,5 @@
 package com.example.project.controller;
 
-import com.example.project.enums.ScrapStatus;
 import com.example.project.util.JwtTokenUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
@@ -16,7 +15,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.HashMap;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
@@ -46,8 +44,6 @@ class RefundControllerTest {
         this.mockMvc.perform(post("http://localhost:8080/szs/refund")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(this.objectMapper.writeValueAsString(token)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("code").value(ScrapStatus.NO_SCRAP_DATA.getCode()))
-                .andExpect(jsonPath("message").value(ScrapStatus.NO_SCRAP_DATA.getMessage()));
+                .andExpect(status().is4xxClientError());
     }
 }

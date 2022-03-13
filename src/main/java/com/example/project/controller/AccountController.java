@@ -51,7 +51,7 @@ public class AccountController {
      */
     @ApiOperation(value = "로그인", notes = "사용자검증에 따른 토큰발급")
     @PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Object login(@RequestBody UserDto userDto) throws Exception {
+    public JwtTokenDto login(@RequestBody UserDto userDto) throws Exception {
 
         return accountService.login(
                 userDto.getUserId(),
@@ -67,7 +67,7 @@ public class AccountController {
      */
     @ApiOperation(value = "개인정보 보기", notes = "토큰정보에 따른 사용자 정보조회")
     @PostMapping(value = "/me", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Object member(@RequestBody JwtTokenDto jwtTokenDto) throws Exception {
+    public UserDto member(@RequestBody JwtTokenDto jwtTokenDto) throws Exception {
 
         return accountService.readMember(
                 jwtTokenDto.getToken()

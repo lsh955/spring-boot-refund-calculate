@@ -1,6 +1,5 @@
 package com.example.project.controller;
 
-import com.example.project.enums.AccountStatus;
 import com.example.project.util.JwtTokenUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
@@ -76,8 +75,6 @@ class ScrapControllerTest {
         this.mockMvc.perform(post("http://localhost:8080/szs/scrap")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(this.objectMapper.writeValueAsString(token)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("code").value(AccountStatus.UNKNOWN.getCode()))
-                .andExpect(jsonPath("message").value(AccountStatus.UNKNOWN.getMessage()));
+                .andExpect(status().is4xxClientError());
     }
 }

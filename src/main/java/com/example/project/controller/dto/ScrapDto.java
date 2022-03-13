@@ -1,5 +1,6 @@
 package com.example.project.controller.dto;
 
+import com.example.project.domain.account.User;
 import com.example.project.domain.scrap.ScrapList;
 import com.example.project.domain.scrap.ScrapOne;
 import com.example.project.domain.scrap.ScrapResponse;
@@ -15,7 +16,7 @@ import java.util.List;
 /**
  * @author 이승환
  * @since 2022-02-20
- * <p>
+ *
  * 계층간 스크랩데이터 교환을 위한 DTO
  */
 @Getter
@@ -44,14 +45,14 @@ public class ScrapDto {
     }
 
     // DTO -> Entity
-    public ScrapResponse toEntity(Long userIdx) {
+    public ScrapResponse toEntity(User user) {
 
         return ScrapResponse.builder()
                 .appVer(getAppVer())
                 .hostNm(getHostNm())
                 .workerReqDt(getWorkerReqDt())
                 .workerResDt(getWorkerReqDt())
-                .userIdx(userIdx)
+                .user(user)
                 .build();
     }
 
@@ -81,13 +82,13 @@ public class ScrapDto {
         }
 
         // DTO -> Entity
-        public ScrapList toEntity(Long userIdx) {
+        public ScrapList toEntity(User user) {
 
             return ScrapList.builder()
                     .errMsg(errMsg)
                     .company(company)
                     .svcCd(svcCd)
-                    .userIdx(userIdx)
+                    .user(user)
                     .build();
         }
     }
@@ -139,8 +140,7 @@ public class ScrapDto {
             this.comNo = comNo;
         }
 
-        // DTO -> Entity
-        public ScrapOne toEntity(Long userIdx) {
+        public ScrapOne toEntity(User user) {
 
             return ScrapOne.builder()
                     .incomeDetails(incomeDetails)
@@ -151,7 +151,7 @@ public class ScrapDto {
                     .endDate(endDate)
                     .incomeCate(incomeCate)
                     .comNo(comNo)
-                    .userIdx(userIdx)
+                    .user(user)
                     .build();
         }
     }
@@ -175,12 +175,12 @@ public class ScrapDto {
         }
 
         // DTO -> Entity
-        public ScrapTwo toEntity(Long userIdx) {
+        public ScrapTwo toEntity(User user) {
 
             return ScrapTwo.builder()
                     .totalUsed(Long.parseLong(totalUsed))
                     .taxAmount(taxAmount)
-                    .userIdx(userIdx)
+                    .user(user)
                     .build();
         }
     }
