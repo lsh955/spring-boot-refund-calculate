@@ -7,7 +7,7 @@ import lombok.Getter;
 /**
  * @author 이승환
  * @since 2022-03-13
- *
+ * <p>
  * 전역으로 사용할 할 Exception
  */
 @Getter

@@ -20,7 +20,7 @@ public class ErrorFormatter {
      * 실제로 보낼 응답 Format
      *
      * @param errorCode errorCode
-     * @return          ResponseEntity
+     * @return ResponseEntity
      */
     public static ResponseEntity<ErrorFormatter> toResponseEntity(ErrorCode errorCode) {
         return ResponseEntity
