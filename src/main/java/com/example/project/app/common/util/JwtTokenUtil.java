@@ -44,12 +44,12 @@ public class JwtTokenUtil {
         payloads.put("name", name);
         payloads.put("regNo", this.aesCryptoUtil.decrypt(regNo));
 
-        String token = Jwts.builder()
-                .setHeader(headers)
-                .setClaims(payloads)
-                .setIssuedAt(date)
-                .setExpiration(expiryDate)
-                .signWith(secretKey, SignatureAlgorithm.HS256)
+        String token = Jwts.builder()   // jjwt library의 Jwts로부터 jwt을 생성
+                .setHeader(headers)     // JWT Header가 지닐 정보
+                .setClaims(payloads)    // JWT Payload가 지닐 정보
+                .setIssuedAt(date)      // 발급 시각
+                .setExpiration(expiryDate)  // 만료시간
+                .signWith(secretKey, SignatureAlgorithm.HS256)  // 해싱할 알고리즘과 비밀키
                 .compact();
 
         HashMap<String, String> map = new HashMap<>();
@@ -66,10 +66,10 @@ public class JwtTokenUtil {
      */
     public HashMap<String, String> decoderToken(String token) throws Exception {
         String[] chunks = token.split("\\.");
-        Base64.Decoder decoder = Base64.getUrlDecoder();
+        Base64.Decoder decoder = Base64.getUrlDecoder();    // base64 인코딩 체계를 사용하여 디코딩
 
-        String strToken = new String(decoder.decode(chunks[1]));
-        JSONObject jsonObject = new JSONObject(strToken);
+        String strToken = new String(decoder.decode(chunks[1]));    // split 으로 짤라진 것중에서 특정배열값을 가져와 디코드
+        JSONObject jsonObject = new JSONObject(strToken);   // String을 json 객체로 변환
 
         HashMap<String, String> refunds = new HashMap<>();
         refunds.put("name", jsonObject.get("name").toString());

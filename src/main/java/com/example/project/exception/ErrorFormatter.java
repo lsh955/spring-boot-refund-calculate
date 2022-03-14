@@ -1,6 +1,6 @@
 package com.example.project.exception;
 
-import com.example.project.app.enums.ErrorCode;
+import com.example.project.app.common.enums.ErrorCode;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.http.ResponseEntity;

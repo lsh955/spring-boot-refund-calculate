@@ -1,4 +1,4 @@
-package com.example.project.app.enums;
+package com.example.project.app.common.enums;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;

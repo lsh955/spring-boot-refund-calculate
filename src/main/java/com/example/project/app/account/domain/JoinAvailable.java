@@ -20,7 +20,7 @@ import javax.persistence.*;
 public class JoinAvailable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long availableIdx;  // 식별값
 
     private String name;        // 이름

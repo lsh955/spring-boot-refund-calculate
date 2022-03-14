@@ -20,10 +20,10 @@ public class SwaggerConfig {
 
     @Bean
     public Docket api() {
-        return new Docket(DocumentationType.SWAGGER_2)
-                .select()
-                .apis(RequestHandlerSelectors.any())    // RequestMapping으로 할당된 모든 URL 리스트를 추출
-                .paths(PathSelectors.ant("/szs/**"))
+        return new Docket(DocumentationType.SWAGGER_2)  // 2.0
+                .select()   // 스웨거에 의해 노출되는 end point 를 제어하는 하나의 방법
+                .apis(RequestHandlerSelectors.any())
+                .paths(PathSelectors.ant("/szs/**"))    // /szs/** 인 URL들만 필터링
                 .build()
                 .apiInfo(apiInfo());
     }

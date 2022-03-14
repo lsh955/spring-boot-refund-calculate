@@ -1,4 +1,4 @@
-package com.example.project.app.enums;
+package com.example.project.app.common.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

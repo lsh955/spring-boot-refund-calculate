@@ -14,8 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.text.DecimalFormat;
 import java.util.HashMap;
 
-import static com.example.project.app.enums.ErrorCode.MEMBER_NOT_FOUND;
-import static com.example.project.app.enums.ErrorCode.NO_SCRAP_DATA;
+import static com.example.project.app.common.enums.ErrorCode.MEMBER_NOT_FOUND;
+import static com.example.project.app.common.enums.ErrorCode.NO_SCRAP_DATA;
 
 /**
  * @author 이승환

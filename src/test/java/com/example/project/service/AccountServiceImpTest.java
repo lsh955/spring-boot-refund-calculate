@@ -4,7 +4,7 @@ import com.example.project.app.account.domain.UserRepository;
 import com.example.project.app.account.dto.UserDto;
 import com.example.project.app.account.service.AccountService;
 import com.example.project.app.common.dto.JwtTokenDto;
-import com.example.project.app.enums.AccountStatus;
+import com.example.project.app.common.enums.AccountStatus;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

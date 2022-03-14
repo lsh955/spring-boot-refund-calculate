@@ -27,7 +27,7 @@ public class AESCryptoUtil {
      * @throws Exception
      */
     public String encrypt(String text) throws Exception {
-        Cipher cipher = Cipher.getInstance(alg);    // getInstance()에 Cipher 객체를 AES 암호화, CBC operation mode, PKCS5 padding scheme로 초기화
+        Cipher cipher = Cipher.getInstance(alg);    // getInstance()에 Cipher 객체를 AES 암고리즘 암호화, CBC 블록암호운영방식, PKCS5 padding scheme로 초기화
         SecretKeySpec keySpec = new SecretKeySpec(secretKey.getBytes(), "AES");   // key 로 비밀키 생성
 
         /**

@@ -2,7 +2,7 @@ package com.example.project.app.account.service;
 
 import com.example.project.app.account.dto.UserDto;
 import com.example.project.app.common.dto.JwtTokenDto;
-import com.example.project.app.enums.AccountStatus;
+import com.example.project.app.common.enums.AccountStatus;
 
 /**
  * @author 이승환

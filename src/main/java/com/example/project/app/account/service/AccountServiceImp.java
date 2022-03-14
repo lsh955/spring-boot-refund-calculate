@@ -5,9 +5,9 @@ import com.example.project.app.account.domain.User;
 import com.example.project.app.account.domain.UserRepository;
 import com.example.project.app.account.dto.UserDto;
 import com.example.project.app.common.dto.JwtTokenDto;
+import com.example.project.app.common.enums.AccountStatus;
 import com.example.project.app.common.util.AESCryptoUtil;
 import com.example.project.app.common.util.JwtTokenUtil;
-import com.example.project.app.enums.AccountStatus;
 import com.example.project.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 
-import static com.example.project.app.enums.ErrorCode.*;
+import static com.example.project.app.common.enums.ErrorCode.*;
 
 /**
  * @author 이승환
@@ -113,10 +113,13 @@ public class AccountServiceImp implements AccountService {
         // Token 검증
         HashMap<String, String> strToken = this.jwtTokenUtil.decoderToken(token);
 
+        // 주민등록번호 암호화
+        String encryptRegNo = this.aesCryptoUtil.encrypt(strToken.get("regNo"));
+
         // 사용자정보 불러오기
         User user = this.userRepository.findByNameAndRegNo(
                 strToken.get("name"),
-                this.aesCryptoUtil.encrypt(strToken.get("regNo"))
+                encryptRegNo
         );
 
         if (user == null) // 정보가 없다면 가입되지 않는회원으로 간주

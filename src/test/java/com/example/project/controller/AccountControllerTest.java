@@ -2,8 +2,8 @@ package com.example.project.controller;
 
 import com.example.project.app.account.domain.UserRepository;
 import com.example.project.app.account.dto.UserDto;
+import com.example.project.app.common.enums.AccountStatus;
 import com.example.project.app.common.util.JwtTokenUtil;
-import com.example.project.app.enums.AccountStatus;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;

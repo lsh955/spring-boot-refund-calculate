@@ -13,15 +13,13 @@ import com.example.project.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
 
 import java.util.HashMap;
 
-import static com.example.project.app.enums.ErrorCode.MEMBER_NOT_FOUND;
+import static com.example.project.app.common.enums.ErrorCode.MEMBER_NOT_FOUND;
 
 /**
  * @author 이승환
@@ -89,16 +87,7 @@ public class ScrapServiceImp implements ScrapService {
                 .uri("/scrap/")
                 .bodyValue(new JSONObject(strToken).toString())
                 .retrieve()
-                .onStatus(httpStatus -> httpStatus != HttpStatus.OK,
-                        clientResponse -> clientResponse.createException()
-                                .flatMap(it -> Mono.error(
-                                        new RuntimeException("statusCode >> " + clientResponse.statusCode())
-                                ))
-                )
                 .bodyToMono(ScrapDto.class)
-                .onErrorResume(throwable -> Mono.error(
-                        new RuntimeException(throwable)
-                ))
                 .block();
     }
 

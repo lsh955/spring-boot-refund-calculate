@@ -2,7 +2,7 @@ package com.example.project.service;
 
 import com.example.project.app.account.domain.UserRepository;
 import com.example.project.app.common.dto.JwtTokenDto;
-import com.example.project.app.enums.AccountStatus;
+import com.example.project.app.common.enums.AccountStatus;
 import com.example.project.app.refund.domain.ScrapOneRepository;
 import com.example.project.app.refund.domain.ScrapResponseRepository;
 import com.example.project.app.refund.domain.ScrapTwoRepository;

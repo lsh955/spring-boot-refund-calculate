@@ -3,7 +3,7 @@ package com.example.project.app.account.controller;
 import com.example.project.app.account.dto.UserDto;
 import com.example.project.app.account.service.AccountService;
 import com.example.project.app.common.dto.JwtTokenDto;
-import com.example.project.app.enums.AccountStatus;
+import com.example.project.app.common.enums.AccountStatus;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
