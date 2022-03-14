@@ -1,5 +1,6 @@
 package com.example.project.util;
 
+import com.example.project.app.common.util.AESCryptoUtil;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

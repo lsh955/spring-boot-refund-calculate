@@ -1,6 +1,6 @@
 package com.example.project.controller;
 
-import com.example.project.util.JwtTokenUtil;
+import com.example.project.app.common.util.JwtTokenUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
