@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.text.DecimalFormat;
 import java.util.HashMap;
 
 import static com.example.project.app.common.enums.ErrorCode.MEMBER_NOT_FOUND;
@@ -68,9 +67,9 @@ public class RefundServiceImp implements RefundService {
 
         HashMap<String, Object> refunds = new HashMap<>();
         refunds.put("이름", strToken.get("name"));
-        refunds.put("한도", getUnitConversion(taxCredit));
-        refunds.put("공제액", getUnitConversion(taxAmount));
-        refunds.put("환급액", getUnitConversion(Math.min(taxCredit, taxAmount)));
+        refunds.put("한도", taxCredit);
+        refunds.put("공제액", taxAmount);
+        refunds.put("환급액", Math.min(taxCredit, taxAmount));
 
         return RefundDto.builder()
                 .name(refunds.get("이름").toString())
@@ -143,29 +142,5 @@ public class RefundServiceImp implements RefundService {
             taxAmount = 715000 + (totalUsed * 0.30);    // 71만 5천원 + (130만원을 초과하는 금액의 100분의 30)
 
         return taxAmount;
-    }
-
-    /**
-     * 금액단위 한글변환
-     *
-     * @param money 금액(ex:684000)
-     * @return      {단위변환결과}원
-     */
-    public String getUnitConversion(double money) {
-        DecimalFormat d = new DecimalFormat("#,####");
-
-        String[] han = {"", "만", "억", "조"};
-        String[] str = d.format(money).split(",");
-
-        StringBuilder result = new StringBuilder();
-        int count = 0;
-        for (int i = str.length; i > 0; i--) {
-            if (Integer.parseInt(str[i - 1]) != 0)
-                result.insert(0, Integer.parseInt(str[i - 1]) + han[count]);
-
-            count++;
-        }
-
-        return result + "원";
     }
 }
