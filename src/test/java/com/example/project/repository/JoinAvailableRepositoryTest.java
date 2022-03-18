@@ -33,4 +33,17 @@ public class JoinAvailableRepositoryTest {
         // then
         assertThat(isRegNo).isFalse();
     }
+
+    @Test
+    @DisplayName("가입가능한 유저의 주민번호가 있을 시")
+    public void isRegNoAvailableTrue () {
+        // given
+        String encryptByRegNo = "ldU2Z5ZlRuwPfYA1YfvOTw==";
+
+        // when
+        boolean isRegNo = joinAvailableRepository.existsByRegNo(encryptByRegNo);
+
+        // then
+        assertThat(isRegNo).isTrue();
+    }
 }
