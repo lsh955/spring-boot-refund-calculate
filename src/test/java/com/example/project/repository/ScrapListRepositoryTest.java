@@ -5,6 +5,7 @@ import com.example.project.app.account.domain.UserRepository;
 import com.example.project.app.refund.domain.ScrapList;
 import com.example.project.app.refund.domain.ScrapListRepository;
 import com.example.project.app.refund.dto.ScrapDto;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,17 +25,25 @@ public class ScrapListRepositoryTest {
     @Autowired
     private ScrapListRepository scrapListRepository;
 
-    @Test
-    @DisplayName("ScrapList 결과저장")
-    public void ScrapListSave () {
-        // given
-        final User user = User.builder()
+    private User user;
+
+    @BeforeEach
+    @DisplayName("초기 사용자정보 등록")
+    public void userSave() {
+        final User result = User.builder()
                 .userId("1")
                 .password("ELbbqFzaPvFZbCrhd61Mzw==")
                 .name("홍길동")
                 .regNo("ldU2Z5ZlRuwPfYA1YfvOTw==")
                 .build();
 
+        user = this.userRepository.save(result);
+    }
+
+    @Test
+    @DisplayName("ScrapList 결과저장")
+    public void ScrapListSave () {
+        // given
         final ScrapDto.ScrapListDto scrapListResult = ScrapDto.ScrapListDto.builder()
                 .errMsg("errMsg")
                 .company("홍당무")
@@ -42,8 +51,7 @@ public class ScrapListRepositoryTest {
                 .build();
 
         // when
-        this.userRepository.save(user);
-        final ScrapList result = this.scrapListRepository.save(scrapListResult.toEntity(user));
+        final ScrapList result = this.scrapListRepository.save(scrapListResult.toEntity(this.user));
 
         // then
         assertThat(result.getResultIdx()).isNotNull();
