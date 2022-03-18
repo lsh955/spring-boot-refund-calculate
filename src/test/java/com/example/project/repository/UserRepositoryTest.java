@@ -1,5 +1,6 @@
 package com.example.project.repository;
 
+import com.example.project.app.account.domain.User;
 import com.example.project.app.account.domain.UserRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -43,5 +44,49 @@ public class UserRepositoryTest {
 
         // then
         assertThat(isRegNo).isTrue();
+    }
+
+    @Test
+    @DisplayName("사용자 등록")
+    public void UserSave () {
+        // given
+        final User user = User.builder()
+                .userId("2")
+                .password("ELbbqFzaPvFZbCrhd61Mzw==")
+                .name("김둘리")
+                .regNo("U99p1DIkTEpARHoYcosMfA==")
+                .build();
+
+        // when
+        final User result = userRepository.save(user);
+
+        // then
+        assertThat(result.getUserIdx()).isNotNull();
+        assertThat(result.getUserId()).isEqualTo("2");
+        assertThat(result.getPassword()).isEqualTo("ELbbqFzaPvFZbCrhd61Mzw==");
+        assertThat(result.getName()).isEqualTo("김둘리");
+        assertThat(result.getRegNo()).isEqualTo("U99p1DIkTEpARHoYcosMfA==");
+    }
+
+    @Test
+    @DisplayName("사용자 아이디 기준으로 데이터 불러오기")
+    public void findByUserId () {
+        // given
+        final User user = User.builder()
+                .userId("1")
+                .password("ELbbqFzaPvFZbCrhd61Mzw==")
+                .name("홍길동")
+                .regNo("ldU2Z5ZlRuwPfYA1YfvOTw==")
+                .build();
+
+        // when
+        final User result = userRepository.findByUserId(user.getUserId());
+
+        // then
+        assertThat(result.getUserIdx()).isNotNull();
+        assertThat(result.getUserId()).isEqualTo("1");
+        assertThat(result.getPassword()).isEqualTo("ELbbqFzaPvFZbCrhd61Mzw==");
+        assertThat(result.getName()).isEqualTo("홍길동");
+        assertThat(result.getRegNo()).isEqualTo("ldU2Z5ZlRuwPfYA1YfvOTw==");
     }
 }
