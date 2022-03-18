@@ -29,7 +29,7 @@ public class ScrapTwoRepositoryTest {
 
     @BeforeEach
     @DisplayName("초기 사용자정보 등록")
-    public void userSave() {
+    public void beforeUserSave() {
         final User result = User.builder()
                 .userId("1")
                 .password("ELbbqFzaPvFZbCrhd61Mzw==")
