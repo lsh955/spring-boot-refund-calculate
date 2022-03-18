@@ -51,7 +51,7 @@ public class ScrapDto {
                 .appVer(getAppVer())
                 .hostNm(getHostNm())
                 .workerReqDt(getWorkerReqDt())
-                .workerResDt(getWorkerReqDt())
+                .workerResDt(getWorkerResDt())
                 .user(user)
                 .build();
     }
