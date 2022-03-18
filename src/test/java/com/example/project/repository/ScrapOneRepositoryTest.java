@@ -62,4 +62,35 @@ public class ScrapOneRepositoryTest {
         assertThat(result.getIncomeCate()).isEqualTo("근로소득(연간)");
         assertThat(result.getComNo()).isEqualTo("012-34-56789");
     }
+
+    @Test
+    @DisplayName("사용자 시퀀스값에 따른 총지급액 불러오기")
+    public void findByTotalPay () {
+        // given
+        final User user = User.builder()
+                .userId("1")
+                .password("ELbbqFzaPvFZbCrhd61Mzw==")
+                .name("홍길동")
+                .regNo("ldU2Z5ZlRuwPfYA1YfvOTw==")
+                .build();
+
+        final ScrapDto.ScrapOneDto scrapOneResult = ScrapDto.ScrapOneDto.builder()
+                .incomeDetails("급여")
+                .totalPay("24000000")
+                .startDate("2020.10.03")
+                .scrapCompany("(주)활빈당")
+                .payDate("2020.11.02")
+                .endDate("2020.11.02")
+                .incomeCate("근로소득(연간)")
+                .comNo("012-34-56789")
+                .build();
+
+        // when
+        this.userRepository.save(user);
+        this.scrapOneRepository.save(scrapOneResult.toEntity(user));
+        final Long totalPay = scrapOneRepository.findByTotalPay(user.getUserIdx());
+
+        // then
+        assertThat(totalPay).isEqualTo(24000000);
+    }
 }
