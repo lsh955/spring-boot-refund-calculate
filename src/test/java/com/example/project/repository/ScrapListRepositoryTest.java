@@ -43,7 +43,7 @@ public class ScrapListRepositoryTest {
 
         // when
         this.userRepository.save(user);
-        final ScrapList result = scrapListRepository.save(scrapListResult.toEntity(user));
+        final ScrapList result = this.scrapListRepository.save(scrapListResult.toEntity(user));
 
         // then
         assertThat(result.getResultIdx()).isNotNull();

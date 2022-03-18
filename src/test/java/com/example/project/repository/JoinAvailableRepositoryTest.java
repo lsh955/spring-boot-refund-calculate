@@ -28,7 +28,7 @@ public class JoinAvailableRepositoryTest {
         String encryptByRegNo = "ldU2Z5ZlRuwDDDPfYA1YfvOTw==";
 
         // when
-        boolean isRegNo = joinAvailableRepository.existsByRegNo(encryptByRegNo);
+        boolean isRegNo = this.joinAvailableRepository.existsByRegNo(encryptByRegNo);
 
         // then
         assertThat(isRegNo).isFalse();
@@ -41,7 +41,7 @@ public class JoinAvailableRepositoryTest {
         String encryptByRegNo = "ldU2Z5ZlRuwPfYA1YfvOTw==";
 
         // when
-        boolean isRegNo = joinAvailableRepository.existsByRegNo(encryptByRegNo);
+        boolean isRegNo = this.joinAvailableRepository.existsByRegNo(encryptByRegNo);
 
         // then
         assertThat(isRegNo).isTrue();

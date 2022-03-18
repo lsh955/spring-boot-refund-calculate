@@ -42,7 +42,7 @@ public class ScrapTwoRepositoryTest {
             
         // when
         this.userRepository.save(user);
-        final ScrapTwo result = scrapTwoRepository.save(scrapTwoResult.toEntity(user));
+        final ScrapTwo result = this.scrapTwoRepository.save(scrapTwoResult.toEntity(user));
             
         // then
         assertThat(result.getScrapTwoIdx()).isNotNull();
