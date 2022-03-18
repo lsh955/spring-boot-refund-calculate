@@ -89,4 +89,22 @@ public class UserRepositoryTest {
         assertThat(result.getName()).isEqualTo("홍길동");
         assertThat(result.getRegNo()).isEqualTo("ldU2Z5ZlRuwPfYA1YfvOTw==");
     }
+    
+    @Test
+    @DisplayName("사용자 이름과 주민번호에 따른 시퀀스값 불러오기")
+    public void findByUserIdx () {
+        // given
+        final User user = User.builder()
+                .userId("1")
+                .password("ELbbqFzaPvFZbCrhd61Mzw==")
+                .name("홍길동")
+                .regNo("ldU2Z5ZlRuwPfYA1YfvOTw==")
+                .build();
+            
+        // when
+        final Long result = userRepository.findByUserIdx(user.getName(), user.getRegNo());
+            
+        // then
+        assertThat(result).isNotNull();
+    }
 }
