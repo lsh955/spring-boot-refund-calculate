@@ -1,6 +1,7 @@
 package com.example.project.repository;
 
 import com.example.project.app.account.domain.JoinAvailableRepository;
+import com.example.project.app.account.domain.User;
 import com.example.project.app.account.domain.UserRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -45,5 +46,27 @@ public class JoinAvailableRepositoryTest {
 
         // then
         assertThat(isRegNo).isTrue();
+    }
+    
+    @Test
+    @DisplayName("사용자 등록")
+    public void UserSave () {
+        // given
+        final User user = User.builder()
+                .userId("2")
+                .password("ELbbqFzaPvFZbCrhd61Mzw==")
+                .name("김둘리")
+                .regNo("U99p1DIkTEpARHoYcosMfA==")
+                .build();
+            
+        // when
+        final User result = userRepository.save(user);
+            
+        // then
+        assertThat(result.getUserIdx()).isNotNull();
+        assertThat(result.getUserId()).isEqualTo("2");
+        assertThat(result.getPassword()).isEqualTo("ELbbqFzaPvFZbCrhd61Mzw==");
+        assertThat(result.getName()).isEqualTo("김둘리");
+        assertThat(result.getRegNo()).isEqualTo("U99p1DIkTEpARHoYcosMfA==");
     }
 }
