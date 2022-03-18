@@ -125,7 +125,6 @@ public class ScrapDto {
                            String startDate,
                            String scrapCompany,
                            String payDate,
-                           String svcCd,
                            String endDate,
                            String incomeCate,
                            String comNo) {
