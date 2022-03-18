@@ -48,7 +48,7 @@ public class ScrapOneRepositoryTest {
             
         // when
         this.userRepository.save(user);
-        final ScrapOne result = scrapOneRepository.save(scrapOneResult.toEntity(user));
+        final ScrapOne result = this.scrapOneRepository.save(scrapOneResult.toEntity(user));
             
         // then
         assertThat(result.getScrapOneIdx()).isNotNull();
@@ -88,7 +88,7 @@ public class ScrapOneRepositoryTest {
         // when
         this.userRepository.save(user);
         this.scrapOneRepository.save(scrapOneResult.toEntity(user));
-        final Long totalPay = scrapOneRepository.findByTotalPay(user.getUserIdx());
+        final Long totalPay = this.scrapOneRepository.findByTotalPay(user.getUserIdx());
 
         // then
         assertThat(totalPay).isEqualTo(24000000);
