@@ -37,8 +37,8 @@ public class ScrapListRepositoryTest {
 
         final ScrapDto.ScrapListDto scrapListResult = ScrapDto.ScrapListDto.builder()
                 .errMsg("errMsg")
-                .company("company")
-                .svcCd("svcCd")
+                .company("홍당무")
+                .svcCd("test01")
                 .build();
 
         // when
@@ -49,7 +49,7 @@ public class ScrapListRepositoryTest {
         assertThat(result.getResultIdx()).isNotNull();
         assertThat(result.getUser().getUserIdx()).isNotNull();
         assertThat(result.getErrMsg()).isEqualTo("errMsg");
-        assertThat(result.getCompany()).isEqualTo("company");
-        assertThat(result.getSvcCd()).isEqualTo("svcCd");
+        assertThat(result.getCompany()).isEqualTo("홍당무");
+        assertThat(result.getSvcCd()).isEqualTo("test01");
     }
 }
