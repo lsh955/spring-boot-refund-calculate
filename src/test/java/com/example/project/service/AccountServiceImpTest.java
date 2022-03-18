@@ -1,177 +1,77 @@
 package com.example.project.service;
 
+import com.example.project.app.account.domain.JoinAvailableRepository;
 import com.example.project.app.account.domain.UserRepository;
-import com.example.project.app.account.dto.UserDto;
-import com.example.project.app.account.service.AccountService;
-import com.example.project.app.common.dto.JwtTokenDto;
-import com.example.project.app.common.enums.AccountStatus;
-import org.junit.jupiter.api.AfterEach;
+import com.example.project.app.account.service.AccountServiceImp;
+import com.example.project.app.common.enums.ErrorCode;
+import com.example.project.app.common.util.AESCryptoUtil;
+import com.example.project.exception.CustomException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.doReturn;
 
 /**
  * @author 이승환
  * @since 2022-02-24
  */
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 class AccountServiceImpTest {
 
-    @Autowired
-    private AccountService accountService;
+    @InjectMocks
+    private AccountServiceImp accountServiceImp;
 
     @Mock
     private UserRepository userRepository;
+    @Mock
+    private JoinAvailableRepository joinAvailableRepository;
+    @Mock
+    private AESCryptoUtil aesCryptoUtil;
 
-    @AfterEach
-    public void cleanup() {
-        userRepository.deleteAll();
+    private final String encryptedRegNo = "ldU2Z5ZlRuwPfYA1YfvOTw==";
+    private final String encryptedPassword = "ELbbqFzaPvFZbCrhd61Mzw==";
+
+    private final String userId = "1";
+    private final String password = "123";
+    private final String name = "홍길동";
+    private final String regNo = "860824-1655068";
+
+    @Test
+    @DisplayName("가입가능한 회원정보에 주민등록번호가 없을 시")
+    public void RegNoOverlapFailureCheck () throws Exception {
+        // given
+        doReturn(false).when(joinAvailableRepository).existsByRegNo("ldU2Z5ZlRuwDDPfYA1YfvOTw==");
+        doReturn("ldU2Z5ZlRuwDDPfYA1YfvOTw==").when(aesCryptoUtil).encrypt(regNo);
+            
+        // when
+        final CustomException result = assertThrows(CustomException.class,
+                () -> accountServiceImp.addSignup(userId, password, name, regNo)
+        );
+            
+        // then
+        assertThat(result.getErrorCode()).isEqualTo(ErrorCode.UNABLE_TO_REG_NO);
     }
 
     @Test
-    @DisplayName(value = "유저생성 성공(가입가능하고 중복된 유저가 없을 시)")
-    public void SIGNUP_SUCCESS_TEST() throws Exception {
-        String userId = "2";
-        String password = "123";
-        String name = "김둘리";
-        String regNo = "921108-1582816";
+    @DisplayName("가입한 회원정보에 주민증록번호가 있는지 중복체크")
+    public void RegNoFailureCheck () throws Exception {
+        // given
+        doReturn(true).when(joinAvailableRepository).existsByRegNo(encryptedRegNo);
+        doReturn(true).when(userRepository).existsByRegNo(encryptedRegNo);
+        doReturn(encryptedRegNo).when(aesCryptoUtil).encrypt(regNo);
 
-        UserDto userDto = UserDto.builder()
-                .userId(userId)
-                .password(password)
-                .name(name)
-                .regNo(regNo)
-                .build();
-
-        AccountStatus signup = this.accountService.addSignup(
-                userDto.getUserId(),
-                userDto.getPassword(),
-                userDto.getName(),
-                userDto.getRegNo()
+        // when
+        final CustomException result = assertThrows(CustomException.class,
+                () -> accountServiceImp.addSignup(userId, password, name, regNo)
         );
 
-        assertThat(signup).isEqualTo(AccountStatus.SIGNUP_SUCCESS);
-    }
-
-    @Test
-    @DisplayName(value = "유저생성 실패(가입한 유저가 이미 있을경우)")
-    public void SIGNUP_OVERLAP_FAILURE_TEST() throws Exception {
-        String userId = "1";
-        String password = "123";
-        String name = "홍길동";
-        String regNo = "860824-1655068";
-
-        UserDto userDto = UserDto.builder()
-                .userId(userId)
-                .password(password)
-                .name(name)
-                .regNo(regNo)
-                .build();
-
-        AccountStatus signup = this.accountService.addSignup(
-                userDto.getUserId(),
-                userDto.getPassword(),
-                userDto.getName(),
-                userDto.getRegNo()
-        );
-
-        assertThat(signup).isEqualTo(AccountStatus.REG_NO_OVERLAP);
-    }
-
-    @Test
-    @DisplayName(value = "유저생성 실패(가입가능한 유저가 아닌경우)")
-    public void SIGNUP_UNABLE_FAILURE_TEST() throws Exception {
-        String userId = "10";
-        String password = "123";
-        String name = "이승환";
-        String regNo = "123456-789456";
-
-        UserDto userDto = UserDto.builder()
-                .userId(userId)
-                .password(password)
-                .name(name)
-                .regNo(regNo)
-                .build();
-
-        AccountStatus signup = this.accountService.addSignup(
-                userDto.getUserId(),
-                userDto.getPassword(),
-                userDto.getName(),
-                userDto.getRegNo()
-        );
-
-        assertThat(signup).isEqualTo(AccountStatus.UNABLE_TO_REG_NO);
-    }
-
-    @Test
-    @DisplayName(value = "로그인 성공(가입된 유저가 로그인 시)")
-    public void LOGIN_SUCCESS_TEST() throws Exception {
-        String userId = "1";
-        String password = "123";
-        String name = "홍길동";
-        String regNo = "860824-1655068";
-
-        UserDto userDto = UserDto.builder()
-                .userId(userId)
-                .password(password)
-                .name(name)
-                .regNo(regNo)
-                .build();
-
-        Object login = this.accountService.login(userDto.getUserId(), userDto.getPassword());
-
-        assertThat(login).isNotNull();
-    }
-
-    @Test
-    @DisplayName(value = "로그인 실패(가입된 유저의 아이디가 맞는지)")
-    public void LOGIN_FAILURE_TEST() throws Exception {
-        String userId = "12";
-        String password = "123";
-        String name = "홍길동";
-        String regNo = "860824-1655068";
-
-        UserDto userDto = UserDto.builder()
-                .userId(userId)
-                .password(password)
-                .name(name)
-                .regNo(regNo)
-                .build();
-
-        Object login = this.accountService.login(userDto.getUserId(), userDto.getPassword());
-
-        assertThat(login).isEqualTo(AccountStatus.UNKNOWN);
-    }
-
-    @Test
-    @DisplayName(value = "개인정보 보기 성공(가입 한 유저인 경우)")
-    public void ME_SUCCESS_TEST() throws Exception {
-        String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyZWdObyI6Ijg2MDgyNC0xNjU1MDY4IiwibmFtZSI6Iu2Zjeq4uOuPmSIsImlhdCI6MTY0NTY4NTM1MiwiZXhwIjoxNjQ1Njg3MTUyfQ.XG0jHD1-7rEujypfvOtHkhj6d91Fphry2F86_9jD5JA";
-
-        JwtTokenDto jwtTokenDto = JwtTokenDto.builder()
-                .token(token)
-                .build();
-
-        Object me = this.accountService.readMember(jwtTokenDto.getToken());
-
-        assertThat(me).isNotNull();
-    }
-
-    @Test
-    @DisplayName(value = "개인정보 보기 실패(가입하지 않는 유저인 경우)")
-    public void ME_FAILURE_TEST() throws Exception {
-        String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyZWdObyI6IjEyMzQ1Ni03ODk0NTYiLCJuYW1lIjoi7J207Iq57ZmYIiwiaWF0IjoxNjQ1Njg1MzUyLCJleHAiOjE2NDU2ODcxNTJ9.fPSM4i2wBNyFnUGct8oToXXnCsTUhND7dB_DqIn_nB0";
-
-        JwtTokenDto jwtTokenDto = JwtTokenDto.builder()
-                .token(token)
-                .build();
-
-        Object me = this.accountService.readMember(jwtTokenDto.getToken());
-
-        assertThat(me).isEqualTo(AccountStatus.UNKNOWN);
+        // then
+        assertThat(result.getErrorCode()).isEqualTo(ErrorCode.REG_NO_OVERLAP);
     }
 }
