@@ -26,7 +26,7 @@ public class UserRepositoryTest {
         String encryptByRegNo = "ldU2Z5ZlRuwDDDPfYA1YfvOTw==";
 
         // when
-        boolean isRegNo = userRepository.existsByRegNo(encryptByRegNo);
+        boolean isRegNo = this.userRepository.existsByRegNo(encryptByRegNo);
 
         // then
         assertThat(isRegNo).isFalse();
@@ -39,7 +39,7 @@ public class UserRepositoryTest {
         String encryptByRegNo = "ldU2Z5ZlRuwPfYA1YfvOTw==";
 
         // when
-        boolean isRegNo = userRepository.existsByRegNo(encryptByRegNo);
+        boolean isRegNo = this.userRepository.existsByRegNo(encryptByRegNo);
 
         // then
         assertThat(isRegNo).isTrue();
@@ -57,7 +57,7 @@ public class UserRepositoryTest {
                 .build();
 
         // when
-        final User result = userRepository.save(user);
+        final User result = this.userRepository.save(user);
 
         // then
         assertThat(result.getUserIdx()).isNotNull();
@@ -79,7 +79,7 @@ public class UserRepositoryTest {
                 .build();
 
         // when
-        final User result = userRepository.findByUserId(user.getUserId());
+        final User result = this.userRepository.findByUserId(user.getUserId());
 
         // then
         assertThat(result.getUserIdx()).isNotNull();
@@ -101,7 +101,7 @@ public class UserRepositoryTest {
                 .build();
             
         // when
-        final Long result = userRepository.findByUserIdx(user.getName(), user.getRegNo());
+        final Long result = this.userRepository.findByUserIdx(user.getName(), user.getRegNo());
             
         // then
         assertThat(result).isNotNull();
