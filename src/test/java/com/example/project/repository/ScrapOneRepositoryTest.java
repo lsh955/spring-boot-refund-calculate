@@ -5,6 +5,7 @@ import com.example.project.app.account.domain.UserRepository;
 import com.example.project.app.refund.domain.ScrapOne;
 import com.example.project.app.refund.domain.ScrapOneRepository;
 import com.example.project.app.refund.dto.ScrapDto;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,18 +24,26 @@ public class ScrapOneRepositoryTest {
     private UserRepository userRepository;
     @Autowired
     private ScrapOneRepository scrapOneRepository;
-    
-    @Test
-    @DisplayName("ScrapOne 결과저장")
-    public void ScrapOneSave () {
-        // given
-        final User user = User.builder()
+
+    private User user;
+
+    @BeforeEach
+    @DisplayName("초기 사용자정보 등록")
+    public void userSave() {
+        final User result = User.builder()
                 .userId("1")
                 .password("ELbbqFzaPvFZbCrhd61Mzw==")
                 .name("홍길동")
                 .regNo("ldU2Z5ZlRuwPfYA1YfvOTw==")
                 .build();
 
+        user = this.userRepository.save(result);
+    }
+    
+    @Test
+    @DisplayName("ScrapOne 결과저장")
+    public void ScrapOneSave () {
+        // given
         final ScrapDto.ScrapOneDto scrapOneResult = ScrapDto.ScrapOneDto.builder()
                 .incomeDetails("급여")
                 .totalPay("24000000")
@@ -47,8 +56,7 @@ public class ScrapOneRepositoryTest {
                 .build();
             
         // when
-        this.userRepository.save(user);
-        final ScrapOne result = this.scrapOneRepository.save(scrapOneResult.toEntity(user));
+        final ScrapOne result = this.scrapOneRepository.save(scrapOneResult.toEntity(this.user));
             
         // then
         assertThat(result.getScrapOneIdx()).isNotNull();
@@ -67,13 +75,6 @@ public class ScrapOneRepositoryTest {
     @DisplayName("사용자 시퀀스값에 따른 총지급액 불러오기")
     public void findByTotalPay () {
         // given
-        final User user = User.builder()
-                .userId("1")
-                .password("ELbbqFzaPvFZbCrhd61Mzw==")
-                .name("홍길동")
-                .regNo("ldU2Z5ZlRuwPfYA1YfvOTw==")
-                .build();
-
         final ScrapDto.ScrapOneDto scrapOneResult = ScrapDto.ScrapOneDto.builder()
                 .incomeDetails("급여")
                 .totalPay("24000000")
@@ -86,9 +87,8 @@ public class ScrapOneRepositoryTest {
                 .build();
 
         // when
-        this.userRepository.save(user);
-        this.scrapOneRepository.save(scrapOneResult.toEntity(user));
-        final Long totalPay = this.scrapOneRepository.findByTotalPay(user.getUserIdx());
+        this.scrapOneRepository.save(scrapOneResult.toEntity(this.user));
+        final Long totalPay = this.scrapOneRepository.findByTotalPay(this.user.getUserIdx());
 
         // then
         assertThat(totalPay).isEqualTo(24000000);
