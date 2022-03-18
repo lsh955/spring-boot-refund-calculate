@@ -50,4 +50,29 @@ public class ScrapTwoRepositoryTest {
         assertThat(result.getTotalUsed()).isEqualTo(2000000);
         assertThat(result.getTaxAmount()).isEqualTo("산출세액");
     }
+
+    @Test
+    @DisplayName("사용자 시퀀스값에 따른 총사용금액 불러오기")
+    public void findByTotalUsed () {
+        // given
+        final User user = User.builder()
+                .userId("1")
+                .password("ELbbqFzaPvFZbCrhd61Mzw==")
+                .name("홍길동")
+                .regNo("ldU2Z5ZlRuwPfYA1YfvOTw==")
+                .build();
+
+        final ScrapDto.ScrapTwoDto scrapTwoResult = ScrapDto.ScrapTwoDto.builder()
+                .totalUsed("2000000")
+                .taxAmount("산출세액")
+                .build();
+
+        // when
+        this.userRepository.save(user);
+        this.scrapTwoRepository.save(scrapTwoResult.toEntity(user));
+        final Long totalUsed = this.scrapTwoRepository.findByTotalUsed(user.getUserIdx());
+
+        // then
+        assertThat(totalUsed).isEqualTo(2000000);
+    }
 }
