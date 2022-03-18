@@ -30,7 +30,6 @@ public class UserRepositoryTest {
 
         // then
         assertThat(isRegNo).isFalse();
-
     }
 
     @Test
