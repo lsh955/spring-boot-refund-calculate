@@ -68,6 +68,9 @@ class AccountServiceImpTest {
             
         // then
         assertThat(result.getErrorCode()).isEqualTo(ErrorCode.UNABLE_TO_REG_NO);
+
+        // verify
+        verify(userRepository, times(0)).save(any(User.class));
     }
 
     @Test
@@ -85,6 +88,9 @@ class AccountServiceImpTest {
 
         // then
         assertThat(result.getErrorCode()).isEqualTo(ErrorCode.REG_NO_OVERLAP);
+
+        // verify
+        verify(userRepository, times(0)).save(any(User.class));
     }
     
     @Test
