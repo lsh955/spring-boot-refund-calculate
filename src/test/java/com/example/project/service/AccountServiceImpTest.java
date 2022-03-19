@@ -45,6 +45,15 @@ class AccountServiceImpTest {
     private final String name = "홍길동";
     private final String regNo = "860824-1655068";
 
+    private User user() {
+        return User.builder()
+                .userId("1")
+                .password("ELbbqFzaPvFZbCrhd61Mzw==")
+                .name("홍길동")
+                .regNo("ldU2Z5ZlRuwPfYA1YfvOTw==")
+                .build();
+    }
+
     @Test
     @DisplayName("가입가능한 회원정보에 주민등록번호가 없을 시")
     public void RegNoOverlapFailureCheck () throws Exception {
@@ -96,14 +105,5 @@ class AccountServiceImpTest {
 
         // verify
         verify(userRepository, times(1)).save(any(User.class));
-    }
-
-    private User user() {
-        return User.builder()
-                .userId("1")
-                .password("ELbbqFzaPvFZbCrhd61Mzw==")
-                .name("홍길동")
-                .regNo("ldU2Z5ZlRuwPfYA1YfvOTw==")
-                .build();
     }
 }
