@@ -59,27 +59,27 @@ class AccountControllerTest {
 
     @Test
     @DisplayName("가입가능한 주민등록번호가 없을시")
-    public void 가입가능한_주민등록번호가_없을시 () throws Exception {
+    public void 가입가능한_주민등록번호가_없을시() throws Exception {
         // given
         final String url = "/szs/signup";
         doThrow(new CustomException(ErrorCode.UNABLE_TO_REG_NO))
                 .when(accountServiceImp)
                 .addSignup("2", "123", "이승환", "123456-789456");
-            
+
         // when
         final ResultActions resultActions = mockMvc.perform(
                 MockMvcRequestBuilders.post(url)
-                .content(gson.toJson(userDto("2", "123", "이승환", "123456-789456")))
-                .contentType(MediaType.APPLICATION_JSON)
+                        .content(gson.toJson(userDto("2", "123", "이승환", "123456-789456")))
+                        .contentType(MediaType.APPLICATION_JSON)
         );
-            
+
         // then
         resultActions.andExpect(status().isConflict());
     }
 
     @Test
     @DisplayName("가입된 주민등록번호가 이미 있을시")
-    public void 가입된_주민등록번호가_이미_있을시 () throws Exception {
+    public void 가입된_주민등록번호가_이미_있을시() throws Exception {
         // given
         final String url = "/szs/signup";
         doThrow(new CustomException(ErrorCode.REG_NO_OVERLAP))
@@ -99,7 +99,7 @@ class AccountControllerTest {
 
     @Test
     @DisplayName("회원가입 성공")
-    public void 회원가입_성공 () throws Exception {
+    public void 회원가입_성공() throws Exception {
         // given
         final String url = "/szs/signup";
 
