@@ -48,7 +48,10 @@ class AccountControllerTest {
                 .build();
     }
 
-    private UserDto userDto(String userId, String password, String name, String regNo) {
+    private UserDto userDto(String userId,
+                            String password,
+                            String name,
+                            String regNo) {
         return UserDto.builder()
                 .userId(userId)
                 .password(password)
