@@ -4,9 +4,11 @@ import com.example.project.app.account.domain.JoinAvailableRepository;
 import com.example.project.app.account.domain.User;
 import com.example.project.app.account.domain.UserRepository;
 import com.example.project.app.account.service.AccountServiceImp;
+import com.example.project.app.common.dto.JwtTokenDto;
 import com.example.project.app.common.enums.AccountStatus;
 import com.example.project.app.common.enums.ErrorCode;
 import com.example.project.app.common.util.AESCryptoUtil;
+import com.example.project.app.common.util.JwtTokenUtil;
 import com.example.project.exception.CustomException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,6 +16,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.HashMap;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -36,16 +40,18 @@ class AccountServiceImpTest {
     private JoinAvailableRepository joinAvailableRepository;
     @Mock
     private AESCryptoUtil aesCryptoUtil;
+    @Mock
+    private JwtTokenUtil jwtTokenUtil;
 
     private final String encryptedRegNo = "ldU2Z5ZlRuwPfYA1YfvOTw==";
     private final String encryptedPassword = "ELbbqFzaPvFZbCrhd61Mzw==";
 
     private final String userId = "1";
-    private final String password = "123";
+    private final String decryptdPassword = "123";
     private final String name = "홍길동";
-    private final String regNo = "860824-1655068";
+    private final String decryptdRegNo = "860824-1655068";
 
-    private User user() {
+    private User userBySave() {
         return User.builder()
                 .userId("1")
                 .password("ELbbqFzaPvFZbCrhd61Mzw==")
@@ -66,11 +72,11 @@ class AccountServiceImpTest {
     public void RegNoOverlapFailureCheck () throws Exception {
         // given
         doReturn(false).when(joinAvailableRepository).existsByRegNo("ldU2Z5ZlRuwDDPfYA1YfvOTw==");
-        doReturn("ldU2Z5ZlRuwDDPfYA1YfvOTw==").when(aesCryptoUtil).encrypt(regNo);
+        doReturn("ldU2Z5ZlRuwDDPfYA1YfvOTw==").when(aesCryptoUtil).encrypt(decryptdRegNo);
             
         // when
         final CustomException result = assertThrows(CustomException.class,
-                () -> accountServiceImp.addSignup(userId, password, name, regNo)
+                () -> accountServiceImp.addSignup(userId, decryptdPassword, name, decryptdRegNo)
         );
             
         // then
@@ -86,11 +92,11 @@ class AccountServiceImpTest {
         // given
         doReturn(true).when(joinAvailableRepository).existsByRegNo(encryptedRegNo);
         doReturn(true).when(userRepository).existsByRegNo(encryptedRegNo);
-        doReturn(encryptedRegNo).when(aesCryptoUtil).encrypt(regNo);
+        doReturn(encryptedRegNo).when(aesCryptoUtil).encrypt(decryptdRegNo);
 
         // when
         final CustomException result = assertThrows(CustomException.class,
-                () -> accountServiceImp.addSignup(userId, password, name, regNo)
+                () -> accountServiceImp.addSignup(userId, decryptdPassword, name, decryptdRegNo)
         );
 
         // then
@@ -106,11 +112,11 @@ class AccountServiceImpTest {
         // given
         doReturn(true).when(joinAvailableRepository).existsByRegNo(encryptedRegNo);
         doReturn(false).when(userRepository).existsByRegNo(encryptedRegNo);
-        doReturn(encryptedRegNo).when(aesCryptoUtil).encrypt(regNo);
-        doReturn(user()).when(userRepository).save(any(User.class));
+        doReturn(encryptedRegNo).when(aesCryptoUtil).encrypt(decryptdRegNo);
+        doReturn(userBySave()).when(userRepository).save(any(User.class));
             
         // when
-        final AccountStatus result = accountServiceImp.addSignup(userId, password, name, regNo);
+        final AccountStatus result = accountServiceImp.addSignup(userId, decryptdPassword, name, decryptdRegNo);
             
         // then
         assertThat(result.getCode()).isEqualTo(AccountStatus.SIGNUP_SUCCESS.getCode());
