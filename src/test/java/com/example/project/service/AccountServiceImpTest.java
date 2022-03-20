@@ -54,6 +54,13 @@ class AccountServiceImpTest {
                 .build();
     }
 
+    private HashMap<String, String> tokenByCreate() {
+        final HashMap<String, String> tokenMap = new HashMap<>();
+        tokenMap.put("token", "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyZWdObyI6Ijg2MDgyNC0xNjU1MDY4IiwibmFtZSI6Iu2Zjeq4uOuPmSIsImlhdCI6MTY0Nzc0NzQ4NCwiZXhwIjoxNjQ3NzQ5Mjg0fQ.uyIN2Sz88HOqUaa-M5th99uP-NIPsl2fI4ssgfkNPOs");
+
+        return tokenMap;
+    }
+
     @Test
     @DisplayName("가입가능한 회원정보에 주민등록번호가 없을 시")
     public void RegNoOverlapFailureCheck () throws Exception {
