@@ -40,7 +40,7 @@ class AccountControllerTest {
     private Gson gson;
 
     @BeforeEach
-    private void init() {
+    public void init() {
         gson = new Gson();
         mockMvc = MockMvcBuilders.standaloneSetup(accountController)
                 .setControllerAdvice(GlobalExceptionHandler.class)
