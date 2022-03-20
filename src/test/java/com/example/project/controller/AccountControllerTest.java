@@ -3,6 +3,7 @@ package com.example.project.controller;
 import com.example.project.app.account.controller.AccountController;
 import com.example.project.app.account.dto.UserDto;
 import com.example.project.app.account.service.AccountServiceImp;
+import com.example.project.app.common.dto.JwtTokenDto;
 import com.example.project.app.common.enums.ErrorCode;
 import com.example.project.exception.CustomException;
 import com.example.project.exception.GlobalExceptionHandler;
@@ -112,6 +113,106 @@ class AccountControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
         );
 
+        // then
+        resultActions.andExpect(status().isOk());
+    }
+    
+    @Test
+    @DisplayName("로그인시 가입된 회원정보가 없을시")
+    public void 로그인시_가입된_회원정보가_없을시 () throws Exception {
+        // given
+        final String url = "/szs/login";
+        doThrow(new CustomException(ErrorCode.MEMBER_NOT_FOUND))
+                .when(accountServiceImp)
+                .login("5555", "123");
+            
+        // when
+        final ResultActions resultActions = mockMvc.perform(
+                MockMvcRequestBuilders.post(url)
+                        .content(gson.toJson(userDto("5555", "123", "이승환", "123456-789456")))
+                        .contentType(MediaType.APPLICATION_JSON)
+        );
+            
+        // then
+        resultActions.andExpect(status().isNotFound());
+    }
+    
+    @Test
+    @DisplayName("로그인시_등록된_패스워드가_틀렸을시")
+    public void 로그인시_등록된_패스워드가_틀렸을시 () throws Exception {
+        // given
+        final String url = "/szs/login";
+        doThrow(new CustomException(ErrorCode.UNAUTHORIZED_PASSWORD))
+                .when(accountServiceImp)
+                .login("1", "7979");
+            
+        // when
+        final ResultActions resultActions = mockMvc.perform(
+                MockMvcRequestBuilders.post(url)
+                        .content(gson.toJson(userDto("1", "7979", "홍길동", "860824-1655068")))
+                        .contentType(MediaType.APPLICATION_JSON)
+        );
+            
+        // then
+        resultActions.andExpect(status().isUnauthorized());
+    }
+    
+    @Test
+    @DisplayName("로그인 성공")
+    public void 로그인_성공 () throws Exception {
+        // given
+        final String url = "/szs/login";
+            
+        // when
+        final ResultActions resultActions = mockMvc.perform(
+                MockMvcRequestBuilders.post(url)
+                        .content(gson.toJson(userDto("1", "123", "홍길동", "860824-1655068")))
+                        .contentType(MediaType.APPLICATION_JSON)
+        );
+            
+        // then
+        resultActions.andExpect(status().isOk());
+    }
+    
+    @Test
+    @DisplayName("개인정보열람시_사용자의_데이터가_없을시")
+    public void 개인정보열람시_사용자의_데이터가_없을시 () throws Exception {
+        // given
+        final String url = "/szs/me";
+        doThrow(new CustomException(ErrorCode.MEMBER_NOT_FOUND))
+                .when(accountServiceImp)
+                .readMember("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyZWdObyI6IjkyMTEwOC0xNTgyODE2IiwibmFtZSI6IuydtOyKue2ZmCIsImlhdCI6MTY0Nzc0NzQ4NCwiZXhwIjoxNjQ3NzQ5Mjg0fQ.TOtRqmykjAgPbtpNO5nMXrntVrdX2AFeG0Y2DINBagE");
+            
+        // when
+        final ResultActions resultActions = mockMvc.perform(
+                MockMvcRequestBuilders.post(url)
+                        .content(gson.toJson(JwtTokenDto.builder()
+                                .token("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyZWdObyI6IjkyMTEwOC0xNTgyODE2IiwibmFtZSI6IuydtOyKue2ZmCIsImlhdCI6MTY0Nzc0NzQ4NCwiZXhwIjoxNjQ3NzQ5Mjg0fQ.TOtRqmykjAgPbtpNO5nMXrntVrdX2AFeG0Y2DINBagE")
+                                .build())
+                        )
+                        .contentType(MediaType.APPLICATION_JSON)
+        );
+            
+        // then
+        resultActions.andExpect(status().isNotFound());
+    }
+    
+    @Test
+    @DisplayName("개인정보열람 성공")
+    public void 개인정보열람_성공 () throws Exception {
+        // given
+        final String url = "/szs/me";
+            
+        // when
+        final ResultActions resultActions = mockMvc.perform(
+                MockMvcRequestBuilders.post(url)
+                        .content(gson.toJson(JwtTokenDto.builder()
+                                .token("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyZWdObyI6Ijg2MDgyNC0xNjU1MDY4IiwibmFtZSI6Iu2Zjeq4uOuPmSIsImlhdCI6MTY0Nzc0NzQ4NCwiZXhwIjoxNjQ3NzQ5Mjg0fQ.uyIN2Sz88HOqUaa-M5th99uP-NIPsl2fI4ssgfkNPOs")
+                                .build())
+                        )
+                        .contentType(MediaType.APPLICATION_JSON)
+        );
+            
         // then
         resultActions.andExpect(status().isOk());
     }
