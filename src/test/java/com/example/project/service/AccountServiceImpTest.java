@@ -112,4 +112,63 @@ class AccountServiceImpTest {
         // verify
         verify(userRepository, times(1)).save(any(User.class));
     }
+
+    @Test
+    @DisplayName("로그인했을때 회원정보가 없을시")
+    public void 로그인했을때_회원정보가_없을시 () {
+        // given
+        doReturn(null).when(userRepository).findByUserId("2");
+
+        // when
+        final CustomException result = assertThrows(CustomException.class,
+                () -> accountServiceImp.login("2", decryptdPassword)
+        );
+
+        // then
+        assertThat(result.getErrorCode()).isEqualTo(ErrorCode.MEMBER_NOT_FOUND);
+
+        // verify
+        verify(userRepository, times(1)).findByUserId("2");
+    }
+
+    @Test
+    @DisplayName("로그인했을때 입력된 패스워드가 틀려 검증이 실패했을시")
+    public void 로그인했을때_패스워드_검증이_실패했을시 () throws Exception {
+        // given
+        final User user = userBySave();
+        doReturn(user).when(userRepository).findByUserId(userId);
+        doReturn(decryptdPassword).when(aesCryptoUtil).decrypt(userBySave().getPassword());
+            
+        // when
+        final CustomException result = assertThrows(CustomException.class,
+                () -> accountServiceImp.login(userId, "789")
+        );
+            
+        // then
+        assertThat(result.getErrorCode()).isEqualTo(ErrorCode.UNAUTHORIZED_PASSWORD);
+
+        // verify
+        verify(userRepository, times(1)).findByUserId(userId);
+    }
+    
+    @Test
+    @DisplayName("로그인했을때 정상 토크발급")
+    public void 로그인했을때_정상_토크발급 () throws Exception {
+        // given
+        final User user = userBySave();
+        final HashMap<String, String> tokenMap = tokenByCreate();
+
+        doReturn(user).when(userRepository).findByUserId(userId);
+        doReturn(decryptdPassword).when(aesCryptoUtil).decrypt(userBySave().getPassword());
+        doReturn(tokenMap).when(jwtTokenUtil).createToken(userBySave().getName(), userBySave().getRegNo());
+            
+        // when
+        final JwtTokenDto result = accountServiceImp.login(userId, decryptdPassword);
+            
+        // then
+        assertThat(result.getToken()).isNotNull();
+
+        // verify
+        verify(userRepository, times(1)).findByUserId(userId);
+    }
 }
