@@ -37,7 +37,6 @@ class AccountControllerTest {
     private AccountServiceImp accountServiceImp;
 
     private MockMvc mockMvc;
-
     private Gson gson;
 
     @BeforeEach
