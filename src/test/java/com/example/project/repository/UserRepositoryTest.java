@@ -21,7 +21,7 @@ public class UserRepositoryTest {
 
     @Test
     @DisplayName("가입된 주민등록번호가 없을 시")
-    public void isUserRegNoFalse () {
+    public void isUserRegNoFalse() {
         // given
         String encryptByRegNo = "ldU2Z5ZlRuwDDDPfYA1YfvOTw==";
 
@@ -34,7 +34,7 @@ public class UserRepositoryTest {
 
     @Test
     @DisplayName("가입된 주민등록번호가 없을 시")
-    public void isUserRegNoTrue () {
+    public void isUserRegNoTrue() {
         // given
         String encryptByRegNo = "ldU2Z5ZlRuwPfYA1YfvOTw==";
 
@@ -47,7 +47,7 @@ public class UserRepositoryTest {
 
     @Test
     @DisplayName("사용자 등록")
-    public void UserSave () {
+    public void UserSave() {
         // given
         final User user = User.builder()
                 .userId("2")
@@ -69,7 +69,7 @@ public class UserRepositoryTest {
 
     @Test
     @DisplayName("사용자 아이디 기준으로 데이터 불러오기")
-    public void findByUserId () {
+    public void findByUserId() {
         // given
         final User user = User.builder()
                 .userId("1")
@@ -88,10 +88,10 @@ public class UserRepositoryTest {
         assertThat(result.getName()).isEqualTo("홍길동");
         assertThat(result.getRegNo()).isEqualTo("ldU2Z5ZlRuwPfYA1YfvOTw==");
     }
-    
+
     @Test
     @DisplayName("사용자 이름과 주민번호에 따른 시퀀스값 불러오기")
-    public void findByUserIdx () {
+    public void findByUserIdx() {
         // given
         final User user = User.builder()
                 .userId("1")
@@ -99,10 +99,10 @@ public class UserRepositoryTest {
                 .name("홍길동")
                 .regNo("ldU2Z5ZlRuwPfYA1YfvOTw==")
                 .build();
-            
+
         // when
         final Long result = this.userRepository.findByUserIdx(user.getName(), user.getRegNo());
-            
+
         // then
         assertThat(result).isNotNull();
     }

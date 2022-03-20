@@ -39,10 +39,10 @@ public class ScrapOneRepositoryTest {
 
         user = this.userRepository.save(result);
     }
-    
+
     @Test
     @DisplayName("ScrapOne 결과저장")
-    public void ScrapOneSave () {
+    public void ScrapOneSave() {
         // given
         final ScrapDto.ScrapOneDto scrapOneResult = ScrapDto.ScrapOneDto.builder()
                 .incomeDetails("급여")
@@ -54,10 +54,10 @@ public class ScrapOneRepositoryTest {
                 .incomeCate("근로소득(연간)")
                 .comNo("012-34-56789")
                 .build();
-            
+
         // when
         final ScrapOne result = this.scrapOneRepository.save(scrapOneResult.toEntity(this.user));
-            
+
         // then
         assertThat(result.getScrapOneIdx()).isNotNull();
         assertThat(result.getUser().getUserIdx()).isNotNull();
@@ -73,7 +73,7 @@ public class ScrapOneRepositoryTest {
 
     @Test
     @DisplayName("사용자 시퀀스값에 따른 총지급액 불러오기")
-    public void findByTotalPay () {
+    public void findByTotalPay() {
         // given
         final ScrapDto.ScrapOneDto scrapOneResult = ScrapDto.ScrapOneDto.builder()
                 .incomeDetails("급여")

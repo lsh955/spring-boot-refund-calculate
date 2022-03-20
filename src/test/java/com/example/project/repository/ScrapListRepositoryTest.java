@@ -42,7 +42,7 @@ public class ScrapListRepositoryTest {
 
     @Test
     @DisplayName("ScrapList 결과저장")
-    public void ScrapListSave () {
+    public void ScrapListSave() {
         // given
         final ScrapDto.ScrapListDto scrapListResult = ScrapDto.ScrapListDto.builder()
                 .errMsg("errMsg")

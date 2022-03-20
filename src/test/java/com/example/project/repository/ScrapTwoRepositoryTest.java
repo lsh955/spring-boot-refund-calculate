@@ -39,19 +39,19 @@ public class ScrapTwoRepositoryTest {
 
         user = this.userRepository.save(result);
     }
-    
+
     @Test
     @DisplayName("ScrapTwo 결과저장")
-    public void ScrapTwoSave () {
+    public void ScrapTwoSave() {
         // given
         final ScrapDto.ScrapTwoDto scrapTwoResult = ScrapDto.ScrapTwoDto.builder()
                 .totalUsed("2000000")
                 .taxAmount("산출세액")
                 .build();
-            
+
         // when
         final ScrapTwo result = this.scrapTwoRepository.save(scrapTwoResult.toEntity(this.user));
-            
+
         // then
         assertThat(result.getScrapTwoIdx()).isNotNull();
         assertThat(result.getUser().getUserIdx()).isNotNull();
@@ -61,7 +61,7 @@ public class ScrapTwoRepositoryTest {
 
     @Test
     @DisplayName("사용자 시퀀스값에 따른 총사용금액 불러오기")
-    public void findByTotalUsed () {
+    public void findByTotalUsed() {
         // given
         final ScrapDto.ScrapTwoDto scrapTwoResult = ScrapDto.ScrapTwoDto.builder()
                 .totalUsed("2000000")

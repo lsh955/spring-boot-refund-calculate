@@ -32,9 +32,14 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class AccountServiceImpTest {
 
+    private final String encryptedRegNo = "ldU2Z5ZlRuwPfYA1YfvOTw==";
+    private final String encryptedPassword = "ELbbqFzaPvFZbCrhd61Mzw==";
+    private final String userId = "1";
+    private final String decryptdPassword = "123";
+    private final String name = "홍길동";
+    private final String decryptdRegNo = "860824-1655068";
     @InjectMocks
     private AccountServiceImp accountServiceImp;
-
     @Mock
     private UserRepository userRepository;
     @Mock
@@ -43,14 +48,6 @@ class AccountServiceImpTest {
     private AESCryptoUtil aesCryptoUtil;
     @Mock
     private JwtTokenUtil jwtTokenUtil;
-
-    private final String encryptedRegNo = "ldU2Z5ZlRuwPfYA1YfvOTw==";
-    private final String encryptedPassword = "ELbbqFzaPvFZbCrhd61Mzw==";
-
-    private final String userId = "1";
-    private final String decryptdPassword = "123";
-    private final String name = "홍길동";
-    private final String decryptdRegNo = "860824-1655068";
 
     private User userBySave() {
         return User.builder()
@@ -221,7 +218,7 @@ class AccountServiceImpTest {
 
     @Test
     @DisplayName("개인정보보기에서 가입된 유자가 있을시")
-    public void 개인정보보기에서_가입된_유자가_있을시 () throws Exception {
+    public void 개인정보보기에서_가입된_유자가_있을시() throws Exception {
         // given
         final HashMap<String, String> tokenMap = tokenByCreate();
         final HashMap<String, String> strToken = tokenByDecoder();

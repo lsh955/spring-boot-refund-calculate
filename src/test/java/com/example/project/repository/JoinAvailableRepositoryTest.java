@@ -20,7 +20,7 @@ public class JoinAvailableRepositoryTest {
 
     @Test
     @DisplayName("가입가능한 유저의 주민번호가 없을 시")
-    public void isRegNoAvailableFalse () {
+    public void isRegNoAvailableFalse() {
         // given
         String encryptByRegNo = "ldU2Z5ZlRuwDDDPfYA1YfvOTw==";
 
@@ -33,7 +33,7 @@ public class JoinAvailableRepositoryTest {
 
     @Test
     @DisplayName("가입가능한 유저의 주민번호가 있을 시")
-    public void isRegNoAvailableTrue () {
+    public void isRegNoAvailableTrue() {
         // given
         String encryptByRegNo = "ldU2Z5ZlRuwPfYA1YfvOTw==";
 

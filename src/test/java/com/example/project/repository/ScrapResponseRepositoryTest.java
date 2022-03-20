@@ -42,7 +42,7 @@ public class ScrapResponseRepositoryTest {
 
     @Test
     @DisplayName("ScrapResponse 결과저장")
-    public void ScrapResponseSave () {
+    public void ScrapResponseSave() {
         // given
         final ScrapDto scrapDtoResult = ScrapDto.builder()
                 .appVer("2021112501")
@@ -50,10 +50,10 @@ public class ScrapResponseRepositoryTest {
                 .workerResDt("2022-03-18T09:21:14.099003")
                 .workerReqDt("2022-03-18T09:21:14.099326")
                 .build();
-            
+
         // when
         final ScrapResponse result = this.scrapResponseRepository.save(scrapDtoResult.toEntity(this.user));
-            
+
         // then
         assertThat(result.getResultIdx()).isNotNull();
         assertThat(result.getUser().getUserId()).isNotNull();
