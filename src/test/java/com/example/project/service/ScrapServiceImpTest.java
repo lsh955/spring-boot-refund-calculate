@@ -52,10 +52,10 @@ class ScrapServiceImpTest {
     private JwtTokenUtil jwtTokenUtil;
     @Mock
     private AESCryptoUtil aesCryptoUtil;
-    
+
     @Test
     @DisplayName("")
-    public void 가입한_유저의_회원정보_데이터가_존재하지_않을경우 () throws Exception {
+    public void 가입한_유저의_회원정보_데이터가_존재하지_않을경우() throws Exception {
         // given
         final HashMap<String, String> tokenMap = new HashMap<>();
         tokenMap.put("name", "이승환");
@@ -71,7 +71,7 @@ class ScrapServiceImpTest {
         final CustomException result = assertThrows(CustomException.class,
                 () -> scrapServiceImp.getSaveByScrap("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyZWdObyI6IjkyMTEwOC0xNTgyODE2IiwibmFtZSI6IuydtOyKue2ZmCIsImlhdCI6MTY0Nzc0NzQ4NCwiZXhwIjoxNjQ3NzQ5Mjg0fQ.TOtRqmykjAgPbtpNO5nMXrntVrdX2AFeG0Y2DINBagE")
         );
-            
+
         // then
         assertThat(result.getErrorCode()).isEqualTo(ErrorCode.MEMBER_NOT_FOUND);
     }
