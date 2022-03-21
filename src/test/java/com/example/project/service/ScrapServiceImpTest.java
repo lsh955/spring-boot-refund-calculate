@@ -1,72 +1,78 @@
 package com.example.project.service;
 
 import com.example.project.app.account.domain.UserRepository;
-import com.example.project.app.common.dto.JwtTokenDto;
-import com.example.project.app.common.enums.AccountStatus;
+import com.example.project.app.common.enums.ErrorCode;
+import com.example.project.app.common.util.AESCryptoUtil;
+import com.example.project.app.common.util.JwtTokenUtil;
+import com.example.project.app.refund.controller.ScrapController;
+import com.example.project.app.refund.domain.ScrapListRepository;
 import com.example.project.app.refund.domain.ScrapOneRepository;
 import com.example.project.app.refund.domain.ScrapResponseRepository;
 import com.example.project.app.refund.domain.ScrapTwoRepository;
-import com.example.project.app.refund.service.ScrapService;
-import org.junit.jupiter.api.AfterEach;
+import com.example.project.app.refund.service.ScrapServiceImp;
+import com.example.project.exception.CustomException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.HashMap;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.doReturn;
+
 
 /**
  * @author 이승환
  * @since 2022-02-24
  */
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 class ScrapServiceImpTest {
 
-    @Autowired
-    private ScrapService scrapService;
+    @InjectMocks
+    private ScrapController scrapController;
 
-    @Autowired
+    @Mock
+    private ScrapServiceImp scrapServiceImp;
+    @Mock
     private UserRepository userRepository;
-    @Autowired
+    @Mock
+    private ScrapListRepository scrapListRepository;
+    @Mock
     private ScrapOneRepository scrapOneRepository;
-    @Autowired
+    @Mock
     private ScrapTwoRepository scrapTwoRepository;
-    @Autowired
+    @Mock
     private ScrapResponseRepository scrapResponseRepository;
 
-    @AfterEach
-    public void cleanup() {
-        scrapOneRepository.deleteAll();
-        scrapTwoRepository.deleteAll();
-        scrapResponseRepository.deleteAll();
-        userRepository.deleteAll();
-    }
-
+    @Mock
+    private JwtTokenUtil jwtTokenUtil;
+    @Mock
+    private AESCryptoUtil aesCryptoUtil;
+    
     @Test
-    @DisplayName(value = "가입한 유저의 정보로 스크랩 성공")
-    public void SCRAP_SUCCESS_TEST() throws Exception {
-        String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyZWdObyI6IjEyMzQ1Ni03ODk0NTYiLCJuYW1lIjoi7J207Iq57ZmYIiwiaWF0IjoxNjQ1Njg1MzUyLCJleHAiOjE2NDU2ODcxNTJ9.fPSM4i2wBNyFnUGct8oToXXnCsTUhND7dB_DqIn_nB0";
+    @DisplayName("")
+    public void 가입한_유저의_회원정보_데이터가_존재하지_않을경우 () throws Exception {
+        // given
+        final HashMap<String, String> tokenMap = new HashMap<>();
+        tokenMap.put("name", "이승환");
+        tokenMap.put("regNo", "921108-1582816");
+        tokenMap.put("exp", "1647749284");
+        tokenMap.put("iat", "1647747484");
 
-        JwtTokenDto jwtTokenDto = JwtTokenDto.builder()
-                .token(token)
-                .build();
+        doReturn(tokenMap).when(jwtTokenUtil).decoderToken("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyZWdObyI6IjkyMTEwOC0xNTgyODE2IiwibmFtZSI6IuydtOyKue2ZmCIsImlhdCI6MTY0Nzc0NzQ4NCwiZXhwIjoxNjQ3NzQ5Mjg0fQ.TOtRqmykjAgPbtpNO5nMXrntVrdX2AFeG0Y2DINBagE");
+        doReturn("U99p1DIkTEpARHoYcosMfA==").when(aesCryptoUtil).encrypt(tokenMap.get("regNo"));
+        doReturn(null).when(userRepository).findByNameAndRegNo(tokenMap.get("name"), "U99p1DIkTEpARHoYcosMfA==");
 
-        Object me = this.scrapService.getSaveByScrap(jwtTokenDto.getToken());
-
-        assertThat(me).isNotNull();
-    }
-
-    @Test
-    @DisplayName(value = "가입한 유저의 정보로 스크랩 실패")
-    public void SCRAP_FAILURE_TEST() throws Exception {
-        String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyZWdObyI6IjEyMzQ1Ni03ODk0NTYiLCJuYW1lIjoi7J207Iq57ZmYIiwiaWF0IjoxNjQ1Njg1MzUyLCJleHAiOjE2NDU2ODcxNTJ9.fPSM4i2wBNyFnUGct8oToXXnCsTUhND7dB_DqIn_nB0";
-
-        JwtTokenDto jwtTokenDto = JwtTokenDto.builder()
-                .token(token)
-                .build();
-
-        Object me = this.scrapService.getSaveByScrap(jwtTokenDto.getToken());
-
-        assertThat(me).isEqualTo(AccountStatus.UNKNOWN);
+        // when
+        final CustomException result = assertThrows(CustomException.class,
+                () -> scrapServiceImp.getSaveByScrap("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyZWdObyI6IjkyMTEwOC0xNTgyODE2IiwibmFtZSI6IuydtOyKue2ZmCIsImlhdCI6MTY0Nzc0NzQ4NCwiZXhwIjoxNjQ3NzQ5Mjg0fQ.TOtRqmykjAgPbtpNO5nMXrntVrdX2AFeG0Y2DINBagE")
+        );
+            
+        // then
+        assertThat(result.getErrorCode()).isEqualTo(ErrorCode.MEMBER_NOT_FOUND);
     }
 }
