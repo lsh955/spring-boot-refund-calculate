@@ -75,4 +75,39 @@ class ScrapServiceImpTest {
         // then
         assertThat(result.getErrorCode()).isEqualTo(ErrorCode.MEMBER_NOT_FOUND);
     }
+
+    @Test
+    @DisplayName("")
+    public void 가입한_유저의_스크랩데이터가_존재하지_않는경우 () {
+        // given
+
+
+        // when
+
+
+        // then
+
+    }
+
+    @Test
+    @DisplayName("")
+    public void 가입한_유저의_스크랩_데이터가_존재하는_경우 () {
+        // given
+
+        // when
+
+        // then
+
+    }
+
+    @Test
+    @DisplayName("")
+    public void 가입한_유저의_회원정보와_스크랩데이터가_모두_있는경우 () {
+        // given
+
+        // when
+
+        // then
+
+    }
 }
