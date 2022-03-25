@@ -1,5 +1,6 @@
 package com.example.project.service;
 
+import com.example.project.app.account.domain.User;
 import com.example.project.app.account.domain.UserRepository;
 import com.example.project.app.common.enums.ErrorCode;
 import com.example.project.app.common.util.AESCryptoUtil;
@@ -53,6 +54,10 @@ class ScrapServiceImpTest {
     @Mock
     private AESCryptoUtil aesCryptoUtil;
 
+    private User getUser(String name, String regNo) {
+        return this.userRepository.findByNameAndRegNo(name, regNo);
+    }
+
     @Test
     @DisplayName("")
     public void 가입한_유저의_회원정보_데이터가_존재하지_않을경우() throws Exception {
@@ -65,7 +70,7 @@ class ScrapServiceImpTest {
 
         doReturn(tokenMap).when(jwtTokenUtil).decoderToken("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyZWdObyI6IjkyMTEwOC0xNTgyODE2IiwibmFtZSI6IuydtOyKue2ZmCIsImlhdCI6MTY0Nzc0NzQ4NCwiZXhwIjoxNjQ3NzQ5Mjg0fQ.TOtRqmykjAgPbtpNO5nMXrntVrdX2AFeG0Y2DINBagE");
         doReturn("U99p1DIkTEpARHoYcosMfA==").when(aesCryptoUtil).encrypt(tokenMap.get("regNo"));
-        doReturn(null).when(userRepository).findByNameAndRegNo(tokenMap.get("name"), "U99p1DIkTEpARHoYcosMfA==");
+        //doReturn(null).when(userRepository).findByNameAndRegNo(tokenMap.get("name"), "U99p1DIkTEpARHoYcosMfA==");
 
         // when
         final CustomException result = assertThrows(CustomException.class,
@@ -76,38 +81,37 @@ class ScrapServiceImpTest {
         assertThat(result.getErrorCode()).isEqualTo(ErrorCode.MEMBER_NOT_FOUND);
     }
 
-    @Test
-    @DisplayName("")
-    public void 가입한_유저의_스크랩데이터가_존재하지_않는경우 () {
-        // given
-
-
-        // when
-
-
-        // then
-
-    }
-
-    @Test
-    @DisplayName("")
-    public void 가입한_유저의_스크랩_데이터가_존재하는_경우 () {
-        // given
-
-        // when
-
-        // then
-
-    }
-
-    @Test
-    @DisplayName("")
-    public void 가입한_유저의_회원정보와_스크랩데이터가_모두_있는경우 () {
-        // given
-
-        // when
-
-        // then
-
-    }
+//    @Test
+//    @DisplayName("")
+//    public void 가입한_유저의_스크랩데이터가_존재하지_않는경우 () {
+//        // given
+//
+//        // when
+//
+//
+//        // then
+//
+//    }
+//
+//    @Test
+//    @DisplayName("")
+//    public void 가입한_유저의_스크랩_데이터가_존재하는_경우 () {
+//        // given
+//
+//        // when
+//
+//        // then
+//
+//    }
+//
+//    @Test
+//    @DisplayName("")
+//    public void 가입한_유저의_회원정보와_스크랩데이터가_모두_있는경우 () {
+//        // given
+//
+//        // when
+//
+//        // then
+//
+//    }
 }
