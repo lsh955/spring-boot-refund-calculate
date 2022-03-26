@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.HashMap;
+import java.util.Optional;
 
 import static com.example.project.app.common.enums.ErrorCode.MEMBER_NOT_FOUND;
 
