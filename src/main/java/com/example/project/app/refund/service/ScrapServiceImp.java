@@ -2,6 +2,7 @@ package com.example.project.app.refund.service;
 
 import com.example.project.app.account.domain.User;
 import com.example.project.app.account.domain.UserRepository;
+import com.example.project.app.common.enums.ErrorCode;
 import com.example.project.app.common.util.AESCryptoUtil;
 import com.example.project.app.common.util.JwtTokenUtil;
 import com.example.project.app.refund.domain.ScrapListRepository;
@@ -19,8 +20,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.HashMap;
 import java.util.Optional;
-
-import static com.example.project.app.common.enums.ErrorCode.MEMBER_NOT_FOUND;
 
 /**
  * @author 이승환
@@ -100,7 +99,7 @@ public class ScrapServiceImp implements ScrapService {
         Optional<User> user = this.userRepository.findByNameAndRegNo(name, regNo);
 
         return user.orElseThrow(() ->
-                new CustomException(MEMBER_NOT_FOUND)
+                new CustomException(ErrorCode.MEMBER_NOT_FOUND)
         );
     }
 
