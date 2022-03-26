@@ -7,6 +7,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
@@ -79,14 +81,16 @@ public class UserRepositoryTest {
                 .build();
 
         // when
-        final User result = this.userRepository.findByUserId(user.getUserId());
+        final Optional<User> result = this.userRepository.findByUserId(user.getUserId());
 
         // then
-        assertThat(result.getUserIdx()).isNotNull();
-        assertThat(result.getUserId()).isEqualTo("1");
-        assertThat(result.getPassword()).isEqualTo("ELbbqFzaPvFZbCrhd61Mzw==");
-        assertThat(result.getName()).isEqualTo("홍길동");
-        assertThat(result.getRegNo()).isEqualTo("ldU2Z5ZlRuwPfYA1YfvOTw==");
+        if(result.isPresent()) {
+            assertThat(result.get().getUserIdx()).isNotNull();
+            assertThat(result.get().getUserId()).isEqualTo("1");
+            assertThat(result.get().getPassword()).isEqualTo("ELbbqFzaPvFZbCrhd61Mzw==");
+            assertThat(result.get().getName()).isEqualTo("홍길동");
+            assertThat(result.get().getRegNo()).isEqualTo("ldU2Z5ZlRuwPfYA1YfvOTw==");
+        }
     }
 
     @Test

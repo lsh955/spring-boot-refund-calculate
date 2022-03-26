@@ -6,6 +6,7 @@ import com.example.project.app.account.domain.UserRepository;
 import com.example.project.app.account.dto.UserDto;
 import com.example.project.app.common.dto.JwtTokenDto;
 import com.example.project.app.common.enums.AccountStatus;
+import com.example.project.app.common.enums.ErrorCode;
 import com.example.project.app.common.util.AESCryptoUtil;
 import com.example.project.app.common.util.JwtTokenUtil;
 import com.example.project.exception.CustomException;
@@ -79,10 +80,7 @@ public class AccountServiceImp implements AccountService {
     @Override
     public JwtTokenDto login(String userId, String password) throws Exception {
         // 사용자 아이디 기준으로 데이터 불러오기
-        User user = userRepository.findByUserId(userId);
-
-        if(user == null)
-            throw new CustomException(MEMBER_NOT_FOUND);
+        User user = getFindByUserId(userId);
 
         // 패스워드 복호화
         String decryptedDbPassword = this.aesCryptoUtil.decrypt(user.getPassword());
@@ -118,21 +116,44 @@ public class AccountServiceImp implements AccountService {
         String encryptRegNo = this.aesCryptoUtil.encrypt(strToken.get("regNo"));
 
         // 사용자정보 불러오기
-        Optional<User> user = this.userRepository.findByNameAndRegNo(
-                strToken.get("name"),
-                encryptRegNo
-        );
-
-        User result = user.orElseThrow(() ->
-                // 정보가 없다면 가입되지 않는회원으로 간주
-                new CustomException(MEMBER_NOT_FOUND)
-        );
+        User user = getFindByNameAndRegNo(strToken.get("name"), encryptRegNo);
 
         return UserDto.builder()
-                .userId(result.getUserId())
-                .name(result.getName())
-                .password(result.getPassword())
-                .regNo(result.getRegNo())
+                .userId(user.getUserId())
+                .name(user.getName())
+                .password(user.getPassword())
+                .regNo(user.getRegNo())
                 .build();
+    }
+
+    // TODO :: 아래의 사용자정보 가져오기는 하나로 통일되게 리렉토링 할 것.
+
+    /**
+     * 사용자정보 가져오기
+     *
+     * @param userId    사용자아이디
+     * @return          사용자정보
+     */
+    private User getFindByUserId(final String userId) {
+        Optional<User> result = this.userRepository.findByUserId(userId);
+
+        return result.orElseThrow(() ->
+                new CustomException(ErrorCode.MEMBER_NOT_FOUND)
+        );
+    }
+
+    /**
+     * 사용자정보 가져오기
+     *
+     * @param name  사용자이름
+     * @param regNo 사용자주민번호
+     * @return      사용자정보
+     */
+    private User getFindByNameAndRegNo(final String name, final String regNo) {
+        Optional<User> result = this.userRepository.findByNameAndRegNo(name, regNo);
+
+        return result.orElseThrow(() ->
+                new CustomException(ErrorCode.MEMBER_NOT_FOUND)
+        );
     }
 }

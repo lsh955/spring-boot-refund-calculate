@@ -19,6 +19,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.HashMap;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -139,7 +140,7 @@ class AccountServiceImpTest {
     @DisplayName("로그인했을때 회원정보가 없을시")
     public void 로그인했을때_회원정보가_없을시() {
         // given
-        doReturn(null).when(userRepository).findByUserId("2");
+        doReturn(Optional.empty()).when(userRepository).findByUserId("2");
 
         // when
         final CustomException result = assertThrows(CustomException.class,
@@ -158,7 +159,7 @@ class AccountServiceImpTest {
     public void 로그인했을때_패스워드_검증이_실패했을시() throws Exception {
         // given
         final User user = userBySave();
-        doReturn(user).when(userRepository).findByUserId(userId);
+        doReturn(Optional.of(user)).when(userRepository).findByUserId(userId);
         doReturn(decryptdPassword).when(aesCryptoUtil).decrypt(userBySave().getPassword());
 
         // when
@@ -180,7 +181,7 @@ class AccountServiceImpTest {
         final User user = userBySave();
         final HashMap<String, String> tokenMap = tokenByCreate();
 
-        doReturn(user).when(userRepository).findByUserId(userId);
+        doReturn(Optional.of(user)).when(userRepository).findByUserId(userId);
         doReturn(decryptdPassword).when(aesCryptoUtil).decrypt(userBySave().getPassword());
         doReturn(tokenMap).when(jwtTokenUtil).createToken(userBySave().getName(), userBySave().getRegNo());
 
@@ -206,7 +207,7 @@ class AccountServiceImpTest {
 
         doReturn(tokenMap).when(jwtTokenUtil).decoderToken("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyZWdObyI6IjkyMTEwOC0xNTgyODE2IiwibmFtZSI6IuydtOyKue2ZmCIsImlhdCI6MTY0Nzc0NzQ4NCwiZXhwIjoxNjQ3NzQ5Mjg0fQ.TOtRqmykjAgPbtpNO5nMXrntVrdX2AFeG0Y2DINBagE");
         doReturn("U99p1DIkTEpARHoYcosMfA==").when(aesCryptoUtil).encrypt(tokenMap.get("regNo"));
-        doReturn(null).when(userRepository).findByNameAndRegNo(tokenMap.get("name"), "U99p1DIkTEpARHoYcosMfA==");
+        doReturn(Optional.empty()).when(userRepository).findByNameAndRegNo(tokenMap.get("name"), "U99p1DIkTEpARHoYcosMfA==");
 
         // when
         final CustomException result = assertThrows(CustomException.class,
@@ -227,7 +228,7 @@ class AccountServiceImpTest {
 
         doReturn(strToken).when(jwtTokenUtil).decoderToken(tokenMap.get("token"));
         doReturn(encryptedRegNo).when(aesCryptoUtil).encrypt(strToken.get("regNo"));
-        doReturn(user).when(userRepository).findByNameAndRegNo(strToken.get("name"), encryptedRegNo);
+        doReturn(Optional.of(user)).when(userRepository).findByNameAndRegNo(strToken.get("name"), encryptedRegNo);
 
         // when
         final UserDto result = accountServiceImp.readMember(tokenMap.get("token"));
