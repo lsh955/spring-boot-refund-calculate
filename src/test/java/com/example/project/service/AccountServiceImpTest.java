@@ -38,6 +38,7 @@ class AccountServiceImpTest {
     private final String decryptdPassword = "123";
     private final String name = "홍길동";
     private final String decryptdRegNo = "860824-1655068";
+
     @InjectMocks
     private AccountServiceImp accountServiceImp;
     @Mock
