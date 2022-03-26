@@ -51,8 +51,48 @@ class ScrapServiceImpTest {
     @Mock
     private AESCryptoUtil aesCryptoUtil;
 
-    private User getUser(String name, String regNo) {
-        return this.userRepository.findByNameAndRegNo(name, regNo);
+    private User userBySave() {
+        return User.builder()
+                .userId("1")
+                .password("ELbbqFzaPvFZbCrhd61Mzw==")
+                .name("홍길동")
+                .regNo("ldU2Z5ZlRuwPfYA1YfvOTw==")
+                .build();
+    }
+
+    private HashMap<String, String> tokenByCreate() {
+        final HashMap<String, String> tokenMap = new HashMap<>();
+        tokenMap.put("token", "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyZWdObyI6Ijg2MDgyNC0xNjU1MDY4IiwibmFtZSI6Iu2Zjeq4uOuPmSIsImlhdCI6MTY0Nzc0NzQ4NCwiZXhwIjoxNjQ3NzQ5Mjg0fQ.uyIN2Sz88HOqUaa-M5th99uP-NIPsl2fI4ssgfkNPOs");
+
+        return tokenMap;
+    }
+
+    private HashMap<String, String> tokenByDecoder() {
+        final HashMap<String, String> result = new HashMap<>();
+        result.put("name", "홍길동");
+        result.put("regNo", "860824-1655068");
+        result.put("exp", "1647749284");
+        result.put("iat", "1647747484");
+
+        return result;
+    }
+
+    private ScrapDto scrapDto() {
+        return ScrapDto.builder()
+                .appVer("2021112501")
+                .hostNm("codetest")
+                .workerResDt("2022-03-26T01:39:25.327850")
+                .workerReqDt("2022-03-26T01:39:25.328166")
+                .build();
+    }
+
+    private ScrapList scrapListToEntity(User user) {
+        return ScrapList.builder()
+                .errMsg("errMsg")
+                .company("정관장")
+                .svcCd("test01")
+                .user(user)
+                .build();
     }
 
     @Test
@@ -67,7 +107,7 @@ class ScrapServiceImpTest {
 
         doReturn(tokenMap).when(jwtTokenUtil).decoderToken("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyZWdObyI6IjkyMTEwOC0xNTgyODE2IiwibmFtZSI6IuydtOyKue2ZmCIsImlhdCI6MTY0Nzc0NzQ4NCwiZXhwIjoxNjQ3NzQ5Mjg0fQ.TOtRqmykjAgPbtpNO5nMXrntVrdX2AFeG0Y2DINBagE");
         doReturn("U99p1DIkTEpARHoYcosMfA==").when(aesCryptoUtil).encrypt(tokenMap.get("regNo"));
-        doReturn(null).when(userRepository).findByNameAndRegNo(tokenMap.get("name"), "U99p1DIkTEpARHoYcosMfA==");
+        doReturn(Optional.empty()).when(userRepository).findByNameAndRegNo(tokenMap.get("name"), "U99p1DIkTEpARHoYcosMfA==");
 
         // when
         final CustomException result = assertThrows(CustomException.class,
@@ -77,8 +117,8 @@ class ScrapServiceImpTest {
         // then
         assertThat(result.getErrorCode()).isEqualTo(ErrorCode.MEMBER_NOT_FOUND);
 
-        // verify
-        verify(userRepository, times(1)).findByNameAndRegNo(tokenMap.get("name"), "U99p1DIkTEpARHoYcosMfA==");
+        // verify :: .description() 은 어떻게 나오는가 궁금해서 넣어봤다.
+        verify(userRepository, times(1).description("한번 만 불어와야 한다")).findByNameAndRegNo(tokenMap.get("name"), "U99p1DIkTEpARHoYcosMfA==");
     }
 
 //    @Test
