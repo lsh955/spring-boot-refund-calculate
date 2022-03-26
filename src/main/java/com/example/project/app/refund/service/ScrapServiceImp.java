@@ -40,6 +40,8 @@ public class ScrapServiceImp implements ScrapService {
     private final AESCryptoUtil aesCryptoUtil;
     private final JwtTokenUtil jwtTokenUtil;
 
+    private final WebClient webClient;
+
     /**
      * 가입한 유저의 스크랩조회 및 저장
      *
@@ -77,14 +79,12 @@ public class ScrapServiceImp implements ScrapService {
      * @return
      */
     private ScrapDto getClientScrap(HashMap<String, String> strToken) {
-        WebClient webClient = WebClient.builder()
-                .baseUrl("https://codetest.3o3.co.kr")  // 공급자 BASE URL 지정
-                .build();
 
-        return webClient.post()
-                .uri("/scrap/")
+        return webClient.mutate().build()
+                .post()
+                .uri("https://codetest.3o3.co.kr/scrap/")
                 .bodyValue(new JSONObject(strToken).toString())
-                .retrieve()
+                .retrieve() // memory leak 가능성 때문에 가급적 retrieve 를 사용하기를 권고
                 .bodyToMono(ScrapDto.class)
                 .block();
     }
