@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
+import java.util.Optional;
 
 import static com.example.project.app.common.enums.ErrorCode.*;
 
@@ -117,19 +118,21 @@ public class AccountServiceImp implements AccountService {
         String encryptRegNo = this.aesCryptoUtil.encrypt(strToken.get("regNo"));
 
         // 사용자정보 불러오기
-        User user = this.userRepository.findByNameAndRegNo(
+        Optional<User> user = this.userRepository.findByNameAndRegNo(
                 strToken.get("name"),
                 encryptRegNo
         );
 
-        if (user == null) // 정보가 없다면 가입되지 않는회원으로 간주
-            throw new CustomException(MEMBER_NOT_FOUND);
+        User result = user.orElseThrow(() ->
+                // 정보가 없다면 가입되지 않는회원으로 간주
+                new CustomException(MEMBER_NOT_FOUND)
+        );
 
         return UserDto.builder()
-                .userId(user.getUserId())
-                .name(user.getName())
-                .password(user.getPassword())
-                .regNo(user.getRegNo())
+                .userId(result.getUserId())
+                .name(result.getName())
+                .password(result.getPassword())
+                .regNo(result.getRegNo())
                 .build();
     }
 }
