@@ -57,16 +57,13 @@ public class ScrapServiceImp implements ScrapService {
         // 사용자 불러오기
         User user = getUser(strToken.get("name"), encryptRegNo);
 
-        if (user == null)
-            throw new CustomException(MEMBER_NOT_FOUND);
-
         // 공급자로 부터의 데이터 조회
         ScrapDto scrapDto = getClientScrap(strToken);
 
-        saveScrapList(scrapDto, user);       // 리스트 결과저장
-        saveScrapOne(scrapDto, user);        // scrap001 결과저장
-        saveScrapTwo(scrapDto, user);        // scrap002 결과저장
-        saveScrapResponse(scrapDto, user);   // 응답결과 결과저장
+        saveScrapList(scrapDto, user);      // 리스트 결과저장
+        saveScrapOne(scrapDto, user);       // scrap001 결과저장
+        saveScrapTwo(scrapDto, user);       // scrap002 결과저장
+        saveScrapResponse(scrapDto, user);  // 응답결과 결과저장
 
         return scrapDto;
     }
@@ -99,7 +96,11 @@ public class ScrapServiceImp implements ScrapService {
      * @return
      */
     private User getUser(String name, String regNo) {
-        return this.userRepository.findByNameAndRegNo(name, regNo);
+        Optional<User> user = this.userRepository.findByNameAndRegNo(name, regNo);
+
+        return user.orElseThrow(() ->
+                new CustomException(MEMBER_NOT_FOUND)
+        );
     }
 
     /**
