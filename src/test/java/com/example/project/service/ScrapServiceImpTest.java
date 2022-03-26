@@ -5,7 +5,6 @@ import com.example.project.app.account.domain.UserRepository;
 import com.example.project.app.common.enums.ErrorCode;
 import com.example.project.app.common.util.AESCryptoUtil;
 import com.example.project.app.common.util.JwtTokenUtil;
-import com.example.project.app.refund.controller.ScrapController;
 import com.example.project.app.refund.domain.ScrapListRepository;
 import com.example.project.app.refund.domain.ScrapOneRepository;
 import com.example.project.app.refund.domain.ScrapResponseRepository;
@@ -23,7 +22,7 @@ import java.util.HashMap;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.*;
 
 
 /**
@@ -34,10 +33,8 @@ import static org.mockito.Mockito.doReturn;
 class ScrapServiceImpTest {
 
     @InjectMocks
-    private ScrapController scrapController;
-
-    @Mock
     private ScrapServiceImp scrapServiceImp;
+
     @Mock
     private UserRepository userRepository;
     @Mock
@@ -59,7 +56,7 @@ class ScrapServiceImpTest {
     }
 
     @Test
-    @DisplayName("")
+    @DisplayName("가입한 유저의 회원정보 데이터가 존재하지 않을경우")
     public void 가입한_유저의_회원정보_데이터가_존재하지_않을경우() throws Exception {
         // given
         final HashMap<String, String> tokenMap = new HashMap<>();
@@ -70,7 +67,7 @@ class ScrapServiceImpTest {
 
         doReturn(tokenMap).when(jwtTokenUtil).decoderToken("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyZWdObyI6IjkyMTEwOC0xNTgyODE2IiwibmFtZSI6IuydtOyKue2ZmCIsImlhdCI6MTY0Nzc0NzQ4NCwiZXhwIjoxNjQ3NzQ5Mjg0fQ.TOtRqmykjAgPbtpNO5nMXrntVrdX2AFeG0Y2DINBagE");
         doReturn("U99p1DIkTEpARHoYcosMfA==").when(aesCryptoUtil).encrypt(tokenMap.get("regNo"));
-        //doReturn(null).when(userRepository).findByNameAndRegNo(tokenMap.get("name"), "U99p1DIkTEpARHoYcosMfA==");
+        doReturn(null).when(userRepository).findByNameAndRegNo(tokenMap.get("name"), "U99p1DIkTEpARHoYcosMfA==");
 
         // when
         final CustomException result = assertThrows(CustomException.class,
@@ -79,6 +76,9 @@ class ScrapServiceImpTest {
 
         // then
         assertThat(result.getErrorCode()).isEqualTo(ErrorCode.MEMBER_NOT_FOUND);
+
+        // verify
+        verify(userRepository, times(1)).findByNameAndRegNo(tokenMap.get("name"), "U99p1DIkTEpARHoYcosMfA==");
     }
 
 //    @Test
