@@ -39,7 +39,7 @@ public class RefundServiceImp implements RefundService {
      */
     @Transactional
     @Override
-    public RefundDto getRefund(String token) throws Exception {
+    public RefundDto getRefund(final String token) throws Exception {
         // Token 검증
         HashMap<String, String> strToken = this.jwtTokenUtil.decoderToken(token);
 
@@ -86,7 +86,7 @@ public class RefundServiceImp implements RefundService {
      * @param regNo 주민등록번호
      * @return
      */
-    private Long getUserIdx(String name, String regNo) {
+    private Long getUserIdx(final String name, final String regNo) {
         return this.userRepository.findByUserIdx(name, regNo);
     }
 
@@ -96,7 +96,7 @@ public class RefundServiceImp implements RefundService {
      * @param totalPay  총급여액(총지급액)
      * @return          기준별 요건에 맞는 한도결과
      */
-    public double getTaxCredit(double totalPay) {
+    public double getTaxCredit(final double totalPay) {
         double taxCredit = 0;   // 초기화
 
         // 3,300만원 이하 일 경우
@@ -130,7 +130,7 @@ public class RefundServiceImp implements RefundService {
      * @param totalUsed 산출세액
      * @return          기준별 요건에 맞는 공제결과
      */
-    public double getTaxAmount(double totalUsed) {
+    public double getTaxAmount(final double totalUsed) {
         double taxAmount = 0;   // 초기화
 
         // 130만원 이하 일 경우
