@@ -5,20 +5,21 @@ import com.example.project.app.account.domain.UserRepository;
 import com.example.project.app.common.enums.ErrorCode;
 import com.example.project.app.common.util.AESCryptoUtil;
 import com.example.project.app.common.util.JwtTokenUtil;
-import com.example.project.app.refund.domain.ScrapListRepository;
-import com.example.project.app.refund.domain.ScrapOneRepository;
-import com.example.project.app.refund.domain.ScrapResponseRepository;
-import com.example.project.app.refund.domain.ScrapTwoRepository;
+import com.example.project.app.refund.domain.*;
+import com.example.project.app.refund.dto.ScrapDto;
 import com.example.project.app.refund.service.ScrapServiceImp;
 import com.example.project.exception.CustomException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Answers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.HashMap;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -34,6 +35,9 @@ class ScrapServiceImpTest {
 
     @InjectMocks
     private ScrapServiceImp scrapServiceImp;
+
+    @Mock(answer = Answers.RETURNS_DEEP_STUBS)
+    private WebClient webClient;
 
     @Mock
     private UserRepository userRepository;
@@ -95,6 +99,38 @@ class ScrapServiceImpTest {
                 .build();
     }
 
+    private ScrapOne saveScrapOneToEntity(User user) {
+        return ScrapOne.builder()
+                .incomeDetails("급여")
+                .totalPay(24000000L)
+                .startDate("2020.10.03")
+                .scrapCompany("(주)활빈당")
+                .payDate("2020.11.02")
+                .endDate("2020.11.02")
+                .incomeCate("근로소득(연간)")
+                .comNo("012-34-56789")
+                .user(user)
+                .build();
+    }
+
+    private ScrapTwo saveScrapTwoToEntity(User user) {
+        return ScrapTwo.builder()
+                .totalUsed(2000000L)
+                .taxAmount("산출세액")
+                .user(user)
+                .build();
+    }
+
+    private ScrapResponse saveScrapResponseToEntity(User user) {
+        return ScrapResponse.builder()
+                .appVer("2021112501")
+                .hostNm("codetest")
+                .workerReqDt("2022-03-26T01:39:25.327850")
+                .workerResDt("2022-03-26T01:39:25.328166")
+                .user(user)
+                .build();
+    }
+
     @Test
     @DisplayName("가입한 유저의 회원정보 데이터가 존재하지 않을경우")
     public void 가입한_유저의_회원정보_데이터가_존재하지_않을경우() throws Exception {
@@ -121,37 +157,37 @@ class ScrapServiceImpTest {
         verify(userRepository, times(1).description("한번 만 불어와야 한다")).findByNameAndRegNo(tokenMap.get("name"), "U99p1DIkTEpARHoYcosMfA==");
     }
 
-//    @Test
-//    @DisplayName("")
-//    public void 가입한_유저의_스크랩데이터가_존재하지_않는경우 () {
-//        // given
-//
-//        // when
-//
-//
-//        // then
-//
-//    }
-//
-//    @Test
-//    @DisplayName("")
-//    public void 가입한_유저의_스크랩_데이터가_존재하는_경우 () {
-//        // given
-//
-//        // when
-//
-//        // then
-//
-//    }
-//
-//    @Test
-//    @DisplayName("")
-//    public void 가입한_유저의_회원정보와_스크랩데이터가_모두_있는경우 () {
-//        // given
-//
-//        // when
-//
-//        // then
-//
-//    }
+    @Test
+    @DisplayName("가입한 유저의 회원정보로 WebClient 요청이 이루어 지는가")
+    public void 가입한_유저의_회원정보로_WebClient_요청이_이루어_지는가 () throws Exception {
+        // given
+        final HashMap<String, String> tokenMap = tokenByCreate();
+        final HashMap<String, String> strToken = tokenByDecoder();
+        final User user = userBySave();
+
+        doReturn(strToken).when(jwtTokenUtil).decoderToken(tokenMap.get("token"));
+        doReturn("ldU2Z5ZlRuwPfYA1YfvOTw==").when(aesCryptoUtil).encrypt("860824-1655068");
+        doReturn(Optional.of(user)).when(userRepository).findByNameAndRegNo(strToken.get("name"), "ldU2Z5ZlRuwPfYA1YfvOTw==");
+
+        // TODO :: webClient Test 에 대해 더 자세히 알아봐야 겠다.
+//        given(webClient.mutate().build()
+//                .post()
+//                .uri("https://codetest.3o3.co.kr/scrap/")
+//                .bodyValue(new JSONObject(strToken).toString())
+//                .retrieve()
+//                .bodyToMono(ScrapDto.class)
+//                .block()
+//        ).willReturn(scrapDto());
+
+        //doReturn(Optional.of(scrapDto())).when(scrapServiceImp).getClientScrap(strToken);
+
+        // when
+        ScrapDto result = scrapServiceImp.getSaveByScrap("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyZWdObyI6Ijg2MDgyNC0xNjU1MDY4IiwibmFtZSI6Iu2Zjeq4uOuPmSIsImlhdCI6MTY0Nzc0NzQ4NCwiZXhwIjoxNjQ3NzQ5Mjg0fQ.uyIN2Sz88HOqUaa-M5th99uP-NIPsl2fI4ssgfkNPOs");
+
+        // then
+        assertThat(result.getAppVer()).isNotNull();
+        assertThat(result.getHostNm()).isNotNull();
+        assertThat(result.getWorkerResDt()).isNotNull();
+        assertThat(result.getWorkerReqDt()).isNotNull();
+    }
 }
