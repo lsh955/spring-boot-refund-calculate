@@ -5,7 +5,10 @@ import com.example.project.app.account.domain.UserRepository;
 import com.example.project.app.common.enums.ErrorCode;
 import com.example.project.app.common.util.AESCryptoUtil;
 import com.example.project.app.common.util.JwtTokenUtil;
-import com.example.project.app.refund.domain.*;
+import com.example.project.app.refund.domain.ScrapListRepository;
+import com.example.project.app.refund.domain.ScrapOneRepository;
+import com.example.project.app.refund.domain.ScrapResponseRepository;
+import com.example.project.app.refund.domain.ScrapTwoRepository;
 import com.example.project.app.refund.dto.ScrapDto;
 import com.example.project.app.refund.service.ScrapServiceImp;
 import com.example.project.exception.CustomException;
@@ -81,55 +84,55 @@ class ScrapServiceImpTest {
         return result;
     }
 
-    private ScrapDto scrapDto() {
-        return ScrapDto.builder()
-                .appVer("2021112501")
-                .hostNm("codetest")
-                .workerResDt("2022-03-26T01:39:25.327850")
-                .workerReqDt("2022-03-26T01:39:25.328166")
-                .build();
-    }
-
-    private ScrapList scrapListToEntity(User user) {
-        return ScrapList.builder()
-                .errMsg("errMsg")
-                .company("정관장")
-                .svcCd("test01")
-                .user(user)
-                .build();
-    }
-
-    private ScrapOne saveScrapOneToEntity(User user) {
-        return ScrapOne.builder()
-                .incomeDetails("급여")
-                .totalPay(24000000L)
-                .startDate("2020.10.03")
-                .scrapCompany("(주)활빈당")
-                .payDate("2020.11.02")
-                .endDate("2020.11.02")
-                .incomeCate("근로소득(연간)")
-                .comNo("012-34-56789")
-                .user(user)
-                .build();
-    }
-
-    private ScrapTwo saveScrapTwoToEntity(User user) {
-        return ScrapTwo.builder()
-                .totalUsed(2000000L)
-                .taxAmount("산출세액")
-                .user(user)
-                .build();
-    }
-
-    private ScrapResponse saveScrapResponseToEntity(User user) {
-        return ScrapResponse.builder()
-                .appVer("2021112501")
-                .hostNm("codetest")
-                .workerReqDt("2022-03-26T01:39:25.327850")
-                .workerResDt("2022-03-26T01:39:25.328166")
-                .user(user)
-                .build();
-    }
+//    private ScrapDto scrapDto() {
+//        return ScrapDto.builder()
+//                .appVer("2021112501")
+//                .hostNm("codetest")
+//                .workerResDt("2022-03-26T01:39:25.327850")
+//                .workerReqDt("2022-03-26T01:39:25.328166")
+//                .build();
+//    }
+//
+//    private ScrapList scrapListToEntity(User user) {
+//        return ScrapList.builder()
+//                .errMsg("errMsg")
+//                .company("정관장")
+//                .svcCd("test01")
+//                .user(user)
+//                .build();
+//    }
+//
+//    private ScrapOne saveScrapOneToEntity(User user) {
+//        return ScrapOne.builder()
+//                .incomeDetails("급여")
+//                .totalPay(24000000L)
+//                .startDate("2020.10.03")
+//                .scrapCompany("(주)활빈당")
+//                .payDate("2020.11.02")
+//                .endDate("2020.11.02")
+//                .incomeCate("근로소득(연간)")
+//                .comNo("012-34-56789")
+//                .user(user)
+//                .build();
+//    }
+//
+//    private ScrapTwo saveScrapTwoToEntity(User user) {
+//        return ScrapTwo.builder()
+//                .totalUsed(2000000L)
+//                .taxAmount("산출세액")
+//                .user(user)
+//                .build();
+//    }
+//
+//    private ScrapResponse saveScrapResponseToEntity(User user) {
+//        return ScrapResponse.builder()
+//                .appVer("2021112501")
+//                .hostNm("codetest")
+//                .workerReqDt("2022-03-26T01:39:25.327850")
+//                .workerResDt("2022-03-26T01:39:25.328166")
+//                .user(user)
+//                .build();
+//    }
 
     @Test
     @DisplayName("가입한 유저의 회원정보 데이터가 존재하지 않을경우")
