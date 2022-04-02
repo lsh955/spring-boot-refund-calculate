@@ -25,6 +25,7 @@ import static com.example.project.app.common.enums.ErrorCode.*;
  */
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class AccountServiceImp implements AccountService {
 
     private final UserRepository userRepository;

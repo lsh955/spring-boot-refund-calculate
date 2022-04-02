@@ -28,6 +28,7 @@ import java.util.Optional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class ScrapServiceImp implements ScrapService {
 
     private final UserRepository userRepository;
