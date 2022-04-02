@@ -79,7 +79,7 @@ public class RefundServiceImp implements RefundService {
      * @param regNo 주민등록번호
      * @return
      */
-    private Long getUserIdx(final String name, final String regNo) {
+    public Long getUserIdx(final String name, final String regNo) {
         final Optional<Long> result = this.userRepository.findByUserIdx(name, regNo);
 
         return result.orElseThrow(() ->
@@ -93,7 +93,7 @@ public class RefundServiceImp implements RefundService {
      * @param userIdx 사용자 키값
      * @return
      */
-    private Long getFindByTotalPay(final Long userIdx) {
+    public Long getFindByTotalPay(final Long userIdx) {
         final Optional<Long> result = scrapOneRepository.findByTotalPay(userIdx);
 
         return result.orElseThrow(() ->
@@ -107,7 +107,7 @@ public class RefundServiceImp implements RefundService {
      * @param userIdx 사용자 키값
      * @return
      */
-    private Long getFindByTotalUsed(final Long userIdx) {
+    public Long getFindByTotalUsed(final Long userIdx) {
         final Optional<Long> result = scrapTwoRepository.findByTotalUsed(userIdx);
 
         return result.orElseThrow(() ->
