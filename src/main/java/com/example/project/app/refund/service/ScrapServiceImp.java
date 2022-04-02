@@ -12,7 +12,6 @@ import com.example.project.app.refund.domain.ScrapTwoRepository;
 import com.example.project.app.refund.dto.ScrapDto;
 import com.example.project.exception.CustomException;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,7 +24,6 @@ import java.util.Optional;
  * @author 이승환
  * @since 2022-02-20
  */
-@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
