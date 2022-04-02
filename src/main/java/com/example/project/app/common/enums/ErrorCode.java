@@ -30,7 +30,11 @@ public enum ErrorCode {
 
     // 404,
     NO_SCRAP_DATA(NOT_FOUND, "요청한 데이터가 존재하지 않습니다."),
-    MEMBER_NOT_FOUND(NOT_FOUND, "사용자 정보를 찾을 수 없습니다");
+    MEMBER_NOT_FOUND(NOT_FOUND, "사용자 정보를 찾을 수 없습니다"),
+
+    // 408
+    TIMEOUT(REQUEST_TIMEOUT, "요청 시간 초과")
+    ;
 
     private final HttpStatus httpStatus;
     private final String detail;
