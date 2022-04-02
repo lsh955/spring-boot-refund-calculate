@@ -44,7 +44,10 @@ public class AccountServiceImp implements AccountService {
      */
     @Transactional
     @Override
-    public AccountStatus addSignup(final String userId, final String password, final String name, final String regNo) throws Exception {
+    public AccountStatus addSignup(final String userId,
+                                   final String password,
+                                   final String name,
+                                   final String regNo) throws Exception {
         // 패스워드 암호화
         final String encryptedRegNo = this.aesCryptoUtil.encrypt(regNo);
         final String encryptedPassword = this.aesCryptoUtil.encrypt(password);
