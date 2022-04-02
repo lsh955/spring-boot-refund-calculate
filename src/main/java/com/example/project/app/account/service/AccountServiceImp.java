@@ -46,8 +46,8 @@ public class AccountServiceImp implements AccountService {
     @Override
     public AccountStatus addSignup(final String userId, final String password, final String name, final String regNo) throws Exception {
         // 패스워드 암호화
-        String encryptedRegNo = this.aesCryptoUtil.encrypt(regNo);
-        String encryptedPassword = this.aesCryptoUtil.encrypt(password);
+        final String encryptedRegNo = this.aesCryptoUtil.encrypt(regNo);
+        final String encryptedPassword = this.aesCryptoUtil.encrypt(password);
 
         // 가입가능한 주민번호 체크(이름은 동명이인 있을 수 있으니 가입가능한 이름은 검사하지 않음)
         if (!this.joinAvailableRepository.existsByRegNo(encryptedRegNo))
@@ -80,17 +80,17 @@ public class AccountServiceImp implements AccountService {
     @Override
     public JwtTokenDto login(final String userId, final String password) throws Exception {
         // 사용자 아이디 기준으로 데이터 불러오기
-        User user = getFindByUserId(userId);
+        final User user = getFindByUserId(userId);
 
         // 패스워드 복호화
-        String decryptedDbPassword = this.aesCryptoUtil.decrypt(user.getPassword());
+        final String decryptedDbPassword = this.aesCryptoUtil.decrypt(user.getPassword());
 
         // 패스와드가 맞는지 검증
         if (!password.equals(decryptedDbPassword))
             throw new CustomException(UNAUTHORIZED_PASSWORD);
 
         // 가입이 되었다면 토큰생성.
-        HashMap<String, String> token = this.jwtTokenUtil.createToken(
+        final HashMap<String, String> token = this.jwtTokenUtil.createToken(
                 user.getName(),
                 user.getRegNo()
         );
@@ -110,13 +110,13 @@ public class AccountServiceImp implements AccountService {
     @Override
     public UserDto readMember(final String token) throws Exception {
         // Token 검증
-        HashMap<String, String> strToken = this.jwtTokenUtil.decoderToken(token);
+        final HashMap<String, String> strToken = this.jwtTokenUtil.decoderToken(token);
 
         // 주민등록번호 암호화
-        String encryptRegNo = this.aesCryptoUtil.encrypt(strToken.get("regNo"));
+        final String encryptRegNo = this.aesCryptoUtil.encrypt(strToken.get("regNo"));
 
         // 사용자정보 불러오기
-        User user = getFindByNameAndRegNo(strToken.get("name"), encryptRegNo);
+        final User user = getFindByNameAndRegNo(strToken.get("name"), encryptRegNo);
 
         return UserDto.builder()
                 .userId(user.getUserId())
@@ -135,7 +135,7 @@ public class AccountServiceImp implements AccountService {
      * @return          사용자정보
      */
     private User getFindByUserId(final String userId) {
-        Optional<User> result = this.userRepository.findByUserId(userId);
+        final Optional<User> result = this.userRepository.findByUserId(userId);
 
         return result.orElseThrow(() ->
                 new CustomException(ErrorCode.MEMBER_NOT_FOUND)
@@ -150,7 +150,7 @@ public class AccountServiceImp implements AccountService {
      * @return      사용자정보
      */
     private User getFindByNameAndRegNo(final String name, final String regNo) {
-        Optional<User> result = this.userRepository.findByNameAndRegNo(name, regNo);
+        final Optional<User> result = this.userRepository.findByNameAndRegNo(name, regNo);
 
         return result.orElseThrow(() ->
                 new CustomException(ErrorCode.MEMBER_NOT_FOUND)
