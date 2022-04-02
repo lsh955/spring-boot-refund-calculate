@@ -21,6 +21,7 @@ import java.util.Optional;
  */
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class RefundServiceImp implements RefundService {
 
     private final UserRepository userRepository;
@@ -36,7 +37,6 @@ public class RefundServiceImp implements RefundService {
      * @param token User Token
      * @return      환금액 결과
      */
-    @Transactional
     @Override
     public RefundDto getRefund(final String token) throws Exception {
         // Token 검증
