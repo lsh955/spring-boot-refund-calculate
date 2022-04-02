@@ -42,7 +42,6 @@ public class AccountServiceImp implements AccountService {
      * @param regNo     주민등록번호
      * @return          성공여부
      */
-    @Transactional
     @Override
     public AccountStatus addSignup(final String userId,
                                    final String password,
@@ -79,7 +78,6 @@ public class AccountServiceImp implements AccountService {
      * @param password  패스워드
      * @return          성공여부
      */
-    @Transactional
     @Override
     public JwtTokenDto login(final String userId, final String password) throws Exception {
         // 사용자 아이디 기준으로 데이터 불러오기
@@ -109,7 +107,6 @@ public class AccountServiceImp implements AccountService {
      * @param token User Token
      * @return      성공여부
      */
-    @Transactional
     @Override
     public UserDto readMember(final String token) throws Exception {
         // Token 검증
