@@ -11,6 +11,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
@@ -70,9 +72,9 @@ public class ScrapTwoRepositoryTest {
 
         // when
         this.scrapTwoRepository.save(scrapTwoResult.toEntity(this.user));
-        final Long totalUsed = this.scrapTwoRepository.findByTotalUsed(this.user.getUserIdx());
+        final Optional<Long> result = this.scrapTwoRepository.findByTotalUsed(this.user.getUserIdx());
 
         // then
-        assertThat(totalUsed).isEqualTo(2000000);
+        result.ifPresent(aLong -> assertThat(aLong).isEqualTo(2000000));
     }
 }

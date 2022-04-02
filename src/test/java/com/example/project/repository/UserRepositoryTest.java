@@ -105,9 +105,10 @@ public class UserRepositoryTest {
                 .build();
 
         // when
-        final Long result = this.userRepository.findByUserIdx(user.getName(), user.getRegNo());
+        final Optional<Long> result = this.userRepository.findByUserIdx(user.getName(), user.getRegNo());
 
         // then
-        assertThat(result).isNotNull();
+        if(result.isPresent())
+            assertThat(result).isNotNull();
     }
 }
