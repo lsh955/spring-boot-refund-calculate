@@ -60,13 +60,7 @@ public class AccountServiceImp implements AccountService {
             throw new CustomException(REG_NO_OVERLAP);
 
         // 사용자 등록
-        this.userRepository.save(User.builder()
-                .userId(userId)
-                .password(encryptedPassword)
-                .name(name)
-                .regNo(encryptedRegNo)
-                .build()
-        );
+        saveUser(userId, encryptedPassword, name, encryptedRegNo);
 
         return AccountStatus.SIGNUP_SUCCESS; // 성공
     }
@@ -126,7 +120,25 @@ public class AccountServiceImp implements AccountService {
                 .build();
     }
 
-    // TODO :: 아래의 사용자정보 가져오기는 하나로 통일되게 리렉토링 할 것.
+    /**
+     * 사용자 등록
+     *
+     * @param userId    사용자아이디
+     * @param password  사용자패스워드
+     * @param name      사용자이름
+     * @param regNo     사용자주민번호
+     */
+    @Transactional
+    public void saveUser(final String userId, final String password, final String name, final String regNo) {
+
+        this.userRepository.save(User.builder()
+                .userId(userId)
+                .password(password)
+                .name(name)
+                .regNo(regNo)
+                .build()
+        );
+    }
 
     /**
      * 사용자정보 가져오기
