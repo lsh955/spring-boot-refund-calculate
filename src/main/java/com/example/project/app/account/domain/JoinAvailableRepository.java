@@ -10,5 +10,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface JoinAvailableRepository extends JpaRepository<JoinAvailable, Long> {
 
-    boolean existsByRegNo(String regNo);
+    boolean existsByRegNo(final String regNo);
 }

@@ -1,6 +1,7 @@
 package com.example.project.app.refund.service;
 
 import com.example.project.app.account.domain.UserRepository;
+import com.example.project.app.common.enums.ErrorCode;
 import com.example.project.app.common.util.AESCryptoUtil;
 import com.example.project.app.common.util.JwtTokenUtil;
 import com.example.project.app.refund.domain.ScrapOneRepository;
@@ -12,9 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
-
-import static com.example.project.app.common.enums.ErrorCode.MEMBER_NOT_FOUND;
-import static com.example.project.app.common.enums.ErrorCode.NO_SCRAP_DATA;
+import java.util.Optional;
 
 /**
  * @author 이승환
@@ -41,31 +40,25 @@ public class RefundServiceImp implements RefundService {
     @Override
     public RefundDto getRefund(final String token) throws Exception {
         // Token 검증
-        HashMap<String, String> strToken = this.jwtTokenUtil.decoderToken(token);
+        final HashMap<String, String> strToken = this.jwtTokenUtil.decoderToken(token);
 
         // 주민등록번호 암호화
-        String encryptRegNo = this.aesCryptoUtil.encrypt(strToken.get("regNo"));
+        final String encryptRegNo = this.aesCryptoUtil.encrypt(strToken.get("regNo"));
 
         // 사용자 불러오기
-        Long userIdx = getUserIdx(strToken.get("name"), encryptRegNo);
-
-        if (userIdx == null)
-            throw new CustomException(MEMBER_NOT_FOUND);
+        final Long userIdx = getUserIdx(strToken.get("name"), encryptRegNo);
 
         // 총지급액 불러오기
-        Long totalPay = scrapOneRepository.findByTotalPay(userIdx);
+        final Long totalPay = getFindByTotalPay(userIdx);
         // 총사용금액 불러오기
-        Long totalUsed = scrapTwoRepository.findByTotalUsed(userIdx);
-
-        if (totalPay == null && totalUsed == null)
-            throw new CustomException(NO_SCRAP_DATA);
+        final Long totalUsed = getFindByTotalUsed(userIdx);
 
         // 세액공제 한도계산
-        double taxCredit = getTaxCredit(totalPay);
+        final double taxCredit = getTaxCredit(totalPay);
         // 소득세액 공제계산
-        double taxAmount = getTaxAmount(totalUsed);
+        final double taxAmount = getTaxAmount(totalUsed);
 
-        HashMap<String, Object> refunds = new HashMap<>();
+        final HashMap<String, Object> refunds = new HashMap<>();
         refunds.put("이름", strToken.get("name"));
         refunds.put("한도", taxCredit);
         refunds.put("공제액", taxAmount);
@@ -87,7 +80,39 @@ public class RefundServiceImp implements RefundService {
      * @return
      */
     private Long getUserIdx(final String name, final String regNo) {
-        return this.userRepository.findByUserIdx(name, regNo);
+        final Optional<Long> result = this.userRepository.findByUserIdx(name, regNo);
+
+        return result.orElseThrow(() ->
+                new CustomException(ErrorCode.MEMBER_NOT_FOUND)
+        );
+    }
+
+    /**
+     * 총지급액 불러오기
+     *
+     * @param userIdx 사용자 키값
+     * @return
+     */
+    private Long getFindByTotalPay(final Long userIdx) {
+        final Optional<Long> result = scrapOneRepository.findByTotalPay(userIdx);
+
+        return result.orElseThrow(() ->
+                new CustomException(ErrorCode.NO_SCRAP_DATA)
+        );
+    }
+
+    /**
+     * 총사용금액 불러오기
+     *
+     * @param userIdx 사용자 키값
+     * @return
+     */
+    private Long getFindByTotalUsed(final Long userIdx) {
+        final Optional<Long> result = scrapTwoRepository.findByTotalUsed(userIdx);
+
+        return result.orElseThrow(() ->
+                new CustomException(ErrorCode.NO_SCRAP_DATA)
+        );
     }
 
     /**

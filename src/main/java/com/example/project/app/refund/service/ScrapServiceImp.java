@@ -51,16 +51,16 @@ public class ScrapServiceImp implements ScrapService {
     @Override
     public ScrapDto getSaveByScrap(final String token) throws Exception {
         // Token 검증
-        HashMap<String, String> strToken = this.jwtTokenUtil.decoderToken(token);
+        final HashMap<String, String> strToken = this.jwtTokenUtil.decoderToken(token);
 
         // 주민등록번호 암호화
-        String encryptRegNo = this.aesCryptoUtil.encrypt(strToken.get("regNo"));
+        final String encryptRegNo = this.aesCryptoUtil.encrypt(strToken.get("regNo"));
 
         // 사용자 불러오기
-        User user = getUser(strToken.get("name"), encryptRegNo);
+        final User user = getUser(strToken.get("name"), encryptRegNo);
 
         // 공급자로 부터의 데이터 조회
-        ScrapDto scrapDto = getClientScrap(strToken);
+        final ScrapDto scrapDto = getClientScrap(strToken);
 
         saveScrapList(scrapDto, user);      // 리스트 결과저장
         saveScrapOne(scrapDto, user);       // scrap001 결과저장
@@ -95,7 +95,7 @@ public class ScrapServiceImp implements ScrapService {
      * @return
      */
     private User getUser(final String name, final String regNo) {
-        Optional<User> user = this.userRepository.findByNameAndRegNo(name, regNo);
+        final Optional<User> user = this.userRepository.findByNameAndRegNo(name, regNo);
 
         return user.orElseThrow(() ->
                 new CustomException(ErrorCode.MEMBER_NOT_FOUND)

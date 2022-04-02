@@ -27,5 +27,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
                     "	WHERE name = ?1 and reg_no = ?2",
             nativeQuery = true
     )
-    Long findByUserIdx(String name, String regNo);
+    Optional<Long> findByUserIdx(String name, String regNo);
 }

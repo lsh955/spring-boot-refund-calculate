@@ -10,9 +10,9 @@ import com.example.project.app.common.enums.AccountStatus;
  */
 public interface AccountService {
 
-    AccountStatus addSignup(String userId, String password, String name, String regNo) throws Exception;
+    AccountStatus addSignup(final String userId, final String password, final String name, final String regNo) throws Exception;
 
-    JwtTokenDto login(String userId, String password) throws Exception;
+    JwtTokenDto login(final String userId, final String password) throws Exception;
 
-    UserDto readMember(String token) throws Exception;
+    UserDto readMember(final String token) throws Exception;
 }
