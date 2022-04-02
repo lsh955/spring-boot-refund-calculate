@@ -146,7 +146,7 @@ public class AccountServiceImp implements AccountService {
      * @param userId    사용자아이디
      * @return          사용자정보
      */
-    private User getFindByUserId(final String userId) {
+    public User getFindByUserId(final String userId) {
         final Optional<User> result = this.userRepository.findByUserId(userId);
 
         return result.orElseThrow(() ->
@@ -161,7 +161,7 @@ public class AccountServiceImp implements AccountService {
      * @param regNo 사용자주민번호
      * @return      사용자정보
      */
-    private User getFindByNameAndRegNo(final String name, final String regNo) {
+    public User getFindByNameAndRegNo(final String name, final String regNo) {
         final Optional<User> result = this.userRepository.findByNameAndRegNo(name, regNo);
 
         return result.orElseThrow(() ->
