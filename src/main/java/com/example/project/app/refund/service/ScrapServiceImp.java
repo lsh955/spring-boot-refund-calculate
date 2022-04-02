@@ -95,9 +95,9 @@ public class ScrapServiceImp implements ScrapService {
      * @return
      */
     private User getUser(final String name, final String regNo) {
-        final Optional<User> user = this.userRepository.findByNameAndRegNo(name, regNo);
+        final Optional<User> result = this.userRepository.findByNameAndRegNo(name, regNo);
 
-        return user.orElseThrow(() ->
+        return result.orElseThrow(() ->
                 new CustomException(ErrorCode.MEMBER_NOT_FOUND)
         );
     }
@@ -119,8 +119,8 @@ public class ScrapServiceImp implements ScrapService {
      * @param user
      */
     private void saveScrapOne(final ScrapDto scrapDto, final User user) {
-        for (ScrapDto.ScrapOneDto scrapOneDtos : scrapDto.getScrapListDto().getScrapOneDto())
-            this.scrapOneRepository.save(scrapOneDtos.toEntity(user));
+        for (ScrapDto.ScrapOneDto result : scrapDto.getScrapListDto().getScrapOneDto())
+            this.scrapOneRepository.save(result.toEntity(user));
     }
 
     /**
@@ -130,8 +130,8 @@ public class ScrapServiceImp implements ScrapService {
      * @param user
      */
     private void saveScrapTwo(final ScrapDto scrapDto, final User user) {
-        for (ScrapDto.ScrapTwoDto scrapTwoDtos : scrapDto.getScrapListDto().getScrapTwoDto())
-            this.scrapTwoRepository.save(scrapTwoDtos.toEntity(user));
+        for (ScrapDto.ScrapTwoDto result : scrapDto.getScrapListDto().getScrapTwoDto())
+            this.scrapTwoRepository.save(result.toEntity(user));
     }
 
     /**
