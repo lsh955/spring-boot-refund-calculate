@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * @author 이승환
  * @since 2022-02-20
- *
+ * <p>
  * 스크랩에 관련된 Controller
  */
 @RestController
@@ -27,8 +27,8 @@ public class ScrapController {
     /**
      * 사용자 스크크정보 조회
      *
-     * @param jwtTokenDto   User Token
-     * @return              조회결과
+     * @param jwtTokenDto User Token
+     * @return 조회결과
      */
     @ApiOperation(value = "사용자 정보 스크랩", notes = "사용자정보를 기반으로 스크랩")
     @PostMapping(value = "/scrap", consumes = MediaType.APPLICATION_JSON_VALUE)

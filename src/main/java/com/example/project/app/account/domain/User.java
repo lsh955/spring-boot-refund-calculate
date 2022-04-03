@@ -29,17 +29,17 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userIdx;       // 식별값
 
-    @OneToMany(mappedBy="user")
-    private List<ScrapOne> scrapOnes = new ArrayList<>();
+    @OneToMany(mappedBy = "user")
+    private final List<ScrapOne> scrapOnes = new ArrayList<>();
 
-    @OneToMany(mappedBy="user")
-    private List<ScrapTwo> scrapTwos = new ArrayList<>();
+    @OneToMany(mappedBy = "user")
+    private final List<ScrapTwo> scrapTwos = new ArrayList<>();
 
-    @OneToMany(mappedBy="user")
-    private List<ScrapResponse> scrapResponses = new ArrayList<>();
+    @OneToMany(mappedBy = "user")
+    private final List<ScrapResponse> scrapResponses = new ArrayList<>();
 
-    @OneToMany(mappedBy="user")
-    private List<ScrapList> scrapLists = new ArrayList<>();
+    @OneToMany(mappedBy = "user")
+    private final List<ScrapList> scrapLists = new ArrayList<>();
 
     private String userId;      // 아이디
     private String password;    // 패스워드

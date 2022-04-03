@@ -33,7 +33,7 @@ public class RefundServiceImp implements RefundService {
      * 환급액 계산
      *
      * @param token User Token
-     * @return      환금액 결과
+     * @return 환금액 결과
      */
     @Override
     public RefundDto getRefund(final String token) {
@@ -113,8 +113,8 @@ public class RefundServiceImp implements RefundService {
     /**
      * 세액공제 한도 계산
      *
-     * @param totalPay  총급여액(총지급액)
-     * @return          기준별 요건에 맞는 한도결과
+     * @param totalPay 총급여액(총지급액)
+     * @return 기준별 요건에 맞는 한도결과
      */
     public double getTaxCredit(final double totalPay) {
         double taxCredit = 0;   // 초기화
@@ -148,7 +148,7 @@ public class RefundServiceImp implements RefundService {
      * 소득세액 공제 계산
      *
      * @param totalUsed 산출세액
-     * @return          기준별 요건에 맞는 공제결과
+     * @return 기준별 요건에 맞는 공제결과
      */
     public double getTaxAmount(final double totalUsed) {
         double taxAmount = 0;   // 초기화

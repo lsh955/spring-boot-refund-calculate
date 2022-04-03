@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * @author 이승환
  * @since 2022-02-20
- *
+ * <p>
  * 계층간 스크랩데이터 교환을 위한 DTO
  */
 @Getter

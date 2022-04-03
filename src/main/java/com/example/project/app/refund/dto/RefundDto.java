@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 /**
  * @author 이승환
  * @since 2022-03-09
- *
+ * <p>
  * 계층간 환급액조회 를 위한 DTO
  */
 @Getter

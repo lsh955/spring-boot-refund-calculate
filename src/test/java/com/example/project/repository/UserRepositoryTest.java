@@ -84,7 +84,7 @@ public class UserRepositoryTest {
         final Optional<User> result = this.userRepository.findByUserId(user.getUserId());
 
         // then
-        if(result.isPresent()) {
+        if (result.isPresent()) {
             assertThat(result.get().getUserIdx()).isNotNull();
             assertThat(result.get().getUserId()).isEqualTo("1");
             assertThat(result.get().getPassword()).isEqualTo("ELbbqFzaPvFZbCrhd61Mzw==");
@@ -108,7 +108,7 @@ public class UserRepositoryTest {
         final Optional<Long> result = this.userRepository.findByUserIdx(user.getName(), user.getRegNo());
 
         // then
-        if(result.isPresent())
+        if (result.isPresent())
             assertThat(result).isNotNull();
     }
 }

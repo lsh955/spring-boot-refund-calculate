@@ -23,7 +23,7 @@ public class ScrapResponse {
     private Long resultIdx; // 식별값
 
     @ManyToOne
-    @JoinColumn(name="user_idx")
+    @JoinColumn(name = "user_idx")
     private User user;
 
     private String appVer;
