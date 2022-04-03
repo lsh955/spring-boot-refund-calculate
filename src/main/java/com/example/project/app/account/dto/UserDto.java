@@ -36,7 +36,7 @@ public class UserDto {
     }
 
     // DTO -> Entity
-    public User toEntity() throws Exception {
+    public User toEntity() {
         AESCryptoUtil aesCryptoUtil = new AESCryptoUtil();
 
         return User.builder()

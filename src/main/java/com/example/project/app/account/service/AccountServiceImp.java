@@ -38,14 +38,14 @@ public class AccountServiceImp implements AccountService {
     /**
      * 회원가입
      *
-     * @param userId    아이디
-     * @param password  패스워드
-     * @param name      이름
-     * @param regNo     주민등록번호
-     * @return          성공여부
+     * @param userId   아이디
+     * @param password 패스워드
+     * @param name     이름
+     * @param regNo    주민등록번호
+     * @return 성공여부
      */
     @Override
-    public AccountStatus addSignup(final String userId, final String password, final String name, final String regNo) throws Exception {
+    public AccountStatus addSignup(final String userId, final String password, final String name, final String regNo) {
         // 패스워드 암호화
         final String encryptedRegNo = this.aesCryptoUtil.encrypt(regNo);
         final String encryptedPassword = this.aesCryptoUtil.encrypt(password);
@@ -67,12 +67,12 @@ public class AccountServiceImp implements AccountService {
     /**
      * 로그인
      *
-     * @param userId    아이디
-     * @param password  패스워드
-     * @return          성공여부
+     * @param userId   아이디
+     * @param password 패스워드
+     * @return 성공여부
      */
     @Override
-    public JwtTokenDto login(final String userId, final String password) throws Exception {
+    public JwtTokenDto login(final String userId, final String password) {
         // 사용자 아이디 기준으로 데이터 불러오기
         final User user = getFindByUserId(userId);
 
@@ -95,10 +95,10 @@ public class AccountServiceImp implements AccountService {
      * 내 정보 보기
      *
      * @param token User Token
-     * @return      성공여부
+     * @return 성공여부
      */
     @Override
-    public UserDto readMember(final String token) throws Exception {
+    public UserDto readMember(final String token) {
         // Token 검증
         final JwtManager.TokenInfo strToken = this.jwtManager.getTokenInfo(token);
 
@@ -116,10 +116,10 @@ public class AccountServiceImp implements AccountService {
     /**
      * 사용자 등록
      *
-     * @param userId    사용자아이디
-     * @param password  사용자패스워드
-     * @param name      사용자이름
-     * @param regNo     사용자주민번호
+     * @param userId   사용자아이디
+     * @param password 사용자패스워드
+     * @param name     사용자이름
+     * @param regNo    사용자주민번호
      */
     @Transactional
     public void saveUser(final String userId, final String password, final String name, final String regNo) {
@@ -136,8 +136,8 @@ public class AccountServiceImp implements AccountService {
     /**
      * 사용자정보 가져오기
      *
-     * @param userId    사용자아이디
-     * @return          사용자정보
+     * @param userId 사용자아이디
+     * @return 사용자정보
      */
     public User getFindByUserId(final String userId) {
         final Optional<User> result = this.userRepository.findByUserId(userId);
@@ -152,7 +152,7 @@ public class AccountServiceImp implements AccountService {
      *
      * @param name  사용자이름
      * @param regNo 사용자주민번호
-     * @return      사용자정보
+     * @return 사용자정보
      */
     public User getFindByNameAndRegNo(final String name, final String regNo) {
         final Optional<User> result = this.userRepository.findByNameAndRegNo(name, regNo);

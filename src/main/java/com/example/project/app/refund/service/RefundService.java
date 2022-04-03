@@ -8,5 +8,5 @@ import com.example.project.app.refund.dto.RefundDto;
  */
 public interface RefundService {
 
-    RefundDto getRefund(final String token) throws Exception;
+    RefundDto getRefund(final String token);
 }

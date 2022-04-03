@@ -32,7 +32,7 @@ public class ScrapController {
      */
     @ApiOperation(value = "사용자 정보 스크랩", notes = "사용자정보를 기반으로 스크랩")
     @PostMapping(value = "/scrap", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ScrapDto scrap(@RequestBody JwtTokenDto jwtTokenDto) throws Exception {
+    public ScrapDto scrap(@RequestBody JwtTokenDto jwtTokenDto) {
 
         return scrapService.getSaveByScrap(
                 jwtTokenDto.getToken()

@@ -36,7 +36,7 @@ public class RefundServiceImp implements RefundService {
      * @return      환금액 결과
      */
     @Override
-    public RefundDto getRefund(final String token) throws Exception {
+    public RefundDto getRefund(final String token) {
         // Token 검증
         final JwtManager.TokenInfo strToken = this.jwtManager.getTokenInfo(token);
 

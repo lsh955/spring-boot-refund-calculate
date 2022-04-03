@@ -137,7 +137,7 @@ class ScrapServiceImpTest {
 
     @Test
     @DisplayName("가입한 유저의 회원정보 데이터가 존재하지 않을경우")
-    public void 가입한_유저의_회원정보_데이터가_존재하지_않을경우() throws Exception {
+    public void 가입한_유저의_회원정보_데이터가_존재하지_않을경우() {
         // given
         final HashMap<String, String> tokenMap = new HashMap<>();
         tokenMap.put("name", "이승환");
@@ -164,7 +164,7 @@ class ScrapServiceImpTest {
 
     @Test
     @DisplayName("가입한 유저의 회원정보로 WebClient 요청이 이루어 지는가")
-    public void 가입한_유저의_회원정보로_WebClient_요청이_이루어_지는가 () throws Exception {
+    public void 가입한_유저의_회원정보로_WebClient_요청이_이루어_지는가() {
         // given
         final HashMap<String, String> tokenMap = tokenByCreate();
         final HashMap<String, String> strToken = tokenByDecoder();

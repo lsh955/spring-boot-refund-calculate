@@ -27,12 +27,12 @@ public class RefundController {
     /**
      * 환급액 계산
      *
-     * @param jwtTokenDto   User Token
-     * @return              환급액 결과
+     * @param jwtTokenDto User Token
+     * @return 환급액 결과
      */
     @ApiOperation(value = "환급액 계산", notes = "사용자정보를 기반으로 환급액 계산")
     @PostMapping(value = "/refund", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public RefundDto refund(@RequestBody JwtTokenDto jwtTokenDto) throws Exception {
+    public RefundDto refund(@RequestBody JwtTokenDto jwtTokenDto) {
 
         return refundService.getRefund(
                 jwtTokenDto.getToken()

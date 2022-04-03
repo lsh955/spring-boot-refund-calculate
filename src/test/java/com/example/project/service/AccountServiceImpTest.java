@@ -71,7 +71,7 @@ class AccountServiceImpTest {
 
     @Test
     @DisplayName("가입가능한 회원정보에 주민등록번호가 없을 시")
-    public void RegNoOverlapFailureCheck() throws Exception {
+    public void RegNoOverlapFailureCheck() {
         // given
         doReturn(false).when(joinAvailableRepository).existsByRegNo("ldU2Z5ZlRuwDDPfYA1YfvOTw==");
         doReturn("ldU2Z5ZlRuwDDPfYA1YfvOTw==").when(aesCryptoUtil).encrypt(decryptdRegNo);
@@ -110,7 +110,7 @@ class AccountServiceImpTest {
 
     @Test
     @DisplayName("회원가입 정상등록")
-    public void addSignup() throws Exception {
+    public void addSignup() {
         // given
         doReturn(true).when(joinAvailableRepository).existsByRegNo(encryptedRegNo);
         doReturn(false).when(userRepository).existsByRegNo(encryptedRegNo);
@@ -168,7 +168,7 @@ class AccountServiceImpTest {
 
     @Test
     @DisplayName("로그인했을때 정상 토크발급")
-    public void 로그인했을때_정상_토크발급() throws Exception {
+    public void 로그인했을때_정상_토크발급() {
         // given
         final User user = userBySave();
         final String token = tokenByCreate();
@@ -211,7 +211,7 @@ class AccountServiceImpTest {
 
     @Test
     @DisplayName("개인정보보기에서 가입된 유자가 있을시")
-    public void 개인정보보기에서_가입된_유자가_있을시() throws Exception {
+    public void 개인정보보기에서_가입된_유자가_있을시() {
         // given
         final String token = tokenByCreate();
         final JwtManager.TokenInfo strToken = tokenByDecoder();

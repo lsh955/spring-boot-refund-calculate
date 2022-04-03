@@ -46,7 +46,7 @@ public class ScrapServiceImp implements ScrapService {
      * @return 스크랩조회 결과
      */
     @Override
-    public ScrapDto getSaveByScrap(final String token) throws Exception {
+    public ScrapDto getSaveByScrap(final String token) {
         // Token 검증
         final JwtManager.TokenInfo strToken = this.jwtManager.getTokenInfo(token);
 

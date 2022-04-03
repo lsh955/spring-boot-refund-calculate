@@ -20,7 +20,7 @@ public class AESCryptoUtilTest {
 
     @Test
     @DisplayName("AES 암호화/복호화 테스트")
-    public void AESUtilTest() throws Exception {
+    public void AESUtilTest() {
         String userId = "lsh955";
         String name = "이승환";
         String regNo = "123456-789456";
