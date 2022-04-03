@@ -6,7 +6,6 @@ import com.example.project.app.account.domain.UserRepository;
 import com.example.project.app.account.dto.UserDto;
 import com.example.project.app.account.service.AccountServiceImp;
 import com.example.project.app.common.dto.JwtTokenDto;
-import com.example.project.app.common.enums.AccountStatus;
 import com.example.project.app.common.enums.ErrorCode;
 import com.example.project.app.common.util.AESCryptoUtil;
 import com.example.project.app.common.util.JwtManager;
@@ -118,11 +117,10 @@ class AccountServiceImpTest {
         doReturn(userBySave()).when(userRepository).save(any(User.class));
 
         // when
-        final AccountStatus result = accountServiceImp.addSignup(userId, decryptdPassword, name, decryptdRegNo);
+        final UserDto result = accountServiceImp.addSignup(userId, decryptdPassword, name, decryptdRegNo);
 
         // then
-        assertThat(result.getCode()).isEqualTo(AccountStatus.SIGNUP_SUCCESS.getCode());
-        assertThat(result.getMessage()).isEqualTo(AccountStatus.SIGNUP_SUCCESS.getMessage());
+        assertThat(result.getUserId()).isNotNull();
 
         // verify
         verify(userRepository, times(1)).save(any(User.class));

@@ -5,7 +5,6 @@ import com.example.project.app.account.domain.User;
 import com.example.project.app.account.domain.UserRepository;
 import com.example.project.app.account.dto.UserDto;
 import com.example.project.app.common.dto.JwtTokenDto;
-import com.example.project.app.common.enums.AccountStatus;
 import com.example.project.app.common.enums.ErrorCode;
 import com.example.project.app.common.util.AESCryptoUtil;
 import com.example.project.app.common.util.JwtManager;
@@ -45,7 +44,7 @@ public class AccountServiceImp implements AccountService {
      * @return 성공여부
      */
     @Override
-    public AccountStatus addSignup(final String userId, final String password, final String name, final String regNo) {
+    public UserDto addSignup(final String userId, final String password, final String name, final String regNo) {
         // 패스워드 암호화
         final String encryptedRegNo = this.aesCryptoUtil.encrypt(regNo);
         final String encryptedPassword = this.aesCryptoUtil.encrypt(password);
@@ -59,9 +58,14 @@ public class AccountServiceImp implements AccountService {
             throw new CustomException(REG_NO_OVERLAP);
 
         // 사용자 등록
-        saveUser(userId, encryptedPassword, name, encryptedRegNo);
+        final User result = saveUser(userId, encryptedPassword, name, encryptedRegNo);
 
-        return AccountStatus.SIGNUP_SUCCESS; // 성공
+        return UserDto.builder()
+                .userId(result.getUserId())
+                .password(result.getPassword())
+                .name(result.getName())
+                .regNo(result.getRegNo())
+                .build();
     }
 
     /**
@@ -122,9 +126,9 @@ public class AccountServiceImp implements AccountService {
      * @param regNo    사용자주민번호
      */
     @Transactional
-    public void saveUser(final String userId, final String password, final String name, final String regNo) {
+    public User saveUser(final String userId, final String password, final String name, final String regNo) {
 
-        this.userRepository.save(User.builder()
+        return this.userRepository.save(User.builder()
                 .userId(userId)
                 .password(password)
                 .name(name)

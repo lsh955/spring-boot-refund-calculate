@@ -3,7 +3,6 @@ package com.example.project.app.account.controller;
 import com.example.project.app.account.dto.UserDto;
 import com.example.project.app.account.service.AccountService;
 import com.example.project.app.common.dto.JwtTokenDto;
-import com.example.project.app.common.enums.AccountStatus;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -34,16 +33,16 @@ public class AccountController {
      */
     @ApiOperation(value = "회원가입", notes = "입력에 따른 사용자 정보등록")
     @PostMapping(value = "/signup", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<AccountStatus> signup(@RequestBody UserDto userDto) {
+    public ResponseEntity<UserDto> signup(@RequestBody UserDto userDto) {
 
-        final AccountStatus accountStatus = accountService.addSignup(
+        final UserDto result = accountService.addSignup(
                 userDto.getUserId(),
                 userDto.getPassword(),
                 userDto.getName(),
                 userDto.getRegNo()
         );
 
-        return ResponseEntity.ok(accountStatus);
+        return ResponseEntity.ok(result);
     }
 
     /**
@@ -56,12 +55,12 @@ public class AccountController {
     @PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<JwtTokenDto> login(@RequestBody UserDto userDto) {
 
-        final JwtTokenDto jwtTokenDto = accountService.login(
+        final JwtTokenDto result = accountService.login(
                 userDto.getUserId(),
                 userDto.getPassword()
         );
 
-        return ResponseEntity.ok(jwtTokenDto);
+        return ResponseEntity.ok(result);
     }
 
     /**
@@ -74,10 +73,10 @@ public class AccountController {
     @PostMapping(value = "/me", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserDto> member(@RequestBody JwtTokenDto jwtTokenDto) {
 
-        final UserDto userDto = accountService.readMember(
+        final UserDto result = accountService.readMember(
                 jwtTokenDto.getToken()
         );
 
-        return ResponseEntity.ok(userDto);
+        return ResponseEntity.ok(result);
     }
 }
