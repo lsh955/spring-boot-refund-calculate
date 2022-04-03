@@ -33,8 +33,7 @@ public enum ErrorCode {
     MEMBER_NOT_FOUND(NOT_FOUND, "사용자 정보를 찾을 수 없습니다"),
 
     // 408
-    TIMEOUT(REQUEST_TIMEOUT, "요청 시간 초과")
-    ;
+    TIMEOUT(REQUEST_TIMEOUT, "요청 시간 초과");
 
     private final HttpStatus httpStatus;
     private final String detail;
