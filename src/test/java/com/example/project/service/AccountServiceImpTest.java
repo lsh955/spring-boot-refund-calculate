@@ -9,7 +9,7 @@ import com.example.project.app.common.dto.JwtTokenDto;
 import com.example.project.app.common.enums.AccountStatus;
 import com.example.project.app.common.enums.ErrorCode;
 import com.example.project.app.common.util.AESCryptoUtil;
-import com.example.project.app.common.util.JwtTokenUtil;
+import com.example.project.app.common.util.JwtManager;
 import com.example.project.exception.CustomException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,6 +18,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Optional;
 

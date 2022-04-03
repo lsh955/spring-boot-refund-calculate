@@ -1,6 +1,6 @@
 package com.example.project.controller;
 
-import com.example.project.app.common.util.JwtTokenUtil;
+import com.example.project.app.common.util.JwtManager;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -11,8 +11,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-
-import java.util.HashMap;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -31,7 +29,7 @@ class RefundControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
     @Autowired
-    private JwtTokenUtil jwtTokenUtil;
+    private JwtManager jwtManager;
 
     @Test
     @DisplayName(value = "환급액 계산 조회실패(저장된 스크랩결과가 없을 시)")
@@ -39,7 +37,7 @@ class RefundControllerTest {
         String name = "홍길동";
         String regNo = "ldU2Z5ZlRuwPfYA1YfvOTw==";
 
-        HashMap<String, String> token = this.jwtTokenUtil.createToken(name, regNo);
+        String token = this.jwtManager.generateToken(name, regNo);
 
         this.mockMvc.perform(post("http://localhost:8080/szs/refund")
                         .contentType(MediaType.APPLICATION_JSON)
