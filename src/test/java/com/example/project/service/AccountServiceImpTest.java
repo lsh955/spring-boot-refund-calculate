@@ -65,7 +65,6 @@ class AccountServiceImpTest {
         return "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyZWdObyI6Ijg2MDgyNC0xNjU1MDY4IiwibmFtZSI6Iu2Zjeq4uOuPmSIsImlhdCI6MTY0Nzc0NzQ4NCwiZXhwIjoxNjQ3NzQ5Mjg0fQ.uyIN2Sz88HOqUaa-M5th99uP-NIPsl2fI4ssgfkNPOs";
     }
 
-
     private JwtManager.TokenInfo tokenByDecoder() {
         return new JwtManager.TokenInfo("홍길동", "ldU2Z5ZlRuwPfYA1YfvOTw==", new Date(), new Date());
     }
