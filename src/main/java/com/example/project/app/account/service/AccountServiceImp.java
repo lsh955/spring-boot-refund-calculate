@@ -8,13 +8,13 @@ import com.example.project.app.common.dto.JwtTokenDto;
 import com.example.project.app.common.enums.AccountStatus;
 import com.example.project.app.common.enums.ErrorCode;
 import com.example.project.app.common.util.AESCryptoUtil;
-import com.example.project.app.common.util.JwtTokenUtil;
+import com.example.project.app.common.util.JwtManager;
 import com.example.project.exception.CustomException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
 import java.util.Optional;
 
 import static com.example.project.app.common.enums.ErrorCode.*;
@@ -23,6 +23,7 @@ import static com.example.project.app.common.enums.ErrorCode.*;
  * @author 이승환
  * @since 2022-02-18
  */
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -31,7 +32,7 @@ public class AccountServiceImp implements AccountService {
     private final UserRepository userRepository;
     private final JoinAvailableRepository joinAvailableRepository;
 
-    private final JwtTokenUtil jwtTokenUtil;
+    private final JwtManager jwtManager;
     private final AESCryptoUtil aesCryptoUtil;
 
     /**
@@ -82,14 +83,11 @@ public class AccountServiceImp implements AccountService {
         if (!password.equals(decryptedDbPassword))
             throw new CustomException(UNAUTHORIZED_PASSWORD);
 
-        // 가입이 되었다면 토큰생성.
-        final HashMap<String, String> token = this.jwtTokenUtil.createToken(
-                user.getName(),
-                user.getRegNo()
-        );
+        // 가입이 되었다면 토큰생성
+        String token = this.jwtManager.generateToken(user.getName(), user.getRegNo());
 
         return JwtTokenDto.builder()
-                .token(token.get("token"))
+                .token(token)
                 .build();
     }
 
@@ -102,13 +100,10 @@ public class AccountServiceImp implements AccountService {
     @Override
     public UserDto readMember(final String token) throws Exception {
         // Token 검증
-        final HashMap<String, String> strToken = this.jwtTokenUtil.decoderToken(token);
-
-        // 주민등록번호 암호화
-        final String encryptRegNo = this.aesCryptoUtil.encrypt(strToken.get("regNo"));
+        final JwtManager.TokenInfo strToken = this.jwtManager.getTokenInfo(token);
 
         // 사용자정보 불러오기
-        final User user = getFindByNameAndRegNo(strToken.get("name"), encryptRegNo);
+        final User user = getFindByNameAndRegNo(strToken.getName(), strToken.getRegNo());
 
         return UserDto.builder()
                 .userId(user.getUserId())

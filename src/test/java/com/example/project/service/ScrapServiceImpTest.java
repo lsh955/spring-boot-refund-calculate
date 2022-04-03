@@ -4,7 +4,7 @@ import com.example.project.app.account.domain.User;
 import com.example.project.app.account.domain.UserRepository;
 import com.example.project.app.common.enums.ErrorCode;
 import com.example.project.app.common.util.AESCryptoUtil;
-import com.example.project.app.common.util.JwtTokenUtil;
+import com.example.project.app.common.util.JwtManager;
 import com.example.project.app.refund.domain.ScrapListRepository;
 import com.example.project.app.refund.domain.ScrapOneRepository;
 import com.example.project.app.refund.domain.ScrapResponseRepository;
@@ -21,6 +21,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Optional;
 
@@ -54,7 +55,7 @@ class ScrapServiceImpTest {
     private ScrapResponseRepository scrapResponseRepository;
 
     @Mock
-    private JwtTokenUtil jwtTokenUtil;
+    private JwtManager jwtManager;
     @Mock
     private AESCryptoUtil aesCryptoUtil;
 
@@ -144,8 +145,9 @@ class ScrapServiceImpTest {
         tokenMap.put("exp", "1647749284");
         tokenMap.put("iat", "1647747484");
 
-        doReturn(tokenMap).when(jwtTokenUtil).decoderToken("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyZWdObyI6IjkyMTEwOC0xNTgyODE2IiwibmFtZSI6IuydtOyKue2ZmCIsImlhdCI6MTY0Nzc0NzQ4NCwiZXhwIjoxNjQ3NzQ5Mjg0fQ.TOtRqmykjAgPbtpNO5nMXrntVrdX2AFeG0Y2DINBagE");
-        doReturn("U99p1DIkTEpARHoYcosMfA==").when(aesCryptoUtil).encrypt(tokenMap.get("regNo"));
+        JwtManager.TokenInfo tokenInfo = new JwtManager.TokenInfo("이승환", "U99p1DIkTEpARHoYcosMfA==", new Date(), new Date());
+
+        doReturn(tokenInfo).when(jwtManager).getTokenInfo("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyZWdObyI6IjkyMTEwOC0xNTgyODE2IiwibmFtZSI6IuydtOyKue2ZmCIsImlhdCI6MTY0Nzc0NzQ4NCwiZXhwIjoxNjQ3NzQ5Mjg0fQ.TOtRqmykjAgPbtpNO5nMXrntVrdX2AFeG0Y2DINBagE");
         doReturn(Optional.empty()).when(userRepository).findByNameAndRegNo(tokenMap.get("name"), "U99p1DIkTEpARHoYcosMfA==");
 
         // when
@@ -168,7 +170,7 @@ class ScrapServiceImpTest {
         final HashMap<String, String> strToken = tokenByDecoder();
         final User user = userBySave();
 
-        doReturn(strToken).when(jwtTokenUtil).decoderToken(tokenMap.get("token"));
+        doReturn(strToken).when(jwtManager).getTokenInfo(tokenMap.get("token"));
         doReturn("ldU2Z5ZlRuwPfYA1YfvOTw==").when(aesCryptoUtil).encrypt("860824-1655068");
         doReturn(Optional.of(user)).when(userRepository).findByNameAndRegNo(strToken.get("name"), "ldU2Z5ZlRuwPfYA1YfvOTw==");
 

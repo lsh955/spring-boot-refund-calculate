@@ -32,7 +32,7 @@ class ScrapControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
     @Autowired
-    private JwtTokenUtil jwtTokenUtil;
+    private JwtManager jwtManager;
 
     @Test
     @DisplayName(value = "사용자정보 스크랩 요청성공(가입된 정보가 있을 시)")
@@ -40,7 +40,7 @@ class ScrapControllerTest {
         String name = "홍길동";
         String regNo = "ldU2Z5ZlRuwPfYA1YfvOTw==";
 
-        HashMap<String, String> token = this.jwtTokenUtil.createToken(name, regNo);
+        String token = this.jwtManager.generateToken(name, regNo);
 
         this.mockMvc.perform(post("http://localhost:8080/szs/scrap")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -70,7 +70,7 @@ class ScrapControllerTest {
         String name = "이승환";
         String regNo = "eeXoFpR60+NfeIpj4aXnWw==";
 
-        HashMap<String, String> token = this.jwtTokenUtil.createToken(name, regNo);
+        String token = this.jwtManager.generateToken(name, regNo);
 
         this.mockMvc.perform(post("http://localhost:8080/szs/scrap")
                         .contentType(MediaType.APPLICATION_JSON)

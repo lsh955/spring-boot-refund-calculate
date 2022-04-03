@@ -34,7 +34,7 @@ public class AccountController {
      */
     @ApiOperation(value = "회원가입", notes = "입력에 따른 사용자 정보등록")
     @PostMapping(value = "/signup", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<AccountStatus> signup(@RequestBody UserDto userDto) throws Exception {
+    public ResponseEntity<AccountStatus> signup(@RequestBody UserDto userDto) {
 
         final AccountStatus accountStatus = accountService.addSignup(
                 userDto.getUserId(),
@@ -54,7 +54,7 @@ public class AccountController {
      */
     @ApiOperation(value = "로그인", notes = "사용자검증에 따른 토큰발급")
     @PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<JwtTokenDto> login(@RequestBody UserDto userDto) throws Exception {
+    public ResponseEntity<JwtTokenDto> login(@RequestBody UserDto userDto) {
 
         final JwtTokenDto jwtTokenDto = accountService.login(
                 userDto.getUserId(),
@@ -72,7 +72,7 @@ public class AccountController {
      */
     @ApiOperation(value = "개인정보 보기", notes = "토큰정보에 따른 사용자 정보조회")
     @PostMapping(value = "/me", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<UserDto> member(@RequestBody JwtTokenDto jwtTokenDto) throws Exception {
+    public ResponseEntity<UserDto> member(@RequestBody JwtTokenDto jwtTokenDto) {
 
         final UserDto userDto = accountService.readMember(
                 jwtTokenDto.getToken()

@@ -49,7 +49,7 @@ class AccountServiceImpTest {
     @Mock
     private AESCryptoUtil aesCryptoUtil;
     @Mock
-    private JwtTokenUtil jwtTokenUtil;
+    private JwtManager jwtManager;
 
     private User userBySave() {
         return User.builder()
@@ -60,21 +60,13 @@ class AccountServiceImpTest {
                 .build();
     }
 
-    private HashMap<String, String> tokenByCreate() {
-        final HashMap<String, String> tokenMap = new HashMap<>();
-        tokenMap.put("token", "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyZWdObyI6Ijg2MDgyNC0xNjU1MDY4IiwibmFtZSI6Iu2Zjeq4uOuPmSIsImlhdCI6MTY0Nzc0NzQ4NCwiZXhwIjoxNjQ3NzQ5Mjg0fQ.uyIN2Sz88HOqUaa-M5th99uP-NIPsl2fI4ssgfkNPOs");
-
-        return tokenMap;
+    private String tokenByCreate() {
+        return "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyZWdObyI6Ijg2MDgyNC0xNjU1MDY4IiwibmFtZSI6Iu2Zjeq4uOuPmSIsImlhdCI6MTY0Nzc0NzQ4NCwiZXhwIjoxNjQ3NzQ5Mjg0fQ.uyIN2Sz88HOqUaa-M5th99uP-NIPsl2fI4ssgfkNPOs";
     }
 
-    private HashMap<String, String> tokenByDecoder() {
-        final HashMap<String, String> result = new HashMap<>();
-        result.put("name", "홍길동");
-        result.put("regNo", "860824-1655068");
-        result.put("exp", "1647749284");
-        result.put("iat", "1647747484");
 
-        return result;
+    private JwtManager.TokenInfo tokenByDecoder() {
+        return new JwtManager.TokenInfo("홍길동", "ldU2Z5ZlRuwPfYA1YfvOTw==", new Date(), new Date());
     }
 
     @Test
@@ -179,11 +171,11 @@ class AccountServiceImpTest {
     public void 로그인했을때_정상_토크발급() throws Exception {
         // given
         final User user = userBySave();
-        final HashMap<String, String> tokenMap = tokenByCreate();
+        final String token = tokenByCreate();
 
         doReturn(Optional.of(user)).when(userRepository).findByUserId(userId);
         doReturn(decryptdPassword).when(aesCryptoUtil).decrypt(userBySave().getPassword());
-        doReturn(tokenMap).when(jwtTokenUtil).createToken(userBySave().getName(), userBySave().getRegNo());
+        doReturn(token).when(jwtManager).generateToken(userBySave().getName(), userBySave().getRegNo());
 
         // when
         final JwtTokenDto result = accountServiceImp.login(userId, decryptdPassword);
@@ -205,8 +197,7 @@ class AccountServiceImpTest {
         tokenMap.put("exp", "1647749284");
         tokenMap.put("iat", "1647747484");
 
-        doReturn(tokenMap).when(jwtTokenUtil).decoderToken("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyZWdObyI6IjkyMTEwOC0xNTgyODE2IiwibmFtZSI6IuydtOyKue2ZmCIsImlhdCI6MTY0Nzc0NzQ4NCwiZXhwIjoxNjQ3NzQ5Mjg0fQ.TOtRqmykjAgPbtpNO5nMXrntVrdX2AFeG0Y2DINBagE");
-        doReturn("U99p1DIkTEpARHoYcosMfA==").when(aesCryptoUtil).encrypt(tokenMap.get("regNo"));
+        doReturn(new JwtManager.TokenInfo("이승환", "U99p1DIkTEpARHoYcosMfA==", new Date(), new Date())).when(jwtManager).getTokenInfo("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyZWdObyI6IjkyMTEwOC0xNTgyODE2IiwibmFtZSI6IuydtOyKue2ZmCIsImlhdCI6MTY0Nzc0NzQ4NCwiZXhwIjoxNjQ3NzQ5Mjg0fQ.TOtRqmykjAgPbtpNO5nMXrntVrdX2AFeG0Y2DINBagE");
         doReturn(Optional.empty()).when(userRepository).findByNameAndRegNo(tokenMap.get("name"), "U99p1DIkTEpARHoYcosMfA==");
 
         // when
@@ -222,16 +213,15 @@ class AccountServiceImpTest {
     @DisplayName("개인정보보기에서 가입된 유자가 있을시")
     public void 개인정보보기에서_가입된_유자가_있을시() throws Exception {
         // given
-        final HashMap<String, String> tokenMap = tokenByCreate();
-        final HashMap<String, String> strToken = tokenByDecoder();
+        final String token = tokenByCreate();
+        final JwtManager.TokenInfo strToken = tokenByDecoder();
         final User user = userBySave();
 
-        doReturn(strToken).when(jwtTokenUtil).decoderToken(tokenMap.get("token"));
-        doReturn(encryptedRegNo).when(aesCryptoUtil).encrypt(strToken.get("regNo"));
-        doReturn(Optional.of(user)).when(userRepository).findByNameAndRegNo(strToken.get("name"), encryptedRegNo);
+        doReturn(strToken).when(jwtManager).getTokenInfo(token);
+        doReturn(Optional.of(user)).when(userRepository).findByNameAndRegNo("홍길동", "ldU2Z5ZlRuwPfYA1YfvOTw==");
 
         // when
-        final UserDto result = accountServiceImp.readMember(tokenMap.get("token"));
+        final UserDto result = accountServiceImp.readMember(token);
 
         // then
         assertThat(result.getUserId()).isEqualTo("1");

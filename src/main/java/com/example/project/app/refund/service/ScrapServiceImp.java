@@ -4,7 +4,7 @@ import com.example.project.app.account.domain.User;
 import com.example.project.app.account.domain.UserRepository;
 import com.example.project.app.common.enums.ErrorCode;
 import com.example.project.app.common.util.AESCryptoUtil;
-import com.example.project.app.common.util.JwtTokenUtil;
+import com.example.project.app.common.util.JwtManager;
 import com.example.project.app.refund.domain.ScrapListRepository;
 import com.example.project.app.refund.domain.ScrapOneRepository;
 import com.example.project.app.refund.domain.ScrapResponseRepository;
@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import java.util.HashMap;
 import java.util.Optional;
 
 /**
@@ -35,8 +34,8 @@ public class ScrapServiceImp implements ScrapService {
     private final ScrapTwoRepository scrapTwoRepository;
     private final ScrapResponseRepository scrapResponseRepository;
 
+    private final JwtManager jwtManager;
     private final AESCryptoUtil aesCryptoUtil;
-    private final JwtTokenUtil jwtTokenUtil;
 
     private final WebClient webClient;
 
@@ -49,13 +48,10 @@ public class ScrapServiceImp implements ScrapService {
     @Override
     public ScrapDto getSaveByScrap(final String token) throws Exception {
         // Token 검증
-        final HashMap<String, String> strToken = this.jwtTokenUtil.decoderToken(token);
-
-        // 주민등록번호 암호화
-        final String encryptRegNo = this.aesCryptoUtil.encrypt(strToken.get("regNo"));
+        final JwtManager.TokenInfo strToken = this.jwtManager.getTokenInfo(token);
 
         // 사용자 불러오기
-        final User user = getUser(strToken.get("name"), encryptRegNo);
+        final User user = getUser(strToken.getName(), strToken.getRegNo());
 
         // 공급자로 부터의 데이터 조회
         final ScrapDto scrapDto = getClientScrap(strToken);
@@ -74,12 +70,20 @@ public class ScrapServiceImp implements ScrapService {
      * @param strToken
      * @return
      */
-    public ScrapDto getClientScrap(final HashMap<String, String> strToken) {
+    public ScrapDto getClientScrap(final JwtManager.TokenInfo strToken) {
+        String decryptRegNo = aesCryptoUtil.decrypt(strToken.getRegNo());
+
+        JwtManager.TokenInfo result = JwtManager.TokenInfo.builder()
+                .name(strToken.getName())
+                .regNo(decryptRegNo)
+                .issuedAt(strToken.getIssuedAt())
+                .expire(strToken.getExpire())
+                .build();
 
         return webClient.mutate().build()
                 .post()
                 .uri("https://codetest.3o3.co.kr/scrap/")
-                .bodyValue(new JSONObject(strToken).toString())
+                .bodyValue(new JSONObject(result).toString())
                 .retrieve() // memory leak 가능성 때문에 가급적 retrieve 를 사용하기를 권고
                 .bodyToMono(ScrapDto.class)
                 .block();

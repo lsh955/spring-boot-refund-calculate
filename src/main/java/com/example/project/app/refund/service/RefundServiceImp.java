@@ -2,8 +2,7 @@ package com.example.project.app.refund.service;
 
 import com.example.project.app.account.domain.UserRepository;
 import com.example.project.app.common.enums.ErrorCode;
-import com.example.project.app.common.util.AESCryptoUtil;
-import com.example.project.app.common.util.JwtTokenUtil;
+import com.example.project.app.common.util.JwtManager;
 import com.example.project.app.refund.domain.ScrapOneRepository;
 import com.example.project.app.refund.domain.ScrapTwoRepository;
 import com.example.project.app.refund.dto.RefundDto;
@@ -28,8 +27,7 @@ public class RefundServiceImp implements RefundService {
     private final ScrapOneRepository scrapOneRepository;
     private final ScrapTwoRepository scrapTwoRepository;
 
-    private final AESCryptoUtil aesCryptoUtil;
-    private final JwtTokenUtil jwtTokenUtil;
+    private final JwtManager jwtManager;
 
     /**
      * 환급액 계산
@@ -40,13 +38,10 @@ public class RefundServiceImp implements RefundService {
     @Override
     public RefundDto getRefund(final String token) throws Exception {
         // Token 검증
-        final HashMap<String, String> strToken = this.jwtTokenUtil.decoderToken(token);
-
-        // 주민등록번호 암호화
-        final String encryptRegNo = this.aesCryptoUtil.encrypt(strToken.get("regNo"));
+        final JwtManager.TokenInfo strToken = this.jwtManager.getTokenInfo(token);
 
         // 사용자 불러오기
-        final Long userIdx = getUserIdx(strToken.get("name"), encryptRegNo);
+        final Long userIdx = getUserIdx(strToken.getName(), strToken.getRegNo());
 
         // 총지급액 불러오기
         final Long totalPay = getFindByTotalPay(userIdx);
@@ -59,7 +54,7 @@ public class RefundServiceImp implements RefundService {
         final double taxAmount = getTaxAmount(totalUsed);
 
         final HashMap<String, Object> refunds = new HashMap<>();
-        refunds.put("이름", strToken.get("name"));
+        refunds.put("이름", strToken.getName());
         refunds.put("한도", taxCredit);
         refunds.put("공제액", taxAmount);
         refunds.put("환급액", Math.min(taxCredit, taxAmount));
