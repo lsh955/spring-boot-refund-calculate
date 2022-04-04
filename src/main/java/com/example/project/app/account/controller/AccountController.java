@@ -7,10 +7,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author 이승환
@@ -66,16 +63,14 @@ public class AccountController {
     /**
      * 개인정보 보기
      *
-     * @param jwtTokenDto User Token
-     * @return 개인정보
+     * @param token User Token
+     * @return  개인정보
      */
     @ApiOperation(value = "개인정보 보기", notes = "토큰정보에 따른 사용자 정보조회")
-    @PostMapping(value = "/me", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<UserDto> member(@RequestBody JwtTokenDto jwtTokenDto) {
+    @GetMapping(value = "/me")
+    public ResponseEntity<UserDto> member(@RequestHeader("Authorization") String token) {
 
-        final UserDto result = accountService.readMember(
-                jwtTokenDto.getToken()
-        );
+        final UserDto result = accountService.readMember(token);
 
         return ResponseEntity.ok(result);
     }

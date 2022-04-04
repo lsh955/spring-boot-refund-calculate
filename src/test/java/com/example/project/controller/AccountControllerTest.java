@@ -3,7 +3,6 @@ package com.example.project.controller;
 import com.example.project.app.account.controller.AccountController;
 import com.example.project.app.account.dto.UserDto;
 import com.example.project.app.account.service.AccountServiceImp;
-import com.example.project.app.common.dto.JwtTokenDto;
 import com.example.project.app.common.enums.ErrorCode;
 import com.example.project.exception.CustomException;
 import com.example.project.exception.GlobalExceptionHandler;
@@ -15,6 +14,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -185,12 +185,10 @@ class AccountControllerTest {
 
         // when
         final ResultActions resultActions = mockMvc.perform(
-                MockMvcRequestBuilders.post(url)
-                        .content(gson.toJson(JwtTokenDto.builder()
-                                .token("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyZWdObyI6IjkyMTEwOC0xNTgyODE2IiwibmFtZSI6IuydtOyKue2ZmCIsImlhdCI6MTY0Nzc0NzQ4NCwiZXhwIjoxNjQ3NzQ5Mjg0fQ.TOtRqmykjAgPbtpNO5nMXrntVrdX2AFeG0Y2DINBagE")
-                                .build())
+                MockMvcRequestBuilders.get(url)
+                        .header(HttpHeaders.AUTHORIZATION,
+                                "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyZWdObyI6IjkyMTEwOC0xNTgyODE2IiwibmFtZSI6IuydtOyKue2ZmCIsImlhdCI6MTY0Nzc0NzQ4NCwiZXhwIjoxNjQ3NzQ5Mjg0fQ.TOtRqmykjAgPbtpNO5nMXrntVrdX2AFeG0Y2DINBagE"
                         )
-                        .contentType(MediaType.APPLICATION_JSON)
         );
 
         // then
@@ -205,12 +203,10 @@ class AccountControllerTest {
 
         // when
         final ResultActions resultActions = mockMvc.perform(
-                MockMvcRequestBuilders.post(url)
-                        .content(gson.toJson(JwtTokenDto.builder()
-                                .token("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyZWdObyI6Ijg2MDgyNC0xNjU1MDY4IiwibmFtZSI6Iu2Zjeq4uOuPmSIsImlhdCI6MTY0Nzc0NzQ4NCwiZXhwIjoxNjQ3NzQ5Mjg0fQ.uyIN2Sz88HOqUaa-M5th99uP-NIPsl2fI4ssgfkNPOs")
-                                .build())
+                MockMvcRequestBuilders.get(url)
+                        .header(HttpHeaders.AUTHORIZATION,
+                                "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyZWdObyI6Ijg2MDgyNC0xNjU1MDY4IiwibmFtZSI6Iu2Zjeq4uOuPmSIsImlhdCI6MTY0Nzc0NzQ4NCwiZXhwIjoxNjQ3NzQ5Mjg0fQ.uyIN2Sz88HOqUaa-M5th99uP-NIPsl2fI4ssgfkNPOs"
                         )
-                        .contentType(MediaType.APPLICATION_JSON)
         );
 
         // then

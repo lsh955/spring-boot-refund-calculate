@@ -195,7 +195,7 @@ class AccountServiceImpTest {
         tokenMap.put("exp", "1647749284");
         tokenMap.put("iat", "1647747484");
 
-        doReturn(new JwtManager.TokenInfo("이승환", "U99p1DIkTEpARHoYcosMfA==", new Date(), new Date())).when(jwtManager).getTokenInfo("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyZWdObyI6IjkyMTEwOC0xNTgyODE2IiwibmFtZSI6IuydtOyKue2ZmCIsImlhdCI6MTY0Nzc0NzQ4NCwiZXhwIjoxNjQ3NzQ5Mjg0fQ.TOtRqmykjAgPbtpNO5nMXrntVrdX2AFeG0Y2DINBagE");
+        doReturn(new JwtManager.TokenInfo("이승환", "U99p1DIkTEpARHoYcosMfA==", new Date(), new Date())).when(jwtManager).getTokenInfo("iOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyZWdObyI6IjkyMTEwOC0xNTgyODE2IiwibmFtZSI6IuydtOyKue2ZmCIsImlhdCI6MTY0Nzc0NzQ4NCwiZXhwIjoxNjQ3NzQ5Mjg0fQ.TOtRqmykjAgPbtpNO5nMXrntVrdX2AFeG0Y2DINBagE");
         doReturn(Optional.empty()).when(userRepository).findByNameAndRegNo(tokenMap.get("name"), "U99p1DIkTEpARHoYcosMfA==");
 
         // when
@@ -215,7 +215,7 @@ class AccountServiceImpTest {
         final JwtManager.TokenInfo strToken = tokenByDecoder();
         final User user = userBySave();
 
-        doReturn(strToken).when(jwtManager).getTokenInfo(token);
+        doReturn(strToken).when(jwtManager).getTokenInfo("iOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyZWdObyI6Ijg2MDgyNC0xNjU1MDY4IiwibmFtZSI6Iu2Zjeq4uOuPmSIsImlhdCI6MTY0Nzc0NzQ4NCwiZXhwIjoxNjQ3NzQ5Mjg0fQ.uyIN2Sz88HOqUaa-M5th99uP-NIPsl2fI4ssgfkNPOs");
         doReturn(Optional.of(user)).when(userRepository).findByNameAndRegNo("홍길동", "ldU2Z5ZlRuwPfYA1YfvOTw==");
 
         // when
