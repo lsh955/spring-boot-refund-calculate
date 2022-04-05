@@ -69,14 +69,14 @@ class ScrapServiceImpTest {
     }
 
     private HashMap<String, String> tokenByCreate() {
-        final HashMap<String, String> tokenMap = new HashMap<>();
+        HashMap<String, String> tokenMap = new HashMap<>();
         tokenMap.put("token", "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyZWdObyI6Ijg2MDgyNC0xNjU1MDY4IiwibmFtZSI6Iu2Zjeq4uOuPmSIsImlhdCI6MTY0Nzc0NzQ4NCwiZXhwIjoxNjQ3NzQ5Mjg0fQ.uyIN2Sz88HOqUaa-M5th99uP-NIPsl2fI4ssgfkNPOs");
 
         return tokenMap;
     }
 
     private HashMap<String, String> tokenByDecoder() {
-        final HashMap<String, String> result = new HashMap<>();
+        HashMap<String, String> result = new HashMap<>();
         result.put("name", "홍길동");
         result.put("regNo", "860824-1655068");
         result.put("exp", "1647749284");
@@ -139,7 +139,7 @@ class ScrapServiceImpTest {
     @DisplayName("가입한 유저의 회원정보 데이터가 존재하지 않을경우")
     public void 가입한_유저의_회원정보_데이터가_존재하지_않을경우() {
         // given
-        final HashMap<String, String> tokenMap = new HashMap<>();
+        HashMap<String, String> tokenMap = new HashMap<>();
         tokenMap.put("name", "이승환");
         tokenMap.put("regNo", "921108-1582816");
         tokenMap.put("exp", "1647749284");
@@ -151,7 +151,7 @@ class ScrapServiceImpTest {
         doReturn(Optional.empty()).when(userRepository).findByNameAndRegNo(tokenMap.get("name"), "U99p1DIkTEpARHoYcosMfA==");
 
         // when
-        final CustomException result = assertThrows(CustomException.class,
+        CustomException result = assertThrows(CustomException.class,
                 () -> scrapServiceImp.getSaveByScrap("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyZWdObyI6IjkyMTEwOC0xNTgyODE2IiwibmFtZSI6IuydtOyKue2ZmCIsImlhdCI6MTY0Nzc0NzQ4NCwiZXhwIjoxNjQ3NzQ5Mjg0fQ.TOtRqmykjAgPbtpNO5nMXrntVrdX2AFeG0Y2DINBagE")
         );
 
@@ -166,9 +166,9 @@ class ScrapServiceImpTest {
     @DisplayName("가입한 유저의 회원정보로 WebClient 요청이 이루어 지는가")
     public void 가입한_유저의_회원정보로_WebClient_요청이_이루어_지는가() {
         // given
-        final HashMap<String, String> tokenMap = tokenByCreate();
-        final HashMap<String, String> strToken = tokenByDecoder();
-        final User user = userBySave();
+        HashMap<String, String> tokenMap = tokenByCreate();
+        HashMap<String, String> strToken = tokenByDecoder();
+        User user = userBySave();
 
         doReturn(strToken).when(jwtManager).getTokenInfo(tokenMap.get("token"));
         doReturn("ldU2Z5ZlRuwPfYA1YfvOTw==").when(aesCryptoUtil).encrypt("860824-1655068");

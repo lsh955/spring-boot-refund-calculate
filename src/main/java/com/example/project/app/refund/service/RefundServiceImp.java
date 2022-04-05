@@ -36,24 +36,24 @@ public class RefundServiceImp implements RefundService {
      * @return 환금액 결과
      */
     @Override
-    public RefundDto getRefund(final String token) {
+    public RefundDto getRefund(String token) {
         // Token 검증
-        final JwtManager.TokenInfo strToken = this.jwtManager.getTokenInfo(token);
+        JwtManager.TokenInfo strToken = this.jwtManager.getTokenInfo(token);
 
         // 사용자 불러오기
-        final Long userIdx = getUserIdx(strToken.getName(), strToken.getRegNo());
+        Long userIdx = getUserIdx(strToken.getName(), strToken.getRegNo());
 
         // 총지급액 불러오기
-        final Long totalPay = getFindByTotalPay(userIdx);
+        Long totalPay = getFindByTotalPay(userIdx);
         // 총사용금액 불러오기
-        final Long totalUsed = getFindByTotalUsed(userIdx);
+        Long totalUsed = getFindByTotalUsed(userIdx);
 
         // 세액공제 한도계산
-        final double taxCredit = getTaxCredit(totalPay);
+        double taxCredit = getTaxCredit(totalPay);
         // 소득세액 공제계산
-        final double taxAmount = getTaxAmount(totalUsed);
+        double taxAmount = getTaxAmount(totalUsed);
 
-        final HashMap<String, Object> refunds = new HashMap<>();
+        HashMap<String, Object> refunds = new HashMap<>();
         refunds.put("이름", strToken.getName());
         refunds.put("한도", taxCredit);
         refunds.put("공제액", taxAmount);
@@ -74,8 +74,8 @@ public class RefundServiceImp implements RefundService {
      * @param regNo 주민등록번호
      * @return
      */
-    public Long getUserIdx(final String name, final String regNo) {
-        final Optional<Long> result = this.userRepository.findByUserIdx(name, regNo);
+    public Long getUserIdx(String name, String regNo) {
+        Optional<Long> result = this.userRepository.findByUserIdx(name, regNo);
 
         return result.orElseThrow(() ->
                 new CustomException(ErrorCode.MEMBER_NOT_FOUND)
@@ -88,8 +88,8 @@ public class RefundServiceImp implements RefundService {
      * @param userIdx 사용자 키값
      * @return
      */
-    public Long getFindByTotalPay(final Long userIdx) {
-        final Optional<Long> result = scrapOneRepository.findByTotalPay(userIdx);
+    public Long getFindByTotalPay(Long userIdx) {
+        Optional<Long> result = scrapOneRepository.findByTotalPay(userIdx);
 
         return result.orElseThrow(() ->
                 new CustomException(ErrorCode.NO_SCRAP_DATA)
@@ -102,8 +102,8 @@ public class RefundServiceImp implements RefundService {
      * @param userIdx 사용자 키값
      * @return
      */
-    public Long getFindByTotalUsed(final Long userIdx) {
-        final Optional<Long> result = scrapTwoRepository.findByTotalUsed(userIdx);
+    public Long getFindByTotalUsed(Long userIdx) {
+        Optional<Long> result = scrapTwoRepository.findByTotalUsed(userIdx);
 
         return result.orElseThrow(() ->
                 new CustomException(ErrorCode.NO_SCRAP_DATA)
@@ -116,7 +116,7 @@ public class RefundServiceImp implements RefundService {
      * @param totalPay 총급여액(총지급액)
      * @return 기준별 요건에 맞는 한도결과
      */
-    public double getTaxCredit(final double totalPay) {
+    public double getTaxCredit(double totalPay) {
         double taxCredit = 0;   // 초기화
 
         // 3,300만원 이하 일 경우
@@ -150,7 +150,7 @@ public class RefundServiceImp implements RefundService {
      * @param totalUsed 산출세액
      * @return 기준별 요건에 맞는 공제결과
      */
-    public double getTaxAmount(final double totalUsed) {
+    public double getTaxAmount(double totalUsed) {
         double taxAmount = 0;   // 초기화
 
         // 130만원 이하 일 경우

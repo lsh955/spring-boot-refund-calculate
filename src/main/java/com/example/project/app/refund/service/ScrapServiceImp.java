@@ -46,15 +46,15 @@ public class ScrapServiceImp implements ScrapService {
      * @return 스크랩조회 결과
      */
     @Override
-    public ScrapDto getSaveByScrap(final String token) {
+    public ScrapDto getSaveByScrap(String token) {
         // Token 검증
-        final JwtManager.TokenInfo strToken = this.jwtManager.getTokenInfo(token);
+        JwtManager.TokenInfo strToken = this.jwtManager.getTokenInfo(token);
 
         // 사용자 불러오기
-        final User user = getUser(strToken.getName(), strToken.getRegNo());
+        User user = getUser(strToken.getName(), strToken.getRegNo());
 
         // 공급자로 부터의 데이터 조회
-        final ScrapDto scrapDto = getClientScrap(strToken);
+        ScrapDto scrapDto = getClientScrap(strToken);
 
         saveScrapList(scrapDto, user);      // 리스트 결과저장
         saveScrapOne(scrapDto, user);       // scrap001 결과저장
@@ -70,7 +70,7 @@ public class ScrapServiceImp implements ScrapService {
      * @param strToken
      * @return
      */
-    public ScrapDto getClientScrap(final JwtManager.TokenInfo strToken) {
+    public ScrapDto getClientScrap(JwtManager.TokenInfo strToken) {
         String decryptRegNo = aesCryptoUtil.decrypt(strToken.getRegNo());
 
         JwtManager.TokenInfo result = JwtManager.TokenInfo.builder()
@@ -96,8 +96,8 @@ public class ScrapServiceImp implements ScrapService {
      * @param regNo
      * @return
      */
-    public User getUser(final String name, final String regNo) {
-        final Optional<User> result = this.userRepository.findByNameAndRegNo(name, regNo);
+    public User getUser(String name, String regNo) {
+        Optional<User> result = this.userRepository.findByNameAndRegNo(name, regNo);
 
         return result.orElseThrow(() ->
                 new CustomException(ErrorCode.MEMBER_NOT_FOUND)
@@ -111,7 +111,7 @@ public class ScrapServiceImp implements ScrapService {
      * @param user
      */
     @Transactional
-    public void saveScrapList(final ScrapDto scrapDto, final User user) {
+    public void saveScrapList(ScrapDto scrapDto, User user) {
         this.scrapListRepository.save(scrapDto.getScrapListDto().toEntity(user));
     }
 
@@ -122,7 +122,7 @@ public class ScrapServiceImp implements ScrapService {
      * @param user
      */
     @Transactional
-    public void saveScrapOne(final ScrapDto scrapDto, final User user) {
+    public void saveScrapOne(ScrapDto scrapDto, User user) {
         for (ScrapDto.ScrapOneDto result : scrapDto.getScrapListDto().getScrapOneDto())
             this.scrapOneRepository.save(result.toEntity(user));
     }
@@ -134,7 +134,7 @@ public class ScrapServiceImp implements ScrapService {
      * @param user
      */
     @Transactional
-    public void saveScrapTwo(final ScrapDto scrapDto, final User user) {
+    public void saveScrapTwo(ScrapDto scrapDto, User user) {
         for (ScrapDto.ScrapTwoDto result : scrapDto.getScrapListDto().getScrapTwoDto())
             this.scrapTwoRepository.save(result.toEntity(user));
     }
@@ -146,7 +146,7 @@ public class ScrapServiceImp implements ScrapService {
      * @param user
      */
     @Transactional
-    public void saveScrapResponse(final ScrapDto scrapDto, final User user) {
+    public void saveScrapResponse(ScrapDto scrapDto, User user) {
         this.scrapResponseRepository.save(scrapDto.toEntity(user));
     }
 }

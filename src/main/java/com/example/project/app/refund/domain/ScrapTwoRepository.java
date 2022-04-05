@@ -19,5 +19,5 @@ public interface ScrapTwoRepository extends JpaRepository<ScrapTwo, Long> {
                     "	WHERE user_idx = ?1",
             nativeQuery = true
     )
-    Optional<Long> findByTotalUsed(final Long userId);
+    Optional<Long> findByTotalUsed(Long userId);
 }

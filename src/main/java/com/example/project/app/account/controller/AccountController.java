@@ -5,6 +5,7 @@ import com.example.project.app.account.service.AccountService;
 import com.example.project.app.common.dto.JwtTokenDto;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
  * <p>
  * 계정에 관련된 Controller
  */
+@Slf4j
 @RestController
 @RequestMapping(value = "/szs", produces = MediaType.APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
@@ -32,7 +34,7 @@ public class AccountController {
     @PostMapping(value = "/signup", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserDto> signup(@RequestBody UserDto userDto) {
 
-        final UserDto result = accountService.addSignup(
+        UserDto result = accountService.addSignup(
                 userDto.getUserId(),
                 userDto.getPassword(),
                 userDto.getName(),
@@ -52,7 +54,7 @@ public class AccountController {
     @PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<JwtTokenDto> login(@RequestBody UserDto userDto) {
 
-        final JwtTokenDto result = accountService.login(
+        JwtTokenDto result = accountService.login(
                 userDto.getUserId(),
                 userDto.getPassword()
         );
@@ -70,7 +72,7 @@ public class AccountController {
     @GetMapping(value = "/me")
     public ResponseEntity<UserDto> member(@RequestHeader("Authorization") String token) {
 
-        final UserDto result = accountService.readMember(token);
+        UserDto result = accountService.readMember(token);
 
         return ResponseEntity.ok(result);
     }

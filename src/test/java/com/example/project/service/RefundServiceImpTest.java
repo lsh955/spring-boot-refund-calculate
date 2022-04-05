@@ -60,7 +60,7 @@ class RefundServiceImpTest {
 
     @Test
     @DisplayName(value = "환급액계산 성공(가입한 유저이며, 스크랩조회를 했을 시)")
-    public void REFUND_SUCCESS_TEST() throws Exception {
+    public void REFUND_SUCCESS_TEST() {
         String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyZWdObyI6Ijg2MDgyNC0xNjU1MDY4IiwibmFtZSI6Iu2Zjeq4uOuPmSIsImlhdCI6MTY0NTc3MjE1MCwiZXhwIjoxNjQ1NzczOTUwfQ.e-QnSPAsOvklv01reQYqFkcNGOdTmw-F2bx770GJkVs";
 
         JwtTokenDto jwtTokenDto = JwtTokenDto.builder()
@@ -88,7 +88,7 @@ class RefundServiceImpTest {
 
     @Test
     @DisplayName(value = "환급액계산 실패(유저의 정보가 없을 시)")
-    public void REFUND_USER_DATA_FAILURE_TEST() throws Exception {
+    public void REFUND_USER_DATA_FAILURE_TEST() {
         String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyZWdObyI6IjEyMzQ1Ni03ODk0NTYiLCJuYW1lIjoi7J207Iq57ZmYIiwiaWF0IjoxNjQ1Njg1MzUyLCJleHAiOjE2NDU2ODcxNTJ9.fPSM4i2wBNyFnUGct8oToXXnCsTUhND7dB_DqIn_nB0";
 
         JwtTokenDto jwtTokenDto = JwtTokenDto.builder()

@@ -27,7 +27,7 @@ public class AESCryptoUtil {
      * @param text 암호화 하려는 평문 데이터
      * @return 암호화된 데이터
      */
-    public String encrypt(final String text) {
+    public String encrypt(String text) {
         String encrypt = null;
         try {
             Cipher cipher = Cipher.getInstance(alg);    // getInstance()에 Cipher 객체를 AES 암고리즘 암호화, CBC 블록암호운영방식, PKCS5 padding scheme로 초기화
@@ -56,7 +56,7 @@ public class AESCryptoUtil {
      * @param text 암호화된 데이터
      * @return 디코더된 데이터
      */
-    public String decrypt(final String text) {
+    public String decrypt(String text) {
         String decrypt = null;
         try {
             Cipher cipher = Cipher.getInstance(alg);    // getInstance()에 Cipher 객체를 AES 암호화, CBC operation mode, PKCS5 padding scheme로 초기화

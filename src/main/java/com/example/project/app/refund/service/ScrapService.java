@@ -8,5 +8,5 @@ import com.example.project.app.refund.dto.ScrapDto;
  */
 public interface ScrapService {
 
-    ScrapDto getSaveByScrap(final String token);
+    ScrapDto getSaveByScrap(String token);
 }

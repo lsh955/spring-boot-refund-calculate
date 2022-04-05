@@ -22,7 +22,7 @@ public class ErrorFormatter {
      * @param errorCode errorCode
      * @return ResponseEntity
      */
-    public static ResponseEntity<ErrorFormatter> toResponseEntity(final ErrorCode errorCode) {
+    public static ResponseEntity<ErrorFormatter> toResponseEntity(ErrorCode errorCode) {
         return ResponseEntity
                 .status(errorCode.getHttpStatus())
                 .body(ErrorFormatter.builder()

@@ -32,7 +32,7 @@ public class ScrapTwoRepositoryTest {
     @BeforeEach
     @DisplayName("초기 사용자정보 등록")
     public void beforeUserSave() {
-        final User result = User.builder()
+        User result = User.builder()
                 .userId("1")
                 .password("ELbbqFzaPvFZbCrhd61Mzw==")
                 .name("홍길동")
@@ -46,13 +46,13 @@ public class ScrapTwoRepositoryTest {
     @DisplayName("ScrapTwo 결과저장")
     public void ScrapTwoSave() {
         // given
-        final ScrapDto.ScrapTwoDto scrapTwoResult = ScrapDto.ScrapTwoDto.builder()
+        ScrapDto.ScrapTwoDto scrapTwoResult = ScrapDto.ScrapTwoDto.builder()
                 .totalUsed("2000000")
                 .taxAmount("산출세액")
                 .build();
 
         // when
-        final ScrapTwo result = this.scrapTwoRepository.save(scrapTwoResult.toEntity(this.user));
+        ScrapTwo result = this.scrapTwoRepository.save(scrapTwoResult.toEntity(this.user));
 
         // then
         assertThat(result.getScrapTwoIdx()).isNotNull();
@@ -65,14 +65,14 @@ public class ScrapTwoRepositoryTest {
     @DisplayName("사용자 시퀀스값에 따른 총사용금액 불러오기")
     public void findByTotalUsed() {
         // given
-        final ScrapDto.ScrapTwoDto scrapTwoResult = ScrapDto.ScrapTwoDto.builder()
+        ScrapDto.ScrapTwoDto scrapTwoResult = ScrapDto.ScrapTwoDto.builder()
                 .totalUsed("2000000")
                 .taxAmount("산출세액")
                 .build();
 
         // when
         this.scrapTwoRepository.save(scrapTwoResult.toEntity(this.user));
-        final Optional<Long> result = this.scrapTwoRepository.findByTotalUsed(this.user.getUserIdx());
+        Optional<Long> result = this.scrapTwoRepository.findByTotalUsed(this.user.getUserIdx());
 
         // then
         result.ifPresent(aLong -> assertThat(aLong).isEqualTo(2000000));

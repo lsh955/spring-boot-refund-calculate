@@ -9,9 +9,9 @@ import com.example.project.app.common.dto.JwtTokenDto;
  */
 public interface AccountService {
 
-    UserDto addSignup(final String userId, final String password, final String name, final String regNo);
+    UserDto addSignup(String userId, String password, String name, String regNo);
 
-    JwtTokenDto login(final String userId, final String password);
+    JwtTokenDto login(String userId, String password);
 
-    UserDto readMember(final String token);
+    UserDto readMember(String token);
 }

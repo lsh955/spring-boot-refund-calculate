@@ -32,7 +32,7 @@ public class ScrapOneRepositoryTest {
     @BeforeEach
     @DisplayName("초기 사용자정보 등록")
     public void beforeUserSave() {
-        final User result = User.builder()
+        User result = User.builder()
                 .userId("1")
                 .password("ELbbqFzaPvFZbCrhd61Mzw==")
                 .name("홍길동")
@@ -46,7 +46,7 @@ public class ScrapOneRepositoryTest {
     @DisplayName("ScrapOne 결과저장")
     public void ScrapOneSave() {
         // given
-        final ScrapDto.ScrapOneDto scrapOneResult = ScrapDto.ScrapOneDto.builder()
+        ScrapDto.ScrapOneDto scrapOneResult = ScrapDto.ScrapOneDto.builder()
                 .incomeDetails("급여")
                 .totalPay("24000000")
                 .startDate("2020.10.03")
@@ -58,7 +58,7 @@ public class ScrapOneRepositoryTest {
                 .build();
 
         // when
-        final ScrapOne result = this.scrapOneRepository.save(scrapOneResult.toEntity(this.user));
+        ScrapOne result = this.scrapOneRepository.save(scrapOneResult.toEntity(this.user));
 
         // then
         assertThat(result.getScrapOneIdx()).isNotNull();
@@ -77,7 +77,7 @@ public class ScrapOneRepositoryTest {
     @DisplayName("사용자 시퀀스값에 따른 총지급액 불러오기")
     public void findByTotalPay() {
         // given
-        final ScrapDto.ScrapOneDto scrapOneResult = ScrapDto.ScrapOneDto.builder()
+        ScrapDto.ScrapOneDto scrapOneResult = ScrapDto.ScrapOneDto.builder()
                 .incomeDetails("급여")
                 .totalPay("24000000")
                 .startDate("2020.10.03")
@@ -90,7 +90,7 @@ public class ScrapOneRepositoryTest {
 
         // when
         this.scrapOneRepository.save(scrapOneResult.toEntity(this.user));
-        final Optional<Long> result = this.scrapOneRepository.findByTotalPay(this.user.getUserIdx());
+        Optional<Long> result = this.scrapOneRepository.findByTotalPay(this.user.getUserIdx());
 
         // then
         result.ifPresent(aLong -> assertThat(aLong).isEqualTo(24000000));

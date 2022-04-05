@@ -42,10 +42,10 @@ public class AccountServiceImp implements AccountService {
      * @return 성공여부
      */
     @Override
-    public UserDto addSignup(final String userId, final String password, final String name, final String regNo) {
+    public UserDto addSignup(String userId, String password, String name, String regNo) {
         // 패스워드 암호화
-        final String encryptedRegNo = this.aesCryptoUtil.encrypt(regNo);
-        final String encryptedPassword = this.aesCryptoUtil.encrypt(password);
+        String encryptedRegNo = this.aesCryptoUtil.encrypt(regNo);
+        String encryptedPassword = this.aesCryptoUtil.encrypt(password);
 
         // 가입가능한 주민번호 체크(이름은 동명이인 있을 수 있으니 가입가능한 이름은 검사하지 않음)
         if (!this.joinAvailableRepository.existsByRegNo(encryptedRegNo))
@@ -56,7 +56,7 @@ public class AccountServiceImp implements AccountService {
             throw new CustomException(REG_NO_OVERLAP);
 
         // 사용자 등록
-        final User result = saveUser(userId, encryptedPassword, name, encryptedRegNo);
+        User result = saveUser(userId, encryptedPassword, name, encryptedRegNo);
 
         return UserDto.builder()
                 .userId(result.getUserId())
@@ -74,12 +74,12 @@ public class AccountServiceImp implements AccountService {
      * @return 성공여부
      */
     @Override
-    public JwtTokenDto login(final String userId, final String password) {
+    public JwtTokenDto login(String userId, String password) {
         // 사용자 아이디 기준으로 데이터 불러오기
-        final User user = getFindByUserId(userId);
+        User user = getFindByUserId(userId);
 
         // 패스워드 복호화
-        final String decryptedDbPassword = this.aesCryptoUtil.decrypt(user.getPassword());
+        String decryptedDbPassword = this.aesCryptoUtil.decrypt(user.getPassword());
 
         // 패스와드가 맞는지 검증
         if (!password.equals(decryptedDbPassword))
@@ -100,12 +100,12 @@ public class AccountServiceImp implements AccountService {
      * @return 성공여부
      */
     @Override
-    public UserDto readMember(final String token) {
+    public UserDto readMember(String token) {
         // Token 검증
-        final JwtManager.TokenInfo strToken = this.jwtManager.getTokenInfo(token.substring(7));
+        JwtManager.TokenInfo strToken = this.jwtManager.getTokenInfo(token.substring(7));
 
         // 사용자정보 불러오기
-        final User user = getFindByNameAndRegNo(strToken.getName(), strToken.getRegNo());
+        User user = getFindByNameAndRegNo(strToken.getName(), strToken.getRegNo());
 
         return UserDto.builder()
                 .userId(user.getUserId())
@@ -124,8 +124,9 @@ public class AccountServiceImp implements AccountService {
      * @param regNo    사용자주민번호
      */
     @Transactional
-    public User saveUser(final String userId, final String password, final String name, final String regNo) {
+    public User saveUser(String userId, String password, String name, String regNo) {
 
+        // TODO :: of 로 바꾸기
         return this.userRepository.save(User.builder()
                 .userId(userId)
                 .password(password)
@@ -141,8 +142,8 @@ public class AccountServiceImp implements AccountService {
      * @param userId 사용자아이디
      * @return 사용자정보
      */
-    public User getFindByUserId(final String userId) {
-        final Optional<User> result = this.userRepository.findByUserId(userId);
+    public User getFindByUserId(String userId) {
+        Optional<User> result = this.userRepository.findByUserId(userId);
 
         return result.orElseThrow(() ->
                 new CustomException(ErrorCode.MEMBER_NOT_FOUND)
@@ -156,8 +157,8 @@ public class AccountServiceImp implements AccountService {
      * @param regNo 사용자주민번호
      * @return 사용자정보
      */
-    public User getFindByNameAndRegNo(final String name, final String regNo) {
-        final Optional<User> result = this.userRepository.findByNameAndRegNo(name, regNo);
+    public User getFindByNameAndRegNo(String name, String regNo) {
+        Optional<User> result = this.userRepository.findByNameAndRegNo(name, regNo);
 
         return result.orElseThrow(() ->
                 new CustomException(ErrorCode.MEMBER_NOT_FOUND)

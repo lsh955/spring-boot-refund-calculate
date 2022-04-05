@@ -19,5 +19,5 @@ public interface ScrapOneRepository extends JpaRepository<ScrapOne, Long> {
                     "	WHERE user_idx = ?1",
             nativeQuery = true
     )
-    Optional<Long> findByTotalPay(final Long userId);
+    Optional<Long> findByTotalPay(Long userId);
 }

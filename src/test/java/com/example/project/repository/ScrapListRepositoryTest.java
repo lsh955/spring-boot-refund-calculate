@@ -30,7 +30,7 @@ public class ScrapListRepositoryTest {
     @BeforeEach
     @DisplayName("초기 사용자정보 등록")
     public void beforeUserSave() {
-        final User result = User.builder()
+        User result = User.builder()
                 .userId("1")
                 .password("ELbbqFzaPvFZbCrhd61Mzw==")
                 .name("홍길동")
@@ -44,14 +44,14 @@ public class ScrapListRepositoryTest {
     @DisplayName("ScrapList 결과저장")
     public void ScrapListSave() {
         // given
-        final ScrapDto.ScrapListDto scrapListResult = ScrapDto.ScrapListDto.builder()
+        ScrapDto.ScrapListDto scrapListResult = ScrapDto.ScrapListDto.builder()
                 .errMsg("errMsg")
                 .company("홍당무")
                 .svcCd("test01")
                 .build();
 
         // when
-        final ScrapList result = this.scrapListRepository.save(scrapListResult.toEntity(this.user));
+        ScrapList result = this.scrapListRepository.save(scrapListResult.toEntity(this.user));
 
         // then
         assertThat(result.getResultIdx()).isNotNull();

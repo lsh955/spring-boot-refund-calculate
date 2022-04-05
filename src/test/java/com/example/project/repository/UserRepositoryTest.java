@@ -51,7 +51,7 @@ public class UserRepositoryTest {
     @DisplayName("사용자 등록")
     public void UserSave() {
         // given
-        final User user = User.builder()
+        User user = User.builder()
                 .userId("2")
                 .password("ELbbqFzaPvFZbCrhd61Mzw==")
                 .name("김둘리")
@@ -59,7 +59,7 @@ public class UserRepositoryTest {
                 .build();
 
         // when
-        final User result = this.userRepository.save(user);
+        User result = this.userRepository.save(user);
 
         // then
         assertThat(result.getUserIdx()).isNotNull();
@@ -73,7 +73,7 @@ public class UserRepositoryTest {
     @DisplayName("사용자 아이디 기준으로 데이터 불러오기")
     public void findByUserId() {
         // given
-        final User user = User.builder()
+        User user = User.builder()
                 .userId("1")
                 .password("ELbbqFzaPvFZbCrhd61Mzw==")
                 .name("홍길동")
@@ -81,7 +81,7 @@ public class UserRepositoryTest {
                 .build();
 
         // when
-        final Optional<User> result = this.userRepository.findByUserId(user.getUserId());
+        Optional<User> result = this.userRepository.findByUserId(user.getUserId());
 
         // then
         if (result.isPresent()) {
@@ -97,7 +97,7 @@ public class UserRepositoryTest {
     @DisplayName("사용자 이름과 주민번호에 따른 시퀀스값 불러오기")
     public void findByUserIdx() {
         // given
-        final User user = User.builder()
+        User user = User.builder()
                 .userId("1")
                 .password("ELbbqFzaPvFZbCrhd61Mzw==")
                 .name("홍길동")
@@ -105,7 +105,7 @@ public class UserRepositoryTest {
                 .build();
 
         // when
-        final Optional<Long> result = this.userRepository.findByUserIdx(user.getName(), user.getRegNo());
+        Optional<Long> result = this.userRepository.findByUserIdx(user.getName(), user.getRegNo());
 
         // then
         if (result.isPresent())

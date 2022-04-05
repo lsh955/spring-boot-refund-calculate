@@ -30,7 +30,7 @@ public class ScrapResponseRepositoryTest {
     @BeforeEach
     @DisplayName("초기 사용자정보 등록")
     public void beforeUserSave() {
-        final User result = User.builder()
+        User result = User.builder()
                 .userId("1")
                 .password("ELbbqFzaPvFZbCrhd61Mzw==")
                 .name("홍길동")
@@ -44,7 +44,7 @@ public class ScrapResponseRepositoryTest {
     @DisplayName("ScrapResponse 결과저장")
     public void ScrapResponseSave() {
         // given
-        final ScrapDto scrapDtoResult = ScrapDto.builder()
+        ScrapDto scrapDtoResult = ScrapDto.builder()
                 .appVer("2021112501")
                 .hostNm("codetest")
                 .workerResDt("2022-03-18T09:21:14.099003")
@@ -52,7 +52,7 @@ public class ScrapResponseRepositoryTest {
                 .build();
 
         // when
-        final ScrapResponse result = this.scrapResponseRepository.save(scrapDtoResult.toEntity(this.user));
+        ScrapResponse result = this.scrapResponseRepository.save(scrapDtoResult.toEntity(this.user));
 
         // then
         assertThat(result.getResultIdx()).isNotNull();

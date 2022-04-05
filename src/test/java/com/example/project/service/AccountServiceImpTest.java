@@ -76,7 +76,7 @@ class AccountServiceImpTest {
         doReturn("ldU2Z5ZlRuwDDPfYA1YfvOTw==").when(aesCryptoUtil).encrypt(decryptdRegNo);
 
         // when
-        final CustomException result = assertThrows(CustomException.class,
+        CustomException result = assertThrows(CustomException.class,
                 () -> accountServiceImp.addSignup(userId, decryptdPassword, name, decryptdRegNo)
         );
 
@@ -89,14 +89,14 @@ class AccountServiceImpTest {
 
     @Test
     @DisplayName("가입한 회원정보에 주민증록번호가 있는지 중복체크")
-    public void RegNoFailureCheck() throws Exception {
+    public void RegNoFailureCheck() {
         // given
         doReturn(true).when(joinAvailableRepository).existsByRegNo(encryptedRegNo);
         doReturn(true).when(userRepository).existsByRegNo(encryptedRegNo);
         doReturn(encryptedRegNo).when(aesCryptoUtil).encrypt(decryptdRegNo);
 
         // when
-        final CustomException result = assertThrows(CustomException.class,
+        CustomException result = assertThrows(CustomException.class,
                 () -> accountServiceImp.addSignup(userId, decryptdPassword, name, decryptdRegNo)
         );
 
@@ -117,7 +117,7 @@ class AccountServiceImpTest {
         doReturn(userBySave()).when(userRepository).save(any(User.class));
 
         // when
-        final UserDto result = accountServiceImp.addSignup(userId, decryptdPassword, name, decryptdRegNo);
+        UserDto result = accountServiceImp.addSignup(userId, decryptdPassword, name, decryptdRegNo);
 
         // then
         assertThat(result.getUserId()).isNotNull();
@@ -133,7 +133,7 @@ class AccountServiceImpTest {
         doReturn(Optional.empty()).when(userRepository).findByUserId("2");
 
         // when
-        final CustomException result = assertThrows(CustomException.class,
+        CustomException result = assertThrows(CustomException.class,
                 () -> accountServiceImp.login("2", decryptdPassword)
         );
 
@@ -146,14 +146,14 @@ class AccountServiceImpTest {
 
     @Test
     @DisplayName("로그인했을때 입력된 패스워드가 틀려 검증이 실패했을시")
-    public void 로그인했을때_패스워드_검증이_실패했을시() throws Exception {
+    public void 로그인했을때_패스워드_검증이_실패했을시() {
         // given
-        final User user = userBySave();
+        User user = userBySave();
         doReturn(Optional.of(user)).when(userRepository).findByUserId(userId);
         doReturn(decryptdPassword).when(aesCryptoUtil).decrypt(userBySave().getPassword());
 
         // when
-        final CustomException result = assertThrows(CustomException.class,
+        CustomException result = assertThrows(CustomException.class,
                 () -> accountServiceImp.login(userId, "789")
         );
 
@@ -168,15 +168,15 @@ class AccountServiceImpTest {
     @DisplayName("로그인했을때 정상 토크발급")
     public void 로그인했을때_정상_토크발급() {
         // given
-        final User user = userBySave();
-        final String token = tokenByCreate();
+        User user = userBySave();
+        String token = tokenByCreate();
 
         doReturn(Optional.of(user)).when(userRepository).findByUserId(userId);
         doReturn(decryptdPassword).when(aesCryptoUtil).decrypt(userBySave().getPassword());
         doReturn(token).when(jwtManager).generateToken(userBySave().getName(), userBySave().getRegNo());
 
         // when
-        final JwtTokenDto result = accountServiceImp.login(userId, decryptdPassword);
+        JwtTokenDto result = accountServiceImp.login(userId, decryptdPassword);
 
         // then
         assertThat(result.getToken()).isNotNull();
@@ -187,9 +187,9 @@ class AccountServiceImpTest {
 
     @Test
     @DisplayName("개인정보보기에서 가입된 유자가 없을시")
-    public void 개인정보보기에서_가입된_유자가_없을시() throws Exception {
+    public void 개인정보보기에서_가입된_유자가_없을시() {
         // given
-        final HashMap<String, String> tokenMap = new HashMap<>();
+        HashMap<String, String> tokenMap = new HashMap<>();
         tokenMap.put("name", "이승환");
         tokenMap.put("regNo", "921108-1582816");
         tokenMap.put("exp", "1647749284");
@@ -199,7 +199,7 @@ class AccountServiceImpTest {
         doReturn(Optional.empty()).when(userRepository).findByNameAndRegNo(tokenMap.get("name"), "U99p1DIkTEpARHoYcosMfA==");
 
         // when
-        final CustomException result = assertThrows(CustomException.class,
+        CustomException result = assertThrows(CustomException.class,
                 () -> accountServiceImp.readMember("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyZWdObyI6IjkyMTEwOC0xNTgyODE2IiwibmFtZSI6IuydtOyKue2ZmCIsImlhdCI6MTY0Nzc0NzQ4NCwiZXhwIjoxNjQ3NzQ5Mjg0fQ.TOtRqmykjAgPbtpNO5nMXrntVrdX2AFeG0Y2DINBagE")
         );
 
@@ -211,15 +211,15 @@ class AccountServiceImpTest {
     @DisplayName("개인정보보기에서 가입된 유자가 있을시")
     public void 개인정보보기에서_가입된_유자가_있을시() {
         // given
-        final String token = tokenByCreate();
-        final JwtManager.TokenInfo strToken = tokenByDecoder();
-        final User user = userBySave();
+        String token = tokenByCreate();
+        JwtManager.TokenInfo strToken = tokenByDecoder();
+        User user = userBySave();
 
         doReturn(strToken).when(jwtManager).getTokenInfo("iOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyZWdObyI6Ijg2MDgyNC0xNjU1MDY4IiwibmFtZSI6Iu2Zjeq4uOuPmSIsImlhdCI6MTY0Nzc0NzQ4NCwiZXhwIjoxNjQ3NzQ5Mjg0fQ.uyIN2Sz88HOqUaa-M5th99uP-NIPsl2fI4ssgfkNPOs");
         doReturn(Optional.of(user)).when(userRepository).findByNameAndRegNo("홍길동", "ldU2Z5ZlRuwPfYA1YfvOTw==");
 
         // when
-        final UserDto result = accountServiceImp.readMember(token);
+        UserDto result = accountServiceImp.readMember(token);
 
         // then
         assertThat(result.getUserId()).isEqualTo("1");
