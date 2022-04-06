@@ -34,7 +34,7 @@ public class RefundController {
     @GetMapping(value = "/refund")
     public ResponseEntity<RefundDto> refund(@RequestHeader("Authorization") String token) {
 
-        RefundDto result = refundService.getRefund(token.substring(7));
+        RefundDto result = refundService.getRefund(token);
 
         return ResponseEntity.ok(result);
     }

@@ -44,7 +44,7 @@ public class JwtManager {
 
     // 토큰정보 return
     public TokenInfo getTokenInfo(String token) {
-        Claims body = getClaims(token);
+        Claims body = getClaims(token.substring(7));
 
         String username = body.get("name", String.class);
         String regNo = body.get("regNo", String.class);

@@ -34,7 +34,7 @@ public class ScrapController {
     @GetMapping(value = "/scrap")
     public ResponseEntity<ScrapDto> scrap(@RequestHeader("Authorization") String token) {
 
-        ScrapDto result = scrapService.getSaveByScrap(token.substring(7));
+        ScrapDto result = scrapService.getSaveByScrap(token);
 
         return ResponseEntity.ok(result);
     }

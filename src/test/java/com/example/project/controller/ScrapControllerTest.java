@@ -50,7 +50,7 @@ class ScrapControllerTest {
         String url = "/szs/scrap";
         doThrow(new CustomException(ErrorCode.MEMBER_NOT_FOUND))
                 .when(scrapServiceImp)
-                .getSaveByScrap("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyZWdObyI6ImxkVTJaNVpsUnV3RERQZllBMVlmdk9Udz09IiwibmFtZSI6IuydtOyKue2ZmCIsImlhdCI6MTY0Nzc0NzQ4NCwiZXhwIjoxNjQ3NzQ5Mjg0fQ.IwXAZqC2JqOZfHFXQg0cF2Fw9yYQou6y9YEeRDaRXOo");
+                .getSaveByScrap("Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyZWdObyI6ImxkVTJaNVpsUnV3RERQZllBMVlmdk9Udz09IiwibmFtZSI6IuydtOyKue2ZmCIsImlhdCI6MTY0Nzc0NzQ4NCwiZXhwIjoxNjQ3NzQ5Mjg0fQ.IwXAZqC2JqOZfHFXQg0cF2Fw9yYQou6y9YEeRDaRXOo");
 
         // when
         ResultActions resultActions = mockMvc.perform(
