@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
  * 스크랩에 관련된 Controller
  */
 @RestController
-@RequestMapping(value = "/szs", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/api", produces = MediaType.APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
 public class ScrapController {
 

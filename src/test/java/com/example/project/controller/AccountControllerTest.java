@@ -64,7 +64,7 @@ class AccountControllerTest {
     @DisplayName("가입가능한 주민등록번호가 없을시")
     public void 가입가능한_주민등록번호가_없을시() throws Exception {
         // given
-        String url = "/szs/signup";
+        String url = "/api/signup";
         doThrow(new CustomException(ErrorCode.UNABLE_TO_REG_NO))
                 .when(accountServiceImp)
                 .addSignup("2", "123", "이승환", "123456-789456");
@@ -84,7 +84,7 @@ class AccountControllerTest {
     @DisplayName("가입된 주민등록번호가 이미 있을시")
     public void 가입된_주민등록번호가_이미_있을시() throws Exception {
         // given
-        String url = "/szs/signup";
+        String url = "/api/signup";
         doThrow(new CustomException(ErrorCode.REG_NO_OVERLAP))
                 .when(accountServiceImp)
                 .addSignup("2", "123", "이승환", "860824-1655068");
@@ -104,7 +104,7 @@ class AccountControllerTest {
     @DisplayName("회원가입 성공")
     public void 회원가입_성공() throws Exception {
         // given
-        String url = "/szs/signup";
+        String url = "/api/signup";
 
         // when
         ResultActions resultActions = mockMvc.perform(
@@ -121,7 +121,7 @@ class AccountControllerTest {
     @DisplayName("로그인시 가입된 회원정보가 없을시")
     public void 로그인시_가입된_회원정보가_없을시() throws Exception {
         // given
-        String url = "/szs/login";
+        String url = "/api/login";
         doThrow(new CustomException(ErrorCode.MEMBER_NOT_FOUND))
                 .when(accountServiceImp)
                 .login("5555", "123");
@@ -141,7 +141,7 @@ class AccountControllerTest {
     @DisplayName("로그인시_등록된_패스워드가_틀렸을시")
     public void 로그인시_등록된_패스워드가_틀렸을시() throws Exception {
         // given
-        String url = "/szs/login";
+        String url = "/api/login";
         doThrow(new CustomException(ErrorCode.UNAUTHORIZED_PASSWORD))
                 .when(accountServiceImp)
                 .login("1", "7979");
@@ -161,7 +161,7 @@ class AccountControllerTest {
     @DisplayName("로그인 성공")
     public void 로그인_성공() throws Exception {
         // given
-        String url = "/szs/login";
+        String url = "/api/login";
 
         // when
         ResultActions resultActions = mockMvc.perform(
@@ -178,7 +178,7 @@ class AccountControllerTest {
     @DisplayName("개인정보열람시_사용자의_데이터가_없을시")
     public void 개인정보열람시_사용자의_데이터가_없을시() throws Exception {
         // given
-        String url = "/szs/me";
+        String url = "/api/me";
         doThrow(new CustomException(ErrorCode.MEMBER_NOT_FOUND))
                 .when(accountServiceImp)
                 .readMember("Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyZWdObyI6IjkyMTEwOC0xNTgyODE2IiwibmFtZSI6IuydtOyKue2ZmCIsImlhdCI6MTY0Nzc0NzQ4NCwiZXhwIjoxNjQ3NzQ5Mjg0fQ.TOtRqmykjAgPbtpNO5nMXrntVrdX2AFeG0Y2DINBagE");
@@ -199,7 +199,7 @@ class AccountControllerTest {
     @DisplayName("개인정보열람 성공")
     public void 개인정보열람_성공() throws Exception {
         // given
-        String url = "/szs/me";
+        String url = "/api/me";
 
         // when
         ResultActions resultActions = mockMvc.perform(

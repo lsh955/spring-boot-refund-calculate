@@ -23,7 +23,7 @@ public class SwaggerConfig {
         return new Docket(DocumentationType.SWAGGER_2)  // 2.0
                 .select()   // 스웨거에 의해 노출되는 end point 를 제어하는 하나의 방법
                 .apis(RequestHandlerSelectors.any())
-                .paths(PathSelectors.ant("/szs/**"))    // /szs/** 인 URL들만 필터링
+                .paths(PathSelectors.ant("/api/**"))    // /api/** 인 URL들만 필터링
                 .build()
                 .apiInfo(apiInfo());
     }

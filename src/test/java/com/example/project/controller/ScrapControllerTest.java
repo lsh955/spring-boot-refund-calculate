@@ -47,7 +47,7 @@ class ScrapControllerTest {
     @DisplayName(value = "사용자정보 스크랩 요청실패(가입된 정보가 없을 시)")
     public void SCRAP_FAILURE_TEST() throws Exception {
         // given
-        String url = "/szs/scrap";
+        String url = "/api/scrap";
         doThrow(new CustomException(ErrorCode.MEMBER_NOT_FOUND))
                 .when(scrapServiceImp)
                 .getSaveByScrap("Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyZWdObyI6ImxkVTJaNVpsUnV3RERQZllBMVlmdk9Udz09IiwibmFtZSI6IuydtOyKue2ZmCIsImlhdCI6MTY0Nzc0NzQ4NCwiZXhwIjoxNjQ3NzQ5Mjg0fQ.IwXAZqC2JqOZfHFXQg0cF2Fw9yYQou6y9YEeRDaRXOo");

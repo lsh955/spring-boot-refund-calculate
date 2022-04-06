@@ -47,7 +47,7 @@ class RefundControllerTest {
     @DisplayName(value = "환급액 계산 조회실패(저장된 스크랩결과가 없을 시)")
     public void REFUND_FAILURE_TEST() throws Exception {
         // given
-        String url = "/szs/refund";
+        String url = "/api/refund";
         doThrow(new CustomException(ErrorCode.MEMBER_NOT_FOUND))
                 .when(refundServiceImp)
                 .getRefund("Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyZWdObyI6ImxkVTJaNVpsUnV3RERQZllBMVlmdk9Udz09IiwibmFtZSI6IuydtOyKue2ZmCIsImlhdCI6MTY0Nzc0NzQ4NCwiZXhwIjoxNjQ3NzQ5Mjg0fQ.IwXAZqC2JqOZfHFXQg0cF2Fw9yYQou6y9YEeRDaRXOo");
