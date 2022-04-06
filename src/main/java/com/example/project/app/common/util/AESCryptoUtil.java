@@ -1,5 +1,7 @@
 package com.example.project.app.common.util;
 
+import com.example.project.app.common.enums.ErrorCode;
+import com.example.project.exception.CustomException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -45,6 +47,7 @@ public class AESCryptoUtil {
             encrypt = Base64.getEncoder().encodeToString(encrypted);   // 암호화 인코딩 후 return
         } catch (Exception e) {
             log.error("encrypt exception >> " + e);
+            throw new CustomException(ErrorCode.SERVER_ERROR);
         }
 
         return encrypt;
@@ -75,6 +78,7 @@ public class AESCryptoUtil {
             decrypt = new String(decrypted, StandardCharsets.UTF_8);   // 복호화 인코딩 후 return
         } catch (Exception e) {
             log.error("decrypt exception >> " + e);
+            throw new CustomException(ErrorCode.SERVER_ERROR);
         }
 
         return decrypt;
