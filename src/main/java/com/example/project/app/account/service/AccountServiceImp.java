@@ -102,7 +102,7 @@ public class AccountServiceImp implements AccountService {
     @Override
     public UserDto readMember(String token) {
         // Token 검증
-        JwtManager.TokenInfo strToken = this.jwtManager.getTokenInfo(token.substring(7));
+        JwtManager.TokenInfo strToken = this.jwtManager.getTokenInfo(token);
 
         // 사용자정보 불러오기
         User user = getFindByNameAndRegNo(strToken.getName(), strToken.getRegNo());

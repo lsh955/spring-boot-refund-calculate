@@ -1,47 +1,66 @@
 package com.example.project.controller;
 
-import com.example.project.app.common.util.JwtManager;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.example.project.app.common.enums.ErrorCode;
+import com.example.project.app.refund.controller.RefundController;
+import com.example.project.app.refund.service.RefundServiceImp;
+import com.example.project.exception.CustomException;
+import com.example.project.exception.GlobalExceptionHandler;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
+import org.springframework.http.HttpHeaders;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.mockito.Mockito.doThrow;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
  * @author 이승환
  * @since 2022-02-24
  */
-@AutoConfigureMockMvc
 @ExtendWith(MockitoExtension.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class RefundControllerTest {
 
-    @Autowired
+    @InjectMocks
+    private RefundController refundController;
+
+    @Mock
+    private RefundServiceImp refundServiceImp;
+
     private MockMvc mockMvc;
-    @Autowired
-    private ObjectMapper objectMapper;
-    @Autowired
-    private JwtManager jwtManager;
+
+    @BeforeEach
+    public void init() {
+        mockMvc = MockMvcBuilders.standaloneSetup(refundController)
+                .setControllerAdvice(GlobalExceptionHandler.class)
+                .build();
+    }
 
     @Test
     @DisplayName(value = "환급액 계산 조회실패(저장된 스크랩결과가 없을 시)")
     public void REFUND_FAILURE_TEST() throws Exception {
-        String name = "홍길동";
-        String regNo = "ldU2Z5ZlRuwPfYA1YfvOTw==";
+        // given
+        String url = "/szs/refund";
+        doThrow(new CustomException(ErrorCode.MEMBER_NOT_FOUND))
+                .when(refundServiceImp)
+                .getRefund("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyZWdObyI6ImxkVTJaNVpsUnV3RERQZllBMVlmdk9Udz09IiwibmFtZSI6IuydtOyKue2ZmCIsImlhdCI6MTY0Nzc0NzQ4NCwiZXhwIjoxNjQ3NzQ5Mjg0fQ.IwXAZqC2JqOZfHFXQg0cF2Fw9yYQou6y9YEeRDaRXOo");
 
-        String token = this.jwtManager.generateToken(name, regNo);
+        // when
+        ResultActions resultActions = mockMvc.perform(
+                MockMvcRequestBuilders.get(url)
+                        .header(HttpHeaders.AUTHORIZATION,
+                                "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyZWdObyI6ImxkVTJaNVpsUnV3RERQZllBMVlmdk9Udz09IiwibmFtZSI6IuydtOyKue2ZmCIsImlhdCI6MTY0Nzc0NzQ4NCwiZXhwIjoxNjQ3NzQ5Mjg0fQ.IwXAZqC2JqOZfHFXQg0cF2Fw9yYQou6y9YEeRDaRXOo"
+                        )
+        );
 
-        this.mockMvc.perform(post("http://localhost:8080/szs/refund")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(this.objectMapper.writeValueAsString(token)))
-                .andExpect(status().is4xxClientError());
+        // then
+        resultActions.andExpect(status().isNotFound());
     }
 }

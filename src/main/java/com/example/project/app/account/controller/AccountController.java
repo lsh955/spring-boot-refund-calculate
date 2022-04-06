@@ -72,7 +72,7 @@ public class AccountController {
     @GetMapping(value = "/me")
     public ResponseEntity<UserDto> member(@RequestHeader("Authorization") String token) {
 
-        UserDto result = accountService.readMember(token);
+        UserDto result = accountService.readMember(token.substring(7));
 
         return ResponseEntity.ok(result);
     }
