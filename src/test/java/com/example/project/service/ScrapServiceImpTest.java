@@ -12,6 +12,7 @@ import com.example.project.app.refund.domain.ScrapTwoRepository;
 import com.example.project.app.refund.dto.ScrapDto;
 import com.example.project.app.refund.service.ScrapServiceImp;
 import com.example.project.exception.CustomException;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
