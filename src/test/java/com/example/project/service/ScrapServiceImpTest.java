@@ -83,12 +83,27 @@ class ScrapServiceImpTest {
                 .regNo("ldU2Z5ZlRuwPfYA1YfvOTw==")
                 .build();
     }
+    
+    @Test
+    @DisplayName("사용자 정보가 있다면 정상적으로 불러오는가")
+    public void 사용자_정보가_있다면_정상적으로_불러오는가() {
+        // given
+        String name = "홍길동";
+        String regNo = "ldU2Z5ZlRuwPfYA1YfvOTw==";
 
-    private HashMap<String, String> tokenByCreate() {
-        HashMap<String, String> tokenMap = new HashMap<>();
-        tokenMap.put("token", "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyZWdObyI6Ijg2MDgyNC0xNjU1MDY4IiwibmFtZSI6Iu2Zjeq4uOuPmSIsImlhdCI6MTY0Nzc0NzQ4NCwiZXhwIjoxNjQ3NzQ5Mjg0fQ.uyIN2Sz88HOqUaa-M5th99uP-NIPsl2fI4ssgfkNPOs");
+        doReturn(Optional.of(userBySave())).when(userRepository).findByNameAndRegNo(name, regNo);
 
-        return tokenMap;
+        // when
+        User result = scrapServiceImp.getUser(name, regNo);
+        
+        // then
+        assertThat(result.getUserId()).isEqualTo("1");
+        assertThat(result.getPassword()).isEqualTo("ELbbqFzaPvFZbCrhd61Mzw==");
+        assertThat(result.getName()).isEqualTo("홍길동");
+        assertThat(result.getRegNo()).isEqualTo("ldU2Z5ZlRuwPfYA1YfvOTw==");
+
+        // verify
+        verify(userRepository, times(1)).findByNameAndRegNo(name, regNo);
     }
 
     private HashMap<String, String> tokenByDecoder() {
