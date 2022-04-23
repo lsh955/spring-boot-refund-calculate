@@ -59,6 +59,21 @@ class ScrapServiceImpTest {
     @Mock
     private AESCryptoUtil aesCryptoUtil;
 
+    private User user;
+
+    @BeforeEach
+    @DisplayName("초기 사용자정보 등록")
+    public void beforeUserSave() {
+        User result = User.builder()
+                .userId("1")
+                .password("ELbbqFzaPvFZbCrhd61Mzw==")
+                .name("홍길동")
+                .regNo("ldU2Z5ZlRuwPfYA1YfvOTw==")
+                .build();
+
+        user = this.userRepository.save(result);
+    }
+
     private User userBySave() {
         return User.builder()
                 .userId("1")
